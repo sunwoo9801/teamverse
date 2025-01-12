@@ -1,0 +1,14 @@
+.main-page {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+  }
+  
+  .main-layout {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    gap: 10px;
+    height: 100%;
+    padding: 10px;
+  }
+  

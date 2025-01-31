@@ -1,14 +1,36 @@
 .main-page {
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-  }
-  
-  .main-layout {
-    display: grid;
-    grid-template-columns: 1fr 2fr 1fr;
-    gap: 10px;
-    height: 100%;
-    padding: 10px;
-  }
-  
+  display: grid;
+  grid-template-columns: 6fr 1.5fr; /* content 영역을 넓게 설정 */
+  grid-template-rows: auto;
+  height: 100vh;
+  gap: 10px;
+  background-color: #f4f4f9;
+}
+
+.sidebar-container {
+  background: #ecf0f3;
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.filter-and-search {
+  margin-bottom: 10px;
+  background: #ffffff;
+  padding: 10px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.chatbox-container {
+  display: flex;
+  flex-direction: column;
+  background: #ecf0f3;
+  border-radius: 12px;
+  padding: 20px;
+}

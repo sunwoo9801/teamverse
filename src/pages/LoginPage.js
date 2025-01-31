@@ -1,50 +1,33 @@
-// src/pages/LoginPage.js
-import React, { useState } from 'react';
-import '../styles/LoginPage.css';
+import React from 'react';
+import '../styles/LoginPage.scss';
 
 const LoginPage = () => {
-  const [formData, setFormData] = useState({ id: '', password: '' });
-
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const handleLogin = () => {
-    alert(`Logging in with ID: ${formData.id}`);
-    // 로그인 API 호출 로직 추가 가능
-  };
-
-  const handleSignUp = () => {
-    alert('Redirecting to Sign Up page');
-    // 회원가입 페이지로 이동 로직 추가 가능
-  };
-
   return (
     <div className="login-page">
-      <div className="login-container">
-        <h2>Login</h2>
-        <div className="input-group">
-          <label>ID</label>
-          <input
-            type="text"
-            name="id"
-            value={formData.id}
-            onChange={handleChange}
-            placeholder="Enter your ID"
-          />
+      <div className="main-container sign-in-mode">
+        <div className="form-container sign-up-container">
+          <form className="form">
+            <h1>Create Account</h1>
+            <div className="social-container">
+              <a href="#" className="social"><i className="fab fa-facebook-f"></i></a>
+              <a href="#" className="social"><i className="fab fa-linkedin-in"></i></a>
+              <a href="#" className="social"><i className="fab fa-twitter"></i></a>
+            </div>
+            <span>or use your email for registration</span>
+            <input type="text" placeholder="Name" />
+            <input type="email" placeholder="Email" />
+            <input type="password" placeholder="Password" />
+            <button>Sign Up</button>
+          </form>
         </div>
-        <div className="input-group">
-          <label>Password</label>
-          <input
-            type="password"
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-            placeholder="Enter your password"
-          />
+        <div className="form-container sign-in-container">
+          <form className="form">
+            <h1>Sign In</h1>
+            <input type="email" placeholder="Email" />
+            <input type="password" placeholder="Password" />
+            <button>Sign In</button>
+          </form>
         </div>
-        <button onClick={handleLogin} className="btn login-btn">Login</button>
-        <button onClick={handleSignUp} className="btn signup-btn">Sign Up</button>
       </div>
     </div>
   );

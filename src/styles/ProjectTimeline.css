@@ -1,0 +1,49 @@
+.project-timeline {
+    margin-top: 20px;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .timeline-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 10px;
+  }
+  
+  .timeline {
+    position: relative;
+    height: 50px;
+    background-color: #f4f4f9;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid #ddd;
+  }
+  
+  .timeline-task {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    border-radius: 8px;
+    text-align: center;
+    line-height: 50px;
+    color: #ffffff;
+    font-size: 12px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+  
+  .timeline-task:hover {
+    opacity: 0.9;
+    transform: scale(1.02);
+    transition: all 0.2s ease-in-out;
+  }
+  
+  .task-name {
+    padding: 0 5px;
+  }
+  

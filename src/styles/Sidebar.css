@@ -1,56 +1,15 @@
-.sidebar {
-    background-color: #ffffff;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    display: flex;
-    flex-direction: column;
-    padding: 20px;
-    height: 100%;
-    overflow-y: auto;
-  }
-  
-  .sidebar h3 {
-    font-size: 1.2rem;
-    color: #333;
-    margin-bottom: 10px;
-    border-bottom: 2px solid #3f51b5;
-    padding-bottom: 5px;
-  }
-  
-  .member-list,
-  .task-list {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-  }
-  
-  .member-list li,
-  .task-list li {
-    display: flex;
-    align-items: center;
-    margin-bottom: 10px;
-  }
-  
-  .member-list li img {
-    width: 35px;
-    height: 35px;
-    border-radius: 50%;
-    margin-right: 10px;
-  }
-  
-  .task-list li input[type="checkbox"] {
-    margin-right: 10px;
-    accent-color: #3f51b5; /* Checkbox 색상 */
-  }
-  
-  .member-list li,
-  .task-list li {
-    font-size: 0.9rem;
-    color: #555;
-  }
-  
-  .member-list li span {
-    font-weight: bold;
-    margin-left: auto; /* 오른쪽 정렬 */
-  }
-  
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+}
+
+.sidebar li {
+  display: flex;
+  align-items: center;
+  margin: 10px 0;
+}
+
+.sidebar img {
+  border-radius: 50%;
+  margin-right: 10px;
+}

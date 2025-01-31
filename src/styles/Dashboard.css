@@ -1,0 +1,61 @@
+.dashboard {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  gap: 20px;
+  background-color: #f4f4f9;
+}
+
+/* 대시보드 카드 레이아웃 */
+.dashboard-header {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 20px;
+}
+
+.dashboard-card {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  transition: transform 0.2s ease-in-out;
+}
+
+.dashboard-card:hover {
+  transform: scale(1.05);
+}
+
+.dashboard-icon {
+  font-size: 30px;
+  color: #4B70E2;
+  margin-bottom: 10px;
+}
+
+.dashboard-card h3 {
+  font-size: 24px;
+  margin: 5px 0;
+}
+
+.dashboard-card p {
+  font-size: 14px;
+  color: #666;
+}
+
+/* 대시보드 하단 콘텐츠 */
+.dashboard-content {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 20px;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+  .dashboard-header {
+    grid-template-columns: 1fr 1fr;
+  }
+  
+  .dashboard-content {
+    grid-template-columns: 1fr;
+  }
+}

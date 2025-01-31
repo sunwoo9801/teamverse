@@ -1,4 +1,4 @@
-package org.zerock.entity;
+package org.zerock.teamverse.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
@@ -12,11 +12,11 @@ public class TaskDependency {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY) 
     @JoinColumn(name = "task_id", nullable = false)
     private Task task;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY) 
     @JoinColumn(name = "dependent_task_id", nullable = false)
     private Task dependentTask;
 }

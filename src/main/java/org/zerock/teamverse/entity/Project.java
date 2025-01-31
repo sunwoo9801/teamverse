@@ -1,4 +1,4 @@
-package org.zerock.entity;
+package org.zerock.teamverse.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
@@ -20,8 +20,8 @@ public class Project {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "team_id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY) 
+    @JoinColumn(name = "team_id")
     private Team team; // 프로젝트가 속한 팀
 
     @Column(nullable = false)
@@ -32,7 +32,7 @@ public class Project {
     @Column(name = "start_date", nullable = false)
     private LocalDate startDate; // 프로젝트 시작일
 
-    @Column(name = "end_date", nullable = false)
+    @Column(name = "end_date")
     private LocalDate endDate; // 프로젝트 종료일
 
     @Column(name = "created_at", updatable = false)

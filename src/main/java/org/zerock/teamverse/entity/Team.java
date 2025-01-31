@@ -1,4 +1,4 @@
-package org.zerock.entity;
+package org.zerock.teamverse.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
@@ -24,7 +24,7 @@ public class Team {
 
     private String description; // 팀 설명
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "created_by", nullable = false)
     private User createdBy; // 팀 생성자
 

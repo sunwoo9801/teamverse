@@ -1,4 +1,4 @@
-package org.zerock.entity;
+package org.zerock.teamverse.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
@@ -39,6 +39,16 @@ public class User {
 
     @Column(name = "updated_at")
     private LocalDateTime updatedAt = LocalDateTime.now();
+
+     // 기본 생성자 (JPA에서 필수)
+     public User() {}
+
+     // 사용자 정의 생성자
+     public User(String email, String password) {
+        //  this.username = username;
+         this.email = email;
+         this.password = password;
+     }
 
     public enum Role {
         ADMIN, MEMBER

@@ -1,11 +1,12 @@
-package org.zerock.entity;
-
+package org.zerock.teamverse.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * Tasks 엔티티
@@ -21,11 +22,12 @@ public class Task {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "project_id", nullable = false)
+    @JsonIgnore // Lazy-loaded 필드 직렬화 방지
     private Project project; // 작업이 속한 프로젝트
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "assigned_to")
     private User assignedTo; // 작업 담당자
 

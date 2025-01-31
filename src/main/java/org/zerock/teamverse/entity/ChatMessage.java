@@ -1,4 +1,4 @@
-package org.zerock.entity;
+package org.zerock.teamverse.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
@@ -19,11 +19,11 @@ public class ChatMessage {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY) 
     @JoinColumn(name = "team_id", nullable = false)
     private Team team; // 메시지가 속한 팀
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY) 
     @JoinColumn(name = "sender_id", nullable = false)
     private User sender; // 메시지를 보낸 사용자
 

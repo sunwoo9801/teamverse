@@ -1,0 +1,27 @@
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: #4B70E2;
+  color: white;
+}
+
+.navbar-links a {
+  margin: 0 10px;
+  text-decoration: none;
+  color: white;
+}
+
+.login-btn {
+  background-color: white;
+  color: #4B70E2;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.login-btn:hover {
+  background-color: #e0e0e0;
+}

@@ -1,0 +1,15 @@
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+}
+
+.sidebar li {
+  display: flex;
+  align-items: center;
+  margin: 10px 0;
+}
+
+.sidebar img {
+  border-radius: 50%;
+  margin-right: 10px;
+}

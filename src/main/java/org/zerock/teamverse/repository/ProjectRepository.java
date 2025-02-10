@@ -6,8 +6,12 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.zerock.teamverse.entity.Project;
+import org.zerock.teamverse.entity.User;
+
 
 public interface ProjectRepository extends JpaRepository<Project, Long> {
     // 특정 팀의 프로젝트를 조회하는 메서드
     List<Project> findByTeamId(Long teamId);
+    List<Project> findByUser(User user);
+    
 }

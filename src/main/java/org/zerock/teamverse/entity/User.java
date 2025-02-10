@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Users 엔티티
@@ -57,4 +59,7 @@ public class User {
     public enum Status {
         ACTIVE, INACTIVE
     }
+    @ManyToMany(mappedBy = "teamMembers") // 프로젝트에서 초대받은 관계
+    private Set<Project> projects = new HashSet<>();
+
 }

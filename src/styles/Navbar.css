@@ -1,0 +1,105 @@
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: #4B70E2;
+  color: white;
+}
+
+.navbar-links a {
+  margin: 0 10px;
+  text-decoration: none;
+  color: white;
+}
+
+.login-btn {
+  background-color: white;
+  color: #4B70E2;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.login-btn:hover {
+  background-color: #e0e0e0;
+}
+/* 초대 팝업 스타일 */
+.invitation-popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  width: 300px;
+  text-align: center;
+}
+
+.invitation-popup h2 {
+  margin-top: 0;
+  font-size: 18px;
+  color: black;
+}
+
+.invitation-popup ul {
+  list-style: none;
+  padding: 0;
+  color: #007bff;
+}
+
+.invitation-popup li {
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+
+.invitation-popup button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  cursor: pointer;
+  margin-top: 10px;
+  border-radius: 5px;
+}
+
+.invitation-popup button:hover {
+  background-color: #0056b3;
+}
+
+.invitation-popup {
+  position: fixed;
+  top: 20%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: white;
+  padding: 20px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+}
+
+.accept-btn, .reject-btn, .close-btn {
+  margin: 5px;
+  padding: 8px 12px;
+  border: none;
+  cursor: pointer;
+}
+
+.accept-btn {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.reject-btn {
+  background-color: #f44336;
+  color: white;
+}
+
+.close-btn {
+  background-color: #bbb;
+  color: white;
+}

@@ -1,5 +1,3 @@
-/* 보안 설정/ JWT 기반 인증 및 접근 제어 설정 */
-
 package org.zerock.teamverse.config;
 
 import org.springframework.context.annotation.Bean;
@@ -13,58 +11,77 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.zerock.teamverse.security.JwtTokenFilter;
 import org.zerock.teamverse.security.JwtTokenProvider;
 
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.List;
 
 @Configuration
 public class SecurityConfig {
-    /*
-     * .requestMatchers("/api/users/tasks").hasRole("ADMIN") // 작업 생성은 ADMIN만 가능하도록
-     * 설정 가능
-     * .oauth2Login(); // OAuth2 인증 추가 시 사용
-     */
-
-    // SecurityFilterChain: HTTP 보안 설정을 정의
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtTokenProvider jwtTokenProvider)
-            throws Exception {
-        http.csrf().disable() // CSRF 비활성화
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // 세션 비활성화
-                .and()
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // OPTIONS 요청 허용
-                        .requestMatchers("/register", "/login").permitAll() // 인증 없이 접근 가능
-                        .requestMatchers("/api/user").authenticated()
-                        .anyRequest().authenticated() // 모든 기타 요청은 인증 필요
-                )
-                .logout(logout -> logout
-                        .logoutUrl("/api/users/logout") // 로그아웃 URL
-                        .logoutSuccessHandler((request, response, authentication) -> {
-                            response.setStatus(HttpServletResponse.SC_OK);
-                            response.getWriter().write("Logged out successfully");
-                        })
-                        .invalidateHttpSession(true) // 세션 무효화
-                        .deleteCookies("Authorization") // 쿠키 삭제
-                        .permitAll() // 로그아웃 자체는 인증 없이 처리 가능
-                )
-                .addFilterBefore(new JwtTokenFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class); // JWT
-                                                                                                                    // 필터
-                                                                                                                    // 추가
-
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtTokenProvider jwtTokenProvider) throws Exception {
+        http
+            .cors(cors -> cors.configurationSource(corsConfigurationSource())) // ✅ CORS 설정 활성화
+            .csrf().disable()
+            .sessionManagement()
+            .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+            .and()
+            .authorizeHttpRequests(auth -> auth
+                    .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // ✅ OPTIONS 요청 허용
+                    .requestMatchers("/api/auth/register", "/api/auth/login").permitAll() // ✅ 로그인 및 회원가입 허용
+                    .requestMatchers("/api/user").authenticated() // ✅ 인증된 사용자만 /api/user 접근 가능
+                    
+                    .anyRequest().authenticated()
+            )
+            .exceptionHandling(exception -> exception
+                    .authenticationEntryPoint((request, response, authException) -> {
+                        response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
+                    })
+            )
+            .logout(logout -> logout
+                    .logoutUrl("/api/auth/logout")
+                    .logoutSuccessHandler((request, response, authentication) -> {
+                        response.setStatus(HttpServletResponse.SC_OK);
+                        response.getWriter().write("Logged out successfully");
+                    })
+                    .invalidateHttpSession(true)
+                    .deleteCookies("Authorization")
+                    .permitAll()
+            )
+            .addFilterBefore(new JwtTokenFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
+    
         return http.build();
     }
+    
 
-    // PasswordEncoder: 비밀번호 암호화를 위한 BCryptPasswordEncoder를 Bean으로 등록
+    // ✅ CORS 설정을 Spring Security에서 직접 적용
     @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder(); // BCrypt 해싱 알고리즘 사용
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOriginPatterns(List.of("*")); // 모든 출처 허용
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        configuration.setAllowedHeaders(List.of("*"));
+        configuration.setExposedHeaders(List.of("Authorization")); // ✅ 클라이언트가 Authorization 헤더 접근 가능
+        configuration.setAllowCredentials(true); // ✅ JWT 포함 요청 허용
+    
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
     }
 
-    // AuthenticationManager: 인증 관리자를 Bean으로 등록 @Bean
+    // PasswordEncoder 설정
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+    // AuthenticationManager 설정
+    @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
         return configuration.getAuthenticationManager();
     }

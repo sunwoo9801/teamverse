@@ -3,8 +3,10 @@ package org.zerock.teamverse.service;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.zerock.teamverse.entity.Project;
+import org.zerock.teamverse.entity.TeamMember;
 import org.zerock.teamverse.entity.User;
 import org.zerock.teamverse.repository.ProjectRepository;
+import org.zerock.teamverse.repository.TeamMemberRepository;
 import org.zerock.teamverse.repository.UserRepository;
 
 import java.time.LocalDateTime;
@@ -12,19 +14,23 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class ProjectServiceImpl implements ProjectService {  // ✅ 기존 기능 유지하면서 구현
+public class ProjectServiceImpl implements ProjectService { // ✅ 기존 기능 유지하면서 구현
 
     private final ProjectRepository projectRepository;
     private final UserRepository userRepository;
+    private final TeamMemberRepository teamMemberRepository;
 
-    public ProjectServiceImpl(ProjectRepository projectRepository, UserRepository userRepository) {
+    public ProjectServiceImpl(ProjectRepository projectRepository,
+            UserRepository userRepository,
+            TeamMemberRepository teamMemberRepository) {
         this.projectRepository = projectRepository;
         this.userRepository = userRepository;
+        this.teamMemberRepository = teamMemberRepository;
     }
 
     @Override
     public List<Project> getProjectsByUser(User user) {
-        return projectRepository.findByUser(user);
+        return projectRepository.findByTeamMembers_User(user);
     }
 
     @Override
@@ -36,7 +42,17 @@ public class ProjectServiceImpl implements ProjectService {  // ✅ 기존 기�
     @Transactional
     public Project createProjectForUser(Project project, User user) {
         project.setOwner(user);
-        return projectRepository.save(project);
+        project = projectRepository.save(project);
+
+        // ✅ 프로젝트 생성 시 자동으로 생성자를 팀 멤버로 추가
+        TeamMember teamMember = new TeamMember();
+        teamMember.setProject(project);
+        teamMember.setUser(user);
+        teamMember.setRole(TeamMember.Role.LEADER); // 프로젝트 생성자는 LEADER 역할
+
+        teamMemberRepository.save(teamMember);
+
+        return project;
     }
 
     @Override
@@ -72,12 +88,17 @@ public class ProjectServiceImpl implements ProjectService {  // ✅ 기존 기�
         projectRepository.delete(project);
     }
 
-    // ✅ 초대 기능 추가
+    // ✅ 초대 기능 수정
     @Override
     @Transactional
     public void inviteUserToProject(Project project, User invitedUser) {
-        project.getTeamMembers().add(invitedUser);
-        projectRepository.save(project);
-        System.out.println("✅ 초대 완료: " + invitedUser.getEmail() + " 님이 " + project.getName() + " 프로젝트에 초대되었습니다.");
+        // ✅ 기존의 `project.getTeamMembers().add(invitedUser);` 코드 제거
+        // ✅ 대신, TeamMember 엔티티를 생성하여 추가
+        TeamMember teamMember = new TeamMember();
+        teamMember.setProject(project);
+        teamMember.setUser(invitedUser);
+        teamMember.setRole(TeamMember.Role.MEMBER); // 기본 역할
+
+        teamMemberRepository.save(teamMember);
     }
 }

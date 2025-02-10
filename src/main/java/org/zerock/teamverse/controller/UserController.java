@@ -16,10 +16,11 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/auth")  // ✅ URL 확인
+@RequestMapping("/api/auth") // ✅ URL 확인
 
 public class UserController {
 
@@ -57,27 +58,34 @@ public class UserController {
     // .orElse(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
     // }
     @PostMapping("/login")
-    public ResponseEntity<LoginResponse> login(@RequestBody @Valid LoginRequest loginRequest,
+    public ResponseEntity<LoginResponse> login(
+            @RequestBody @Valid LoginRequest loginRequest,
+            @RequestParam(name = "duration", defaultValue = "30") String duration, // 로그인 연장 옵션(기본 : 30분)
             HttpServletResponse response) {
+
+        int durationValue = "forever".equals(duration) ? 60 * 60 * 24 * 365 : Integer.parseInt(duration); // ✅ 변환 처리
+
         return userService.authenticate(loginRequest)
                 .map(tokens -> {
                     String accessToken = tokens.getOrDefault("accessToken", "");
                     String refreshToken = tokens.getOrDefault("refreshToken", "");
+
+                    int refreshTokenExpiry = (durationValue == 30) ? 1800 : 60 * 60 * 24 * 365; // 🔹 30분 또는 영구 유지
 
                     // Access Token을 쿠키에 저장
                     Cookie accessCookie = new Cookie("accessToken", accessToken);
                     accessCookie.setHttpOnly(true); // 보안을 위해 HttpOnly 설정
                     accessCookie.setSecure(false); // HTTPS에서만 전송
                     accessCookie.setPath("/");
-                    accessCookie.setMaxAge(3600); // 유효 기간: 1시간
+                    accessCookie.setMaxAge(1800); // 유효 기간: 30분
                     response.addCookie(accessCookie);
 
-                    // Refresh Token을 쿠키에 저장
+                    // Refresh Token을 쿠키에 저장(30분 또는 영구 유지)
                     Cookie refreshCookie = new Cookie("refreshToken", refreshToken);
                     refreshCookie.setHttpOnly(true);
                     refreshCookie.setSecure(false);
                     refreshCookie.setPath("/");
-                    refreshCookie.setMaxAge(86400); // 유효 기간: 1일
+                    refreshCookie.setMaxAge(refreshTokenExpiry);
                     response.addCookie(refreshCookie);
 
                     return ResponseEntity.ok(new LoginResponse(accessToken, refreshToken));
@@ -110,13 +118,31 @@ public class UserController {
         return ResponseEntity.ok(Map.of("accessToken", newAccessToken));
     }
 
-
     // ✅ 사용자 정보 조회 (경로를 명확히 `/api/auth/me`로 변경)
+    // @GetMapping("/me")
+    // public ResponseEntity<Map<String, String>> getMyInfo(Authentication
+    // authentication) {
+    // return userService.getAuthenticatedUserInfo(authentication)
+    // .map(ResponseEntity::ok)
+    // .orElse(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
+    // }
     @GetMapping("/me")
-    public ResponseEntity<Map<String, String>> getMyInfo(Authentication authentication) {
-        return userService.getAuthenticatedUserInfo(authentication)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
+    public ResponseEntity<Map<String, Object>> getMyInfo(Authentication authentication) {
+        if (authentication == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        }
+
+        String email = authentication.getName();
+        User user = userService.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("id", user.getId()); // ✅ id 필드 추가
+        response.put("email", user.getEmail());
+        response.put("role", user.getRole().name());
+        response.put("username", user.getUsername());
+
+        return ResponseEntity.ok(response);
     }
 
     // 사용자 정보 수정
@@ -157,19 +183,29 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not authenticated");
     }
 
-    // 로그아웃
-    @PostMapping("/api/user/logout")
+    // ✅ 로그아웃 (쿠키 삭제)
+    @PostMapping("/logout")
     public ResponseEntity<String> logout(HttpServletResponse response) {
-        // 쿠키 무효화
-        Cookie authCookie = new Cookie("Authorization", null);
-        authCookie.setHttpOnly(true);
-        authCookie.setSecure(false);
-        authCookie.setPath("/");
-        authCookie.setMaxAge(0); // 즉시 만료
-        response.addCookie(authCookie);
+        // ✅ 클라이언트 쿠키 삭제 요청 (accessToken, refreshToken 제거)
+        // 🔹 Access Token 쿠키 삭제
+        Cookie accessCookie = new Cookie("accessToken", null);
+        accessCookie.setHttpOnly(true);
+        accessCookie.setSecure(false); // 🔹 개발 환경에서는 false, 배포 시 true로 변경 필요
+        accessCookie.setPath("/");
+        accessCookie.setMaxAge(0); // ✅ 즉시 만료
+        response.addCookie(accessCookie);
 
-        return ResponseEntity.ok("Logout successful");
+        // 🔹 Refresh Token 쿠키 삭제
+        Cookie refreshCookie = new Cookie("refreshToken", null);
+        refreshCookie.setHttpOnly(true);
+        refreshCookie.setSecure(false);
+        refreshCookie.setPath("/");
+        refreshCookie.setMaxAge(0); // ✅ 즉시 만료
+        response.addCookie(refreshCookie);
+
+        System.out.println("✅ 로그아웃: accessToken 및 refreshToken 쿠키 삭제됨."); // ✅ 로그 추가
+
+
+        return ResponseEntity.ok("로그아웃 성공");
     }
-
-    
 }

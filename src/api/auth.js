@@ -25,11 +25,22 @@ export const signup = async (name, email, password) => {
 };
 
 
-export const login = async (email, password) => {
+// export const login = async (email, password) => {
+//     try {
+//         const response = await axios.post(`${API_BASE_URL}/login`, { email, password }, { withCredentials: true });
+//         return response.data;
+//     } catch (error) {
+//         return { message: error.response?.data?.message || "로그인 실패" };
+//     }
+export const login = async (email, password, duration = 30) => {
     try {
-        const response = await axios.post(`${API_BASE_URL}/login`, { email, password }, { withCredentials: true });
+        const response = await axios.post("http://localhost:8082/api/auth/login", { email, password }, {
+            params: { duration }, // 🔹 로그인 연장 옵션 전달
+            withCredentials: true 
+        });
         return response.data;
     } catch (error) {
         return { message: error.response?.data?.message || "로그인 실패" };
     }
 };
+

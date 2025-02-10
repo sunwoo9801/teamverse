@@ -4,31 +4,31 @@ import axios from "axios";
 import "../styles/Navbar.css";
 
 const Navbar = () => {
-  const [invitations, setInvitations] = useState([]); 
+  const [invitations, setInvitations] = useState([]);
   const [showPopup, setShowPopup] = useState(false);
   const [user, setUser] = useState(null);
 
   // ✅ 사용자 정보 불러오기
   const fetchUserInfo = async () => {
     try {
-        const token = localStorage.getItem("token");
-        if (!token) {
-            console.error("🚨 JWT 토큰이 없습니다! 로그인이 필요합니다.");
-            return;
-        }
+      const token = localStorage.getItem("accessToken"); // 수정: accessToken 사용
+      if (!token) {
+        console.error("🚨 JWT 토큰이 없습니다! 로그인이 필요합니다.");
+        return;
+      }
 
-        const response = await axios.get("http://localhost:8082/api/auth/me", {  
-            headers: {
-                Authorization: `Bearer ${token}`,
-                "Content-Type": "application/json",
-            },
-            withCredentials: true, 
-        });
+      const response = await axios.get("http://localhost:8082/api/auth/me", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      });
 
-        localStorage.setItem("user", JSON.stringify(response.data));
-        setUser(response.data);
+      localStorage.setItem("user", JSON.stringify(response.data));
+      setUser(response.data);
     } catch (error) {
-        console.error("❌ 사용자 정보 불러오기 실패:", error);
+      console.error("❌ 사용자 정보 불러오기 실패:", error);
     }
   };
 
@@ -67,17 +67,51 @@ const Navbar = () => {
   };
 
   // ✅ 로그아웃
-  const handleLogout = () => {
-    localStorage.removeItem("token");
+  // const handleLogout = () => {
+  //   localStorage.removeItem("token");
+  //   localStorage.removeItem("refreshToken");
+  //   localStorage.removeItem("user");
+  //   setUser(null);
+  //   window.location.href = "/login";
+  // };
+
+  // useEffect(() => {
+  //   fetchUserInfo();
+  //   fetchInvitations();
+  // }, []);
+  const handleLogout = async () => {
+    try {
+      const token = localStorage.getItem("accessToken"); // 🔹 추가: 로그아웃 시 Authorization 헤더에 토큰 포함
+ if (!token) {
+      console.error("🚨 JWT 토큰이 없습니다! 로그아웃 요청을 할 수 없습니다.");
+      return; // 🔹 토큰이 없으면 로그아웃 요청을 실행하지 않음
+    }
+
+  await axios.post("http://localhost:8082/api/auth/logout", {}, {
+      headers: { Authorization: `Bearer ${token}` }, // 🔹 추가: Authorization 헤더 포함
+      withCredentials: true
+    });
+
+      // ✅ 쿠키 삭제 (브라우저에서 강제 삭제)
+    document.cookie = "accessToken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+    document.cookie = "refreshToken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+     
+    // ✅ 로컬스토리지 삭제
+    localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");
     localStorage.removeItem("user");
-    setUser(null);
-    window.location.href = "/login";
+
+      setUser(null); // 로그아웃 후 사용자 상태 초기화
+      alert("로그아웃 되었습니다.");
+      window.location.href = "/";
+    } catch (error) {
+      console.error("로그아웃 실패:", error);
+    }
   };
 
+  // 수정: 페이지 로드시 사용자 정보 자동 불러오기
   useEffect(() => {
     fetchUserInfo();
-    fetchInvitations();
   }, []);
 
   return (
@@ -108,10 +142,15 @@ const Navbar = () => {
         <Link to="/team-status">Team</Link>
         <Link to="/settings">Settings</Link>
         {user ? (
-          <div className="user-info">
-            <span>Welcome, {user.username}!</span>
-            <button onClick={handleLogout}>Logout</button>
-          </div>
+          <Link
+            to="/login"
+            onClick={(e) => {
+              e.preventDefault(); // 기본 이동 방지
+              handleLogout(); // 로그아웃 함수 실행
+            }}
+          >
+            Logout
+          </Link>
         ) : (
           <Link to="/login">Login</Link>
         )}

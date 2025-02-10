@@ -1,11 +1,15 @@
+/**
+ * Users 엔티티
+ * - 사용자 계정 정보를 저장
+ * - 로그인, 팀 멤버 관리, 작업 배정 등 사용자와 관련된 기능에서 사용
+ */
 package org.zerock.teamverse.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 /**
  * Users 엔티티
@@ -42,15 +46,9 @@ public class User {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt = LocalDateTime.now();
 
-     // 기본 생성자 (JPA에서 필수)
-     public User() {}
-
-     // 사용자 정의 생성자
-     public User(String email, String password) {
-        //  this.username = username;
-         this.email = email;
-         this.password = password;
-     }
+    // ✅ 기존 ManyToMany 삭제 후 OneToMany 추가
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<TeamMember> teamProjects; // 사용자가 속한 팀 프로젝트 목록
 
     public enum Role {
         ADMIN, MEMBER
@@ -59,7 +57,4 @@ public class User {
     public enum Status {
         ACTIVE, INACTIVE
     }
-    @ManyToMany(mappedBy = "teamMembers") // 프로젝트에서 초대받은 관계
-    private Set<Project> projects = new HashSet<>();
-
 }

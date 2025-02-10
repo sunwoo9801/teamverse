@@ -6,7 +6,7 @@ import StatisticsPage from './pages/StatisticsPage';
 import TeamStatusPage from './pages/TeamStatusPage';
 import LoginPage from "./components/LoginPage";
 import SessionTimeout from "./components/SessionTimeout"; // 자동 세션 관리
-
+import LandingPage from './components/LandingPage';
 
 
 const tasks = [
@@ -33,12 +33,13 @@ function MainLayout() {
     <>
       {!hideNavbar && <Navbar />}
       <Routes>
-        <Route path="/" element={<MainPage />} />
+        <Route path="/" element={<LandingPage />} />{/* 페이지 추가 */}
         <Route path="/login" element={<LoginPage />} />
-                  {/* <Route path="/login" element={<AuthPage/>} /> */}
-          {/* <Route path="/login" element={<LoginPage />} /> */}
-          <Route path="/statistics" element={<StatisticsPage tasks={tasks} />} /> {/* tasks 전달 */}
-          <Route path="/team-status" element={<TeamStatusPage />} /> {/* 팀 상태 페이지 추가 */}
+        <Route path="/dashboard/:userId" element={<MainPage />} /> {/* 수정: MainPage 경로 변경 */}
+        {/* <Route path="/login" element={<AuthPage/>} /> */}
+        {/* <Route path="/login" element={<LoginPage />} /> */}
+        <Route path="/statistics" element={<StatisticsPage tasks={tasks} />} /> {/* tasks 전달 */}
+        <Route path="/team-status" element={<TeamStatusPage />} /> 
 
       </Routes>
     </>

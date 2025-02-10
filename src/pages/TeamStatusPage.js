@@ -20,9 +20,16 @@ const TeamStatusPage = () => {
               return;
           }
 
+            // ✅ 현재 선택된 프로젝트 ID 가져오기
+        const projectId = localStorage.getItem("selectedProjectId");
+        if (!projectId) {
+            alert("프로젝트를 먼저 선택해주세요.");
+            return;
+        }
+
           const response = await axios.post(
               "http://localhost:8082/api/team/invite",
-              { email: inviteEmail },
+              { email: inviteEmail, projectId },
               {
                   headers: {
                       "Authorization": `Bearer ${token}`,

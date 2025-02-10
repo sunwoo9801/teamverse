@@ -19,6 +19,8 @@ import jakarta.validation.Valid;
 import java.util.Map;
 
 @RestController
+@RequestMapping("/api/auth")  // ✅ URL 확인
+
 public class UserController {
 
     private final UserService userService;
@@ -32,12 +34,12 @@ public class UserController {
 
     // 회원가입
     @PostMapping("/register")
-    public ResponseEntity<String> registerUser(@RequestBody @Valid UserRegistrationDTO userDTO) {
+    public ResponseEntity<?> registerUser(@RequestBody @Valid UserRegistrationDTO userDTO) {
         try {
             userService.register(userDTO);
-            return ResponseEntity.ok("User registered successfully");
+            return ResponseEntity.ok("회원가입이 완료되었습니다.");
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
@@ -108,8 +110,9 @@ public class UserController {
         return ResponseEntity.ok(Map.of("accessToken", newAccessToken));
     }
 
-    // 사용자 정보 조회
-    @GetMapping("/api/user")
+
+    // ✅ 사용자 정보 조회 (경로를 명확히 `/api/auth/me`로 변경)
+    @GetMapping("/me")
     public ResponseEntity<Map<String, String>> getMyInfo(Authentication authentication) {
         return userService.getAuthenticatedUserInfo(authentication)
                 .map(ResponseEntity::ok)
@@ -168,4 +171,5 @@ public class UserController {
         return ResponseEntity.ok("Logout successful");
     }
 
+    
 }

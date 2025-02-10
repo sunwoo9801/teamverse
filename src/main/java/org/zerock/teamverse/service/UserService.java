@@ -61,18 +61,23 @@ public class UserService {
     // 사용자 등록 로직
     @Transactional
     public void register(UserRegistrationDTO userDTO) {
+        // 🔹 사용자명이 중복되는지 확인
         if (userRepository.findByUsername(userDTO.getUsername()).isPresent()) {
-            throw new IllegalArgumentException("Username already exists");
+            throw new IllegalArgumentException("이미 사용 중인 사용자명입니다.");
         }
+        
+
+        // 🔹 이메일이 중복되는지 확인
         if (userRepository.findByEmail(userDTO.getEmail()).isPresent()) {
-            throw new IllegalArgumentException("Email already exists");
+            throw new IllegalArgumentException("이미 사용 중인 이메일입니다.");
         }
 
+        // 🔹 사용자 저장
         User newUser = new User();
         newUser.setUsername(userDTO.getUsername());
         newUser.setEmail(userDTO.getEmail());
-        newUser.setPassword(passwordEncoder.encode(userDTO.getPassword())); // 암호화
-        newUser.setRole(User.Role.MEMBER); // 기본 역할
+        newUser.setPassword(passwordEncoder.encode(userDTO.getPassword())); // 비밀번호 암호화
+        newUser.setRole(User.Role.MEMBER); // 기본 역할 설정
         userRepository.save(newUser);
     }
 

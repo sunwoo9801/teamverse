@@ -29,13 +29,11 @@ public class WebConfig {
 						 * .allowedOrigins("http://localhost:3000", "https://myapp.com")처럼 여러 개를 넣어주면 돼!
 						 */
 
-						.allowedOrigins("http://localhost:3000")
-						// 허용할 HTTP 메서드
-						.allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-						.allowCredentials(true) // 쿠키 포함 요청 허용
-
-						// 허용할 요청 헤더
-						.allowedHeaders("*");
+						 .allowedOriginPatterns("*") // ✅ 모든 출처 허용
+						 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS") // ✅ OPTIONS 허용
+						 .allowedHeaders("*")
+						 .exposedHeaders("Authorization") // ✅ 응답 헤더에 Authorization 포함
+						 .allowCredentials(true); // ✅ 쿠키 포함 허용
 
 			}
 		};

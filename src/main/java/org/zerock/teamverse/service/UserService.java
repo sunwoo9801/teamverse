@@ -58,6 +58,11 @@ public class UserService {
         this.jwtTokenProvider = jwtTokenProvider;
     }
 
+      // ✅ ID로 사용자 조회
+      public Optional<User> findById(Long id) {
+        return userRepository.findById(id);
+    }
+
     // 사용자 등록 로직
     @Transactional
     public void register(UserRegistrationDTO userDTO) {
@@ -94,8 +99,8 @@ public class UserService {
                 "email", user.getEmail(),
                 "role", user.getRole().name());
 
-        String accessToken = jwtTokenProvider.createToken(claims, 10); // 10분 유효
-        String refreshToken = jwtTokenProvider.createToken(claims, 60 * 24); // 1일 유효
+        String accessToken = jwtTokenProvider.createToken(claims, 60); // 10분 유효
+        String refreshToken = jwtTokenProvider.createToken(claims, 60 * 24 * 30); // 1일 유효
 
         return Optional.of(Map.of(
                 "accessToken", accessToken,

@@ -113,3 +113,36 @@
   color: gray;
   margin-top: 20px;
 }
+
+#다혜가 만든 테스트용
+/* 프로젝트 목록 스타일 */
+.project-list-container {
+  display: flex;
+  flex-wrap: wrap; /* ✅ 프로젝트 목록이 여러 줄에 표시될 수 있도록 함 */
+  gap: 10px;
+  list-style: none;
+  padding: 0;
+  max-height: 300px; /* ✅ 목록이 너무 길어지는 경우 대비 */
+  overflow-y: auto;
+}
+
+.project-btn {
+  padding: 10px;
+  border: none;
+  background-color: #f0f0f0;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background 0.3s;
+}
+
+.project-btn.active {
+  background-color: #4B70E2;
+  color: white;
+  font-weight: bold;
+}
+
+.no-project-selected {
+  text-align: center;
+  font-style: italic;
+  color: gray;
+}

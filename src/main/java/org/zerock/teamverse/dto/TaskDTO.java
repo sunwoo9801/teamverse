@@ -8,8 +8,12 @@ public class TaskDTO {
 	private Long id;
 	private String name;
 	private String status;
+	private LocalDate startDate; 
 	private LocalDate dueDate;
+	private String description;
 	private Long projectId;
+	private Long assignedTo; // ✅ 담당자 ID 추가
+
 
 	//기본 생성자(필수)
 	public TaskDTO() {}
@@ -19,9 +23,15 @@ public class TaskDTO {
 		this.id = task.getId();
 		this.name = task.getName();
 		this.status = task.getStatus().toString(); // Enum을 String으로 변환
+		this.startDate = task.getStartDate(); 
 		this.dueDate = task.getDueDate();
+		this.description = task.getDescription(); 
+
 		if (task.getProject() != null) {
 			this.projectId = task.getProject().getId();
+		}
+		if (task.getAssignedTo() != null) { // ✅ 담당자가 있을 경우
+			this.assignedTo = task.getAssignedTo().getId();
 		}
 	}
 
@@ -50,6 +60,14 @@ public class TaskDTO {
 		this.status = status;
 	}
 
+	public LocalDate getStartDate() { 
+		return startDate;
+	}
+
+	public void setStartDate(LocalDate startDate) { 
+		this.startDate = startDate;
+	}
+
 	public LocalDate getDueDate() {
 		return dueDate;
 	}
@@ -58,11 +76,27 @@ public class TaskDTO {
 		this.dueDate = dueDate;
 	}
 
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
 	public Long getProjectId() {
 		return projectId;
 	}
 
 	public void setProjectId(Long projectId) {
 		this.projectId = projectId;
+	}
+	
+	public Long getAssignedTo() {
+		return assignedTo;
+	}
+
+	public void setAssignedTo(Long assignedTo) {
+		this.assignedTo = assignedTo;
 	}
 }

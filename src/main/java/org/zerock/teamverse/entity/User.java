@@ -11,6 +11,8 @@ import lombok.Data;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 /**
  * Users 엔티티
  * - 사용자 계정 정보를 저장
@@ -19,6 +21,8 @@ import java.util.List;
 @Data
 @Entity
 @Table(name = "users")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "teamProjects"}) // ✅ 순환 참조 방지
+
 public class User {
 
     @Id
@@ -49,7 +53,6 @@ public class User {
     // ✅ 기존 ManyToMany 삭제 후 OneToMany 추가
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TeamMember> teamProjects; // 사용자가 속한 팀 프로젝트 목록
-
     public enum Role {
         ADMIN, MEMBER
     }

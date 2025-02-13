@@ -1,0 +1,83 @@
+.task-page {
+  width: 100%;
+  padding: 20px;
+}
+
+.project-title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.title-divider {
+  border: 1px solid #ddd;
+  margin-bottom: 20px;
+}
+
+.task-container {
+  display: flex;
+  gap: 20px;
+}
+
+/* ✅ 추가: 업무 목록 스타일 */
+.task-list {
+  flex: 1;
+  max-width: 50%;
+  border-right: 1px solid #ddd;
+  padding-right: 20px;
+}
+
+.task-list table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.task-list th, .task-list td {
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+  text-align: left;
+}
+
+.status-badge {
+  padding: 5px 10px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.status-badge.완료 {
+  background-color: #4caf50;
+  color: white;
+}
+
+.status-badge.진행중 {
+  background-color: #ff9800;
+  color: white;
+}
+
+.status-badge.대기 {
+  background-color: #f44336;
+  color: white;
+}
+
+/* ✅ 추가: 관리 버튼 스타일 */
+.detail-btn {
+  margin-left: 5px;
+  color: blue;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+.delete-btn {
+  margin-left: 5px;
+  color: red;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+/* ✅ 추가: 간트 차트 컨테이너 스타일 */
+.gantt-chart-container {
+  flex: 2;
+}

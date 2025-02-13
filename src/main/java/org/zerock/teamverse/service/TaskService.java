@@ -1,7 +1,11 @@
 package org.zerock.teamverse.service;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.zerock.teamverse.dto.TaskDTO;
+import org.zerock.teamverse.entity.Project;
 import org.zerock.teamverse.entity.Task;
+import org.zerock.teamverse.entity.User;
 import org.zerock.teamverse.repository.TaskRepository;
 
 import java.util.List;
@@ -28,17 +32,21 @@ public class TaskService {
         return taskRepository.findById(id);
     }
 
-    public Task updateTask(Long id, Task taskDetails) {
+    @Transactional
+    public Task updateTask(Long id, TaskDTO taskDTO, Project project, User assignedUser) {
         Task task = taskRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Task not found"));
 
-        task.setName(taskDetails.getName());
-        task.setStatus(taskDetails.getStatus());
-        task.setDueDate(taskDetails.getDueDate());
-        task.setUpdatedAt(taskDetails.getUpdatedAt());
+        task.setName(taskDTO.getName());
+        task.setStatus(Task.Status.valueOf(taskDTO.getStatus()));
+        task.setStartDate(taskDTO.getStartDate()); // ✅ 작업 시작일 업데이트
+        task.setDueDate(taskDTO.getDueDate());
+        task.setDescription(taskDTO.getDescription()); // ✅ 작업 내용 업데이트
+        task.setProject(project);
+        task.setAssignedTo(assignedUser);
+
         return taskRepository.save(task);
     }
-
     public void deleteTask(Long id) {
         Task task = taskRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Task not found"));

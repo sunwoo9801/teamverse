@@ -14,6 +14,9 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 /**
  * Projects 엔티티
  * - 팀별 프로젝트 정보를 저장
@@ -23,6 +26,8 @@ import java.util.List;
 @Getter
 @Setter
 @Table(name = "projects")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "teamMembers"}) // ✅ 순환 참조 방지
+
 public class Project {
 
     @Id
@@ -56,6 +61,7 @@ public class Project {
 
     // ✅ 기존의 다대다 관계 삭제 후, 일대다 관계로 변경
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore // ✅ 순환 참조 방지
     private List<TeamMember> teamMembers;
 
     // ✅ 프로젝트 생성 시 자동으로 생성 날짜 저장

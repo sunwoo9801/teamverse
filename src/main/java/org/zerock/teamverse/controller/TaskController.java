@@ -7,8 +7,10 @@ import org.springframework.web.bind.annotation.*;
 import org.zerock.teamverse.dto.TaskDTO;
 import org.zerock.teamverse.entity.Project;
 import org.zerock.teamverse.entity.Task;
+import org.zerock.teamverse.entity.User;
 import org.zerock.teamverse.service.ProjectService;
 import org.zerock.teamverse.service.TaskService;
+import org.zerock.teamverse.service.UserService;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -19,27 +21,41 @@ public class TaskController {
 
   private final TaskService taskService;
   private final ProjectService projectService;
+  private final UserService userService;
 
   @Autowired
   private SimpMessagingTemplate messagingTemplate;
 
-  public TaskController(TaskService taskService, ProjectService projectService) {
+  public TaskController(TaskService taskService, ProjectService projectService, UserService userService) {
     this.taskService = taskService;
     this.projectService = projectService;
+    this.userService = userService;
   }
 
   // Task 생성 API
   @PostMapping
   public ResponseEntity<Task> createTask(@RequestBody TaskDTO taskDTO) {
-    // DTO를 엔티티로 변환
+    // 프로젝트 조회
     Project project = projectService.getProjectById(taskDTO.getProjectId())
         .orElseThrow(() -> new IllegalArgumentException("Invalid project ID"));
+
+    // 담당자 조회
+    User assignedUser = null;
+    if (taskDTO.getAssignedTo() != null) {
+      assignedUser = userService.findById(taskDTO.getAssignedTo())
+          .orElseThrow(() -> new IllegalArgumentException("Invalid assigned user ID"));
+    }
+
+    // DTO → 엔티티 변환
     Task task = new Task();
     task.setName(taskDTO.getName());
     task.setStatus(Task.Status.valueOf(taskDTO.getStatus()));
+    task.setStartDate(taskDTO.getStartDate()); // ✅ 작업 시작일 반영
     task.setDueDate(taskDTO.getDueDate());
+    task.setDescription(taskDTO.getDescription()); // ✅ 작업 내용 반영
     task.setProject(project);
-    
+    task.setAssignedTo(assignedUser); // ✅ 담당자 설정
+
     Task createdTask = taskService.createTask(task);
     messagingTemplate.convertAndSend("/topic/tasks", createdTask); // 작업 생성 이벤트 전송
     return ResponseEntity.ok(createdTask);
@@ -64,19 +80,38 @@ public class TaskController {
   }
 
   // Task 업데이트 API
+  // @PutMapping("/{id}")
+  // public ResponseEntity<Task> updateTask(@PathVariable Long id, @RequestBody
+  // TaskDTO taskDTO) {
+  // // DTO를 엔티티로 변환
+  // Project project = projectService.getProjectById(taskDTO.getProjectId())
+  // .orElseThrow(() -> new IllegalArgumentException("Invalid project ID"));
+  // Task taskDetails = new Task();
+  // taskDetails.setName(taskDTO.getName());
+  // taskDetails.setStatus(Task.Status.valueOf(taskDTO.getStatus()));
+  // taskDetails.setDueDate(taskDTO.getDueDate());
+  // taskDetails.setProject(project);
+
+  // Task updatedTask = taskService.updateTask(id, taskDetails);
+  // messagingTemplate.convertAndSend("/topic/tasks", updatedTask); // 작업 수정 이벤트
+  // 전송
+  // return ResponseEntity.ok(updatedTask);
+  // }
   @PutMapping("/{id}")
   public ResponseEntity<Task> updateTask(@PathVariable Long id, @RequestBody TaskDTO taskDTO) {
-    // DTO를 엔티티로 변환
     Project project = projectService.getProjectById(taskDTO.getProjectId())
         .orElseThrow(() -> new IllegalArgumentException("Invalid project ID"));
-    Task taskDetails = new Task();
-    taskDetails.setName(taskDTO.getName());
-    taskDetails.setStatus(Task.Status.valueOf(taskDTO.getStatus()));
-    taskDetails.setDueDate(taskDTO.getDueDate());
-    taskDetails.setProject(project);
 
-    Task updatedTask = taskService.updateTask(id, taskDetails);
-    messagingTemplate.convertAndSend("/topic/tasks", updatedTask); // 작업 수정 이벤트 전송
+    User assignedUser = null;
+    if (taskDTO.getAssignedTo() != null) {
+      assignedUser = userService.findById(taskDTO.getAssignedTo())
+          .orElseThrow(() -> new IllegalArgumentException("Invalid assigned user ID"));
+    }
+
+    // 기존 Task 정보 가져와 업데이트
+    Task updatedTask = taskService.updateTask(id, taskDTO, project, assignedUser);
+
+    messagingTemplate.convertAndSend("/topic/tasks", updatedTask);
     return ResponseEntity.ok(updatedTask);
   }
 

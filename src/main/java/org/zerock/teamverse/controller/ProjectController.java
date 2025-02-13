@@ -43,7 +43,7 @@ public class ProjectController {
         User user = userService.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        List<Project> projects = projectService.getProjectsByUser(user);
+        List<Project> projects = projectService.getProjectsByOwner(user);
 
         // 로그 추가 (name 필드 확인)
         projects.forEach(project -> {
@@ -65,6 +65,8 @@ public class ProjectController {
 
         // ✅ `User` 객체를 함께 전달하여 프로젝트 생성
         Project createdProject = projectService.createProjectForUser(project, currentUser);
+
+        System.out.println("📌 프로젝트 생성 완료: ID = " + createdProject.getId() + ", Name = " + createdProject.getName()); // 로그 추가
 
         return ResponseEntity.ok(createdProject);
     }

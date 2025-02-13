@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom"; // 수정: useNavigate 추가
+import { useNavigate } from "react-router-dom"; 
 import { signup, login } from "../api/auth"; // ✅ API 호출 함수
-import { handleLoginSuccess } from "../utils/authUtils"; // ✅ 로그인 성공 시 토큰 저장
+import { handleLoginSuccess, getAccessToken, getRefreshToken } from "../utils/authUtils"; // ✅ 로그인 성공 시 토큰 저장
 import "../styles/Login.scss";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import GoogleIcon from "@mui/icons-material/Google";
@@ -9,13 +9,14 @@ import TwitterIcon from "@mui/icons-material/Twitter";
 import axios from "axios"; // ✅ axios import 추가
 
 
+
 const LoginPage = () => {
 	const [isSignUp, setIsSignUp] = useState(false);
 	const [name, setName] = useState("");
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState(""); // ✅ 기존에 30으로 설정된 초기값을 빈 문자열로 변경
-	const [duration, setDuration] = useState(30); // 🔹 로그인 연장 기본값: 30분 추가
-	const navigate = useNavigate(); // 수정: navigate 사용
+	const [rememberMe, setRememberMe] = useState(false); // ✅ 로그인 정보 기억 여부 추가
+	const navigate = useNavigate(); 
 
 	const toggleForm = () => setIsSignUp((prev) => !prev);
 
@@ -25,8 +26,8 @@ const LoginPage = () => {
 		const response = await signup(name, email, password);
 
 		if (response.success) {
-			alert("회원가입 성공! 자동 로그인됩니다.");
-			await handleSignIn(e); // ✅ 회원가입 후 자동 로그인
+			alert("회원가입 성공! 로그인 화면으로 이동합니다.");
+			setIsSignUp(false); // ✅ 회원가입 후 자동 로그인 대신 로그인 화면으로 전환
 		} else {
 			alert(response.message || "회원가입 실패");
 		}
@@ -35,18 +36,21 @@ const LoginPage = () => {
 	// 🔹 로그인 요청
 	const handleSignIn = async (e) => {
 		e.preventDefault();
-		const response = await login(email, password, duration); // ✅ 로그인 요청 시 duration 값을 전달
+		const response = await login(email, password, rememberMe); // ✅ rememberMe 값을 전달
 
 		// if (response.accessToken) {
 		// 	localStorage.setItem("token", response.accessToken);
 		// 	localStorage.setItem("refreshToken", response.refreshToken);
-		if (response.accessToken) {
-			handleLoginSuccess(response.accessToken, response.refreshToken);
 
-			console.log("📌 저장된 accessToken:", localStorage.getItem("accessToken"));
+		if (response.accessToken && response.refreshToken) { // ✅ refreshToken이 있는지 확인
+			handleLoginSuccess(response.accessToken, response.refreshToken, rememberMe);
+
+			console.log("📌 저장된 accessToken:", getAccessToken()); // ✅ 수정 후 accessToken 가져오기
+			console.log("📌 저장된 refreshToken:", getRefreshToken());
+
 
 			// ✅ 로그인한 사용자 정보 가져오기
-			const userInfo = await fetchUserInfo();
+			const userInfo = await fetchUserInfo(); // ✅ 수정: 올바른 accessToken을 사용하여 호출
 			console.log(" 로그인한 사용자 정보: ", userInfo); //디버깅 로그
 			if (userInfo && userInfo.id) {
 				localStorage.setItem("user", JSON.stringify(userInfo));
@@ -75,7 +79,7 @@ const LoginPage = () => {
 	// };
 	const fetchUserInfo = async () => {
 		try {
-			const token = localStorage.getItem("accessToken");
+			const token = localStorage.getItem("accessToken")  || sessionStorage.getItem("accessToken");
 			if (!token) {
 				console.error("❌ 토큰이 없습니다.");
 				return null;
@@ -85,7 +89,7 @@ const LoginPage = () => {
 				headers: { Authorization: `Bearer ${token}` },
 			});
 	
-			console.log("📌 백엔드 응답 데이터:", response.data); // ✅ 추가
+			console.log("📌 백엔드 응답 데이터:", response.data); 
 	
 			if (!response.data.id) {
 				console.error("❌ 사용자 ID 없음! 백엔드 응답 수정 필요:", response.data);
@@ -131,26 +135,14 @@ const LoginPage = () => {
 						<span className="form__span">or use your email account</span>
 						<input className="form__input" type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
 						<input className="form__input" type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required />
-						{/* 🔹 로그인 연장 선택 옵션 추가 */}
-
-						<div>
+						{/* ✅ 로그인 정보 기억하기 체크박스 추가 */}
+						<div className="remember-me">
 							<label>
 								<input
-									type="radio"
-									name="duration"
-									value="30"
-									checked={duration === 30}
-									onChange={() => setDuration(30)}
-								/> 30분
-							</label>
-							<label>
-								<input
-									type="radio"
-									name="duration"
-									value="forever"
-									checked={duration !== 30}
-									onChange={() => setDuration("forever")}
-								/> 로그아웃 전까지 유지
+									type="checkbox"
+									checked={rememberMe}
+									onChange={() => setRememberMe(!rememberMe)}
+								/> 로그인 정보 기억하기
 							</label>
 						</div>
 

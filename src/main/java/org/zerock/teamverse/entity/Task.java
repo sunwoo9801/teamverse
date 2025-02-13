@@ -39,8 +39,14 @@ public class Task {
 
     private String color; // Gantt 차트에서 작업 색상
 
+    @Column(name = "start_date", nullable = false) // ✅ 작업 시작일 추가
+    private LocalDate startDate;
+
     @Column(name = "due_date", nullable = false)
     private LocalDate dueDate; // 작업 마감일
+
+    @Column(name = "description", columnDefinition = "TEXT") // ✅ 작업 내용 추가
+    private String description;
 
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
@@ -49,6 +55,6 @@ public class Task {
     private LocalDateTime updatedAt = LocalDateTime.now();
 
     public enum Status {
-        TODO, IN_PROGRESS, DONE
+        DRAFT, EDITING, TODO, IN_PROGRESS, DONE
     }
 }

@@ -35,7 +35,8 @@ public class SecurityConfig {
                     .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // ✅ OPTIONS 요청 허용
                     .requestMatchers("/api/auth/register", "/api/auth/login").permitAll() // ✅ 로그인 및 회원가입 허용
                     .requestMatchers("/api/auth/logout").authenticated()
-                    .requestMatchers("/api/team/invite").authenticated() // ✅ 권한 허용 추가
+                    .requestMatchers("/api/team/invite").authenticated() 
+                       .requestMatchers("/api/user/projects/**").authenticated() 
                     .requestMatchers("/api/user").authenticated() // ✅ 인증된 사용자만 /api/user 접근 가능
                     
                     .anyRequest().authenticated()

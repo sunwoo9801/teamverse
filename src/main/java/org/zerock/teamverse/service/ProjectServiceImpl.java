@@ -28,6 +28,10 @@ public class ProjectServiceImpl implements ProjectService { // ✅ 기존 기능
         this.teamMemberRepository = teamMemberRepository;
     }
 
+     public Optional<User> findById(Long id) {
+        return userRepository.findById(id);
+    }
+
     @Override
     public List<Project> getProjectsByUser(User user) {
         return projectRepository.findByTeamMembers_User(user);
@@ -101,4 +105,11 @@ public class ProjectServiceImpl implements ProjectService { // ✅ 기존 기능
 
         teamMemberRepository.save(teamMember);
     }
+
+    @Override
+    public List<Project> getProjectsByOwner(User owner) {
+        return projectRepository.findByOwner(owner); // owner_id 기반 프로젝트 목록 가져오기
+    }
+
+
 }

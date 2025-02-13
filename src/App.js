@@ -7,6 +7,7 @@ import TeamStatusPage from './pages/TeamStatusPage';
 import LoginPage from "./components/LoginPage";
 import SessionTimeout from "./components/SessionTimeout"; // 자동 세션 관리
 import LandingPage from './components/LandingPage';
+import TaskPage from './pages/TaskPage';
 
 
 const tasks = [
@@ -40,7 +41,7 @@ function MainLayout() {
         {/* <Route path="/login" element={<LoginPage />} /> */}
         <Route path="/statistics" element={<StatisticsPage tasks={tasks} />} /> {/* tasks 전달 */}
         <Route path="/team-status" element={<TeamStatusPage />} /> 
-
+        <Route path="/task" element={<TaskPage />} /> 
       </Routes>
     </>
   );

@@ -208,60 +208,58 @@ import TaskBoard from "../components/TaskBoard";
 import "../styles/MainPage.css";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
+import { getAccessToken } from "../utils/authUtils";
 
 const MainPage = () => {
     const [projects, setProjects] = useState([]); // ✅ 프로젝트 목록 저장
     const [selectedProject, setSelectedProject] = useState(null); // ✅ 선택한 프로젝트 저장
+    const [tasks, setTasks] = useState([]); // ✅ 선택한 프로젝트의 작업 목록
     const [showModal, setShowModal] = useState(false);
     const [projectName, setProjectName] = useState("");
     const [user, setUser] = useState(null);
     const { userId } = useParams();
-    const navigate = useNavigate();
+    const navigate = useNavigate(); // ✅ 페이지 이동
+    const [projectDescription, setProjectDescription] = useState(""); // ✅ 설명 추가
 
-    // ✅ 프로젝트 목록 불러오기
-    useEffect(() => {
-        const fetchProjects = async () => {
-            const token = localStorage.getItem("accessToken");
-            if (!token) return;
 
-            try {
-                const response = await axios.get("http://localhost:8082/api/user/projects", {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                        "Content-Type": "application/json",
-                    },
-                });
+    // ✅ 로그인한 사용자의 프로젝트 목록 불러오기
+    const fetchProjects = async () => {
+        const token = getAccessToken();
+        if (!token) {
+            alert("로그인이 필요합니다.");
+            navigate("/login");
+            return;
+        }
 
-                console.log("✅ 프로젝트 목록:", response.data);
-                setProjects(response.data);
+        try {
+            const response = await axios.get("http://localhost:8082/api/user/projects", {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    "Content-Type": "application/json",
+                },
+                withCredentials: true,
+            });
 
-                // 데이터가 teamProjects 내부에 있는 경우 대응
-                if (Array.isArray(response.data) && response.data.length > 0) {
-                    setProjects(response.data);
-                } else if (response.data.teamProjects) {
-                    const extractedProjects = response.data.teamProjects.map(tp => tp.project);
-                    setProjects(extractedProjects);
-                } else {
-                    console.warn("🚨 예상과 다른 API 응답 구조:", response.data);
-                }
-            } catch (error) {
-                console.error("❌ 프로젝트 목록 불러오기 실패:", error);
-
-                // 수정: 401 Unauthorized 발생 시 로그인 페이지로 이동
-                if (error.response?.status === 401) {
-                    console.warn("🚨 인증 만료 - 다시 로그인 필요");
-                    localStorage.removeItem("accessToken");
-                    navigate("/login");
-                }
-
-                alert("프로젝트 데이터를 불러올 수 없습니다.");
+            console.log("✅ 서버에서 가져온 프로젝트 목록:", response.data);
+            if (response.data && response.data.length > 0) {
+                const formattedProjects = response.data.map(project => ({
+                    ...project,
+                    name: project.name ? project.name : "🚨 이름 없음", // ✅ 이름이 없으면 기본값 설정
+                }));
+                setProjects(formattedProjects);
+                handleProjectSelect(formattedProjects[0]); // ✅ 첫 번째 프로젝트 선택
             }
-        };
+        } catch (error) {
+            console.error("❌ 프로젝트 목록 불러오기 실패:", error);
+            if (error.response?.status === 401) {
+                localStorage.removeItem("accessToken");
+                sessionStorage.removeItem("accessToken");
+                navigate("/login");
+            }
+        }
+    };
 
-        fetchProjects();
-    }, []);
-
-    // 추가가: 새로운 Access Token 발급
+    // 새로운 Access Token 발급
     const refreshAccessToken = async () => {
         const refreshToken = localStorage.getItem("refreshToken");
         if (!refreshToken) {
@@ -275,6 +273,7 @@ const MainPage = () => {
             });
 
             localStorage.setItem("accessToken", response.data.accessToken);
+            sessionStorage.setItem("accessToken", response.data.accessToken); // ✅ 추가: sessionStorage에도 저장
             console.log("✅ 새 Access Token 발급:", response.data.accessToken);
             return response.data.accessToken;
         } catch (error) {
@@ -282,36 +281,100 @@ const MainPage = () => {
             navigate("/login");
         }
     };
+
     // ✅ 새로운 프로젝트 생성
     const handleCreateProject = async () => {
-        const token = localStorage.getItem("accessToken");
+        const token = getAccessToken(); // sessionStorage에서도 accessToken을 가져올 수 있도록 변경
+
         if (!token) {
             alert("로그인이 필요합니다.");
+            navigate("/login");
             return;
         }
 
         try {
-            const response = await axios.post(
-                "http://localhost:8082/api/user/projects",
-                { name: projectName, startDate: new Date().toISOString().split("T")[0] },
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                        "Content-Type": "application/json",
-                    },
-                }
-            );
+            // 사용자가 입력한 값 반영 (빈 값이면 null 처리)
+            const newProjectData = {
+                name: projectName.trim() !== "" ? projectName.trim() : null,
+                description: projectDescription.trim() !== "" ? projectDescription.trim() : null,
+                startDate: new Date().toISOString().split("T")[0],
+            };
 
-            console.log("✅ 프로젝트 생성 성공:", response.data);
-            setProjects([...projects, response.data]);
+            const response = await axios.post(
+                "http://localhost:8082/api/user/projects", newProjectData, {
+                // { name: projectName, startDate: new Date().toISOString().split("T")[0] },
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    "Content-Type": "application/json",
+                },
+                withCredentials: true,
+            });
+
+            console.log("✅ 새 프로젝트 생성 응답:", response.data);
+            // ✅ 프로젝트 생성 후 Task 페이지로 이동
+            navigate(`/task?projectId=${response.data.id}`);
+
+
+            // setProjects([...projects, response.data]);
+            // setSelectedProject(response.data);
+            // localStorage.setItem("selectedProjectId", response.data.id);
+            // setShowModal(false);
+            // ✅ 프로젝트 목록에 즉시 추가 (name이 올바르게 존재하는지 확인)
+            if (!response.data || !response.data.id) {
+                throw new Error("프로젝트 생성 후 ID를 찾을 수 없습니다.");
+            }
+    
+            setProjects((prevProjects) => [...prevProjects, response.data]);
             setSelectedProject(response.data);
             localStorage.setItem("selectedProjectId", response.data.id);
+            fetchTasks(response.data.id);
             setShowModal(false);
         } catch (error) {
             console.error("❌ 프로젝트 생성 실패:", error);
             alert("프로젝트 생성에 실패했습니다.");
         }
     };
+
+    // ✅ 선택한 프로젝트의 작업(Task) 목록 불러오기
+    const fetchTasks = async (projectId) => {
+        const token = getAccessToken();
+        if (!token) {
+            alert("로그인이 필요합니다.");
+            navigate("/login");
+            return;
+        }
+
+        try {
+            const response = await axios.get(`http://localhost:8082/api/user/projects/${projectId}/tasks`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    "Content-Type": "application/json",
+                },
+                withCredentials: true,
+            });
+
+            console.log(`✅ 프로젝트 ${projectId}의 작업 목록:`, response.data);
+            setTasks(response.data);
+        } catch (error) {
+            console.error(`❌ 프로젝트 ${projectId}의 작업 목록 불러오기 실패:`, error);
+        }
+    };
+    // ✅ 프로젝트 선택 시 처리 함수
+    const handleProjectSelect = (project) => {
+        setSelectedProject(project);
+        fetchTasks(project.id);
+        console.log("🔍 선택된 프로젝트:", project);
+    };
+
+       // ✅ 프로젝트 상세 보기 페이지(TaskPage)로 이동
+       const handleProjectClick = (projectId) => {
+        navigate(`/task?projectId=${projectId}`);
+    };
+
+    useEffect(() => {
+        fetchProjects();
+    }, []);
+
 
     return (
         <div className="main-page">
@@ -322,15 +385,16 @@ const MainPage = () => {
                     {projects.length === 0 ? (
                         <p>현재 프로젝트가 없습니다.</p>
                     ) : (
-                        <ul>
+                        <ul className="project-list-container">
                             {projects.map((project) => (
                                 <li key={project.id}>
                                     <button
                                         className={`project-btn ${selectedProject?.id === project.id ? "active" : ""}`}
-                                        onClick={() => {
-                                            setSelectedProject(project);
-                                            localStorage.setItem("selectedProjectId", project.id);
-                                        }}
+                                        onClick={() =>
+                                            handleProjectSelect(project)
+                                            // {setSelectedProject(project);
+                                            // localStorage.setItem("selectedProjectId", project.id)}
+                                        }
                                     >
                                         {/* 수정: 프로젝트 이름이 없을 경우 대비 */}
                                         {project?.name || "🚨 이름 없음"}
@@ -347,8 +411,15 @@ const MainPage = () => {
                 {/* ✅ 선택한 프로젝트의 간트 차트 표시 */}
                 {selectedProject ? (
                     <div className="project-details">
-                        <h2>📊 {selectedProject.name} - Gantt Chart</h2>
-                        <GanttChart project={selectedProject} />
+                         {/* ✅ 클릭 시 TaskPage로 이동 */}
+                         <h2 
+                            className="clickable-title" 
+                            onClick={() => handleProjectClick(selectedProject.id)}
+                            style={{ cursor: "pointer", color: "blue", textDecoration: "underline" }} // ✅ 스타일 추가
+                        >
+                            📊 {selectedProject.name} - 간트차트
+                        </h2>
+                        <GanttChart project={selectedProject} tasks={tasks} />
                     </div>
                 ) : (
                     <p className="no-project-selected">📌 프로젝트를 선택해주세요.</p>
@@ -372,6 +443,12 @@ const MainPage = () => {
                             placeholder="프로젝트 이름"
                             value={projectName}
                             onChange={(e) => setProjectName(e.target.value)}
+                        />
+                         <input 
+                            type="text" 
+                            placeholder="프로젝트 설명 (선택 사항)" 
+                            value={projectDescription} 
+                            onChange={(e) => setProjectDescription(e.target.value)}
                         />
                         <button onClick={handleCreateProject}>생성</button>
                         <button onClick={() => setShowModal(false)}>취소</button>

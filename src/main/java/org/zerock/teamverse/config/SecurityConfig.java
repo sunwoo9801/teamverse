@@ -24,43 +24,44 @@ import java.util.List;
 public class SecurityConfig {
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtTokenProvider jwtTokenProvider) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtTokenProvider jwtTokenProvider)
+            throws Exception {
         http
-            .cors(cors -> cors.configurationSource(corsConfigurationSource())) // ✅ CORS 설정 활성화
-            .csrf().disable()
-            .sessionManagement()
-            .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-            .and()
-            .authorizeHttpRequests(auth -> auth
-                    .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // ✅ OPTIONS 요청 허용
-                    .requestMatchers("/api/auth/register", "/api/auth/login").permitAll() // ✅ 로그인 및 회원가입 허용
-                    .requestMatchers("/api/auth/logout").authenticated()
-                    .requestMatchers("/api/team/invite").authenticated() 
-                       .requestMatchers("/api/user/projects/**").authenticated() 
-                    .requestMatchers("/api/user").authenticated() // ✅ 인증된 사용자만 /api/user 접근 가능
-                    
-                    .anyRequest().authenticated()
-            )
-            .exceptionHandling(exception -> exception
-                    .authenticationEntryPoint((request, response, authException) -> {
-                        response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
-                    })
-            )
-            .logout(logout -> logout
-                    .logoutUrl("/api/auth/logout")
-                    .logoutSuccessHandler((request, response, authentication) -> {
-                        response.setStatus(HttpServletResponse.SC_OK);
-                        response.getWriter().write("Logged out successfully");
-                    })
-                    .invalidateHttpSession(true)
-                    .deleteCookies("accessToken", "refreshToken")
-                    .permitAll()
-            )
-            .addFilterBefore(new JwtTokenFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
-    
+                .cors(cors -> cors.configurationSource(corsConfigurationSource())) // ✅ CORS 설정 활성화
+                .csrf().disable()
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // ✅ OPTIONS 요청 허용
+                        .requestMatchers("/api/auth/register").permitAll() // ✅ 회원가입 허용
+                        .requestMatchers("/api/auth/login").permitAll() // ✅ 로그인 허용
+                        .requestMatchers("/api/auth/logout").authenticated()
+                        .requestMatchers("/api/team/invite").authenticated()
+                        .requestMatchers("/api/user/projects/**").authenticated()
+                        .requestMatchers("/api/config/google-maps-key").authenticated()
+                        .requestMatchers("/api/places/search").authenticated()
+                        .requestMatchers("/api/user").authenticated() 
+                        .requestMatchers("/api/auth").authenticated()
+
+                        .anyRequest().authenticated())
+                .exceptionHandling(exception -> exception
+                        .authenticationEntryPoint((request, response, authException) -> {
+                            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
+                        }))
+                .logout(logout -> logout
+                        .logoutUrl("/api/auth/logout")
+                        .logoutSuccessHandler((request, response, authentication) -> {
+                            response.setStatus(HttpServletResponse.SC_OK);
+                            response.getWriter().write("Logged out successfully");
+                        })
+                        .invalidateHttpSession(true)
+                        .deleteCookies("accessToken", "refreshToken")
+                        .permitAll())
+                .addFilterBefore(new JwtTokenFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
+
         return http.build();
     }
-    
 
     // ✅ CORS 설정을 Spring Security에서 직접 적용
     @Bean
@@ -71,7 +72,7 @@ public class SecurityConfig {
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setExposedHeaders(List.of("Authorization")); // ✅ 클라이언트가 Authorization 헤더 접근 가능
         configuration.setAllowCredentials(true); // ✅ JWT 포함 요청 허용
-    
+
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;

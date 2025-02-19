@@ -53,7 +53,9 @@ dependencies {
 	//
 	implementation 'com.google.code.gson:gson'
 
-
+	// .env 파일 사용을 위함(구글맵 관련)
+    implementation 'io.github.cdimascio:java-dotenv:5.2.2'
+		
 }
 
 tasks.named('test') {

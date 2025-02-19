@@ -84,4 +84,17 @@ try {
 }
 };
 
+export const getGoogleMapsApiKey = async () => {
+  try {
+    const response = await axios.get("http://localhost:8082/api/config/google-maps-key");
+    return response.data;
+  } catch (error) {
+    console.error("❌ Google Maps API 키 가져오기 실패:", error);
+    return null;
+  }
+};
+
+
+export default authAxios;
+
 

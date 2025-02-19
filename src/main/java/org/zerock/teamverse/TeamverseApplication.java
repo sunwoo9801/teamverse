@@ -10,5 +10,4 @@ public class TeamverseApplication {
 		SpringApplication.run(TeamverseApplication.class, args);
 	}
 
-}
-	
+}	

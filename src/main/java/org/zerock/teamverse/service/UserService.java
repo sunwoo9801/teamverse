@@ -58,8 +58,8 @@ public class UserService {
         this.jwtTokenProvider = jwtTokenProvider;
     }
 
-      // ✅ ID로 사용자 조회
-      public Optional<User> findById(Long id) {
+    // ✅ ID로 사용자 조회
+    public Optional<User> findById(Long id) {
         return userRepository.findById(id);
     }
 
@@ -70,7 +70,6 @@ public class UserService {
         if (userRepository.findByUsername(userDTO.getUsername()).isPresent()) {
             throw new IllegalArgumentException("이미 사용 중인 사용자명입니다.");
         }
-        
 
         // 🔹 이메일이 중복되는지 확인
         if (userRepository.findByEmail(userDTO.getEmail()).isPresent()) {
@@ -83,6 +82,21 @@ public class UserService {
         newUser.setEmail(userDTO.getEmail());
         newUser.setPassword(passwordEncoder.encode(userDTO.getPassword())); // 비밀번호 암호화
         newUser.setRole(User.Role.MEMBER); // 기본 역할 설정
+
+        // ✅ 선택 입력 필드 (값이 있으면 저장, 없으면 null 유지)
+        if (userDTO.getCompanyName() != null) {
+            newUser.setCompanyName(userDTO.getCompanyName());
+        }
+        if (userDTO.getDepartment() != null) {
+            newUser.setDepartment(userDTO.getDepartment());
+        }
+        if (userDTO.getPosition() != null) {
+            newUser.setPosition(userDTO.getPosition());
+        }
+        if (userDTO.getPhoneNumber() != null) {
+            newUser.setPhoneNumber(userDTO.getPhoneNumber());
+        }
+
         userRepository.save(newUser);
     }
 
@@ -108,7 +122,7 @@ public class UserService {
     }
 
     // 인증된 사용자 정보 조회
-    public Optional<Map<String, String>> getAuthenticatedUserInfo(Authentication authentication) {
+    public Optional<Map<String, Object>> getAuthenticatedUserInfo(Authentication authentication) {
         if (authentication == null || !authentication.isAuthenticated()) {
             return Optional.empty();
         }
@@ -117,7 +131,11 @@ public class UserService {
         return userRepository.findByEmail(email).map(user -> Map.of(
                 "username", user.getUsername(),
                 "email", user.getEmail(),
-                "role", user.getRole().name()));
+                "role", user.getRole().name(),
+                "companyName", user.getCompanyName(),
+                "department", user.getDepartment(),
+                "position", user.getPosition(),
+                "phoneNumber", user.getPhoneNumber()));
     }
 
     // 사용자 이메일로 조회
@@ -134,6 +152,17 @@ public class UserService {
     public void saveUser(User user) {
         userRepository.save(user);
     }
+
+     // ✅ 사용자 정보 업데이트 기능 추가
+     @Transactional
+     public void updateUser(User user, Map<String, String> updates) {
+         if (updates.containsKey("companyName")) user.setCompanyName(updates.get("companyName"));
+         if (updates.containsKey("department")) user.setDepartment(updates.get("department"));
+         if (updates.containsKey("position")) user.setPosition(updates.get("position"));
+         if (updates.containsKey("phoneNumber")) user.setPhoneNumber(updates.get("phoneNumber"));
+ 
+         userRepository.save(user);
+     }
 
     // 사용자 삭제
     @Transactional
@@ -158,25 +187,22 @@ public class UserService {
         response.addCookie(authCookie);
     }
 
-    //Refresh Token 검증
+    // Refresh Token 검증
     public boolean validateRefreshToken(String refreshToken) {
         return jwtTokenProvider.validateToken(refreshToken);
     }
 
-    
-    //Token에서 이메일 추출
+    // Token에서 이메일 추출
     public String getEmailFromToken(String token) {
         return jwtTokenProvider.getEmail(token);
     }
 
-    //새로운 Access Token 생성
+    // 새로운 Access Token 생성
     public String generateAccessToken(User user) {
         Map<String, Object> claims = Map.of(
                 "email", user.getEmail(),
-                "role", user.getRole().name()
-        );
+                "role", user.getRole().name());
         return jwtTokenProvider.createToken(claims, 10); // 10분 유효
     }
-    
 
 }

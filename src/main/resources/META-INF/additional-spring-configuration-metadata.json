@@ -1,0 +1,10 @@
+{
+  "properties": [
+    {
+      "name": "google.api.key",
+      "type": "java.lang.String",
+      "description": "Google API Key for accessing Google Maps and Places API",
+      "defaultValue": ""
+    }
+  ]
+}

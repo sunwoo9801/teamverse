@@ -1,0 +1,158 @@
+/* ✅ 모달 오버레이 */
+.edit-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+/* ✅ 모달 컨텐츠 */
+.edit-modal-content {
+  background: white;
+  width: 700px;
+  height: 650px;
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  text-align: left;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* ✅ 왼쪽 프로필 사이드바 */
+.edit-modal-sidebar {
+  width: 30%;
+  background: linear-gradient(to bottom, #c4b5fd, #ffffff);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-top-left-radius: 12px;
+  border-bottom-left-radius: 12px;
+}
+
+.profile-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+/* ✅ 프로필 이미지 */
+.edit-profile-image {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background: #ddd;
+  margin-bottom: 10px;
+}
+
+.edit-username {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 15px;
+  color: #333;
+}
+
+
+.edit-profile-edit-icon {
+  position: absolute;
+  top: 60px;
+  right: 60px;
+  background: white;
+  padding: 5px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+/* ✅ 사이드바 메뉴 */
+.edit-sidebar-menu {
+  list-style: none;
+  padding: 0;
+  width: 100%;
+}
+
+.edit-sidebar-menu li {
+  padding: 12px 0;
+  font-size: 14px;
+  color: #333;
+  text-align: left;
+  padding-left: 15px;
+  cursor: pointer;
+}
+
+.edit-sidebar-menu li:hover {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 5px;
+}
+
+/* ✅ 오른쪽 정보 수정 영역 */
+.edit-modal-main {
+  width: 70%;
+  padding: 25px;
+  overflow-y: auto;
+}
+
+/* ✅ 제목 스타일 */
+.edit-modal-title {
+  font-size: 20px;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 20px;
+  color: #333;
+}
+/* ✅ 입력 필드 스타일 */
+.edit-form-group {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 15px;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 10px;
+}
+
+.edit-form-group label {
+  font-size: 14px;
+  font-weight: bold;
+  width: 30%;
+  color: #333;
+}
+
+.edit-form-group input {
+  flex: 1;
+  padding: 8px;
+  border: none;
+  outline: none;
+  font-size: 14px;
+  color: #333;
+}
+
+
+/* ✅ 편집 아이콘 */
+.edit-icon {
+  cursor: pointer;
+  color: gray;
+}
+
+/* ✅ 저장 버튼 */
+.edit-save-btn {
+  background: #007bff;
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  width: 100%;
+  font-size: 16px;
+  font-weight: bold;
+  margin-top: 20px;
+}
+
+.edit-save-btn:hover {
+  background: #0056b3;
+}

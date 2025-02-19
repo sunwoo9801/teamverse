@@ -16,6 +16,8 @@
   background-color: #fff;
   /* border-radius: 8px; */
   margin: 20px;
+  height: 100%;
+
 }
 
 .month-calendar {
@@ -282,20 +284,32 @@ endar-day.empty-day {
   border-radius: 50%; /* 완전한 동그라미 */
   margin: 2px auto; /* 중앙 정렬 */
 }
-
 .progress-bar {
-  position: relative;
-  height: 100%;
-  background: #e3e4e8;
-  border-radius: 20px; /* 둥근 막대 */
-  overflow: hidden;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease-in-out;
+  position: absolute;
+  top: calc(100% + 5px);
+  left: 0;
+  height: 10px;
+  border-radius: 6px;
+  text-align: center;
+  font-size: 10px;
+  font-weight: bold;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+
 }
+
 
 .progress-bar:hover {
   transform: scale(1.03);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.calendar {
+  position: relative; /* ✅ progress-bar의 위치 기준을 calendar로 설정 */
 }
 
 .progress {

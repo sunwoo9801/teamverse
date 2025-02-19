@@ -1,175 +1,19 @@
-// import React, { useEffect, useState } from "react";
-// import { Link } from "react-router-dom";
-// import axios from "axios";
-// import "../styles/Navbar.css";
-
-// const Navbar = () => {
-//   const [invitations, setInvitations] = useState([]);
-//   const [showPopup, setShowPopup] = useState(false);
-//   const [user, setUser] = useState(null);
-
-//   // ✅ 사용자 정보 불러오기
-//   const fetchUserInfo = async () => {
-//     try {
-//       const token = localStorage.getItem("accessToken"); // accessToken 사용
-//       if (!token) {
-//         console.error("🚨 JWT 토큰이 없습니다! 로그인이 필요합니다.");
-//         return;
-//       }
-
-//       const response = await axios.get("http://localhost:8082/api/auth/me", {
-//         headers: {
-//           Authorization: `Bearer ${token}`,
-//           "Content-Type": "application/json",
-//         },
-//         withCredentials: true,
-//       });
-
-//       localStorage.setItem("user", JSON.stringify(response.data));
-//       setUser(response.data);
-//     } catch (error) {
-//       console.error("❌ 사용자 정보 불러오기 실패:", error);
-//     }
-//   };
-
-//   // ✅ 초대 목록 불러오기
-//   const fetchInvitations = async () => {
-//     try {
-//       const token = localStorage.getItem("token");
-//       if (!token) return;
-
-//       const response = await axios.get("http://localhost:8082/api/team/invitations", {
-//         headers: { Authorization: `Bearer ${token}` },
-//       });
-
-//       setInvitations(response.data);
-//       if (response.data.length > 0) setShowPopup(true);
-//     } catch (error) {
-//       console.error("초대 목록 불러오기 실패:", error);
-//     }
-//   };
-
-//   // ✅ 초대 수락하기
-//   const acceptInvite = async (inviteId) => {
-//     try {
-//       const token = localStorage.getItem("token");
-//       await axios.post(
-//         `http://localhost:8082/api/invites/${inviteId}/accept`,
-//         {},
-//         { headers: { Authorization: `Bearer ${token}` } }
-//       );
-
-//       alert("✅ 초대를 수락했습니다!");
-//       fetchInvitations(); // 새 초대 목록 다시 불러오기
-//     } catch (error) {
-//       console.error("❌ 초대 수락 실패:", error);
-//     }
-//   };
-
-//   // ✅ 로그아웃
-//   // const handleLogout = () => {
-//   //   localStorage.removeItem("token");
-//   //   localStorage.removeItem("refreshToken");
-//   //   localStorage.removeItem("user");
-//   //   setUser(null);
-//   //   window.location.href = "/login";
-//   // };
-
-//   // useEffect(() => {
-//   //   fetchUserInfo();
-//   //   fetchInvitations();
-//   // }, []);
-//   const handleLogout = async () => {
-//     try {
-//       const token = localStorage.getItem("accessToken"); // 로그아웃 시 Authorization 헤더에 토큰 포함
-//  if (!token) {
-//       console.error("🚨 JWT 토큰이 없습니다! 로그아웃 요청을 할 수 없습니다.");
-//       return; // 🔹 토큰이 없으면 로그아웃 요청을 실행하지 않음
-//     }
-
-//   await axios.post("http://localhost:8082/api/auth/logout", {}, {
-//       headers: { Authorization: `Bearer ${token}` }, // Authorization 헤더 포함
-//       withCredentials: true
-//     });
-
-//       // ✅ 쿠키 삭제 (브라우저에서 강제 삭제)
-//     document.cookie = "accessToken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
-//     document.cookie = "refreshToken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
-     
-//     // ✅ 로컬스토리지 삭제
-//     localStorage.removeItem("accessToken");
-//     localStorage.removeItem("refreshToken");
-//     localStorage.removeItem("user");
-
-//       setUser(null); // 로그아웃 후 사용자 상태 초기화
-//       alert("로그아웃 되었습니다.");
-//       window.location.href = "/";
-//     } catch (error) {
-//       console.error("로그아웃 실패:", error);
-//     }
-//   };
-
-//   // 페이지 로드시 사용자 정보 자동 불러오기
-//   useEffect(() => {
-//     fetchUserInfo();
-//   }, []);
-
-//   return (
-//     <nav className="navbar">
-//       <div className="navbar-logo">TeamVerse</div>
-
-//       {/* ✅ 초대 팝업 */}
-//       {showPopup && (
-//         <div className="invitation-popup">
-//           <h2>초대 알림</h2>
-//           <ul>
-//             {invitations.map((invite) => (
-//               <li key={invite.id}>
-//                 <p>{invite.email}님이 팀 초대를 보냈습니다.</p>
-//                 <button className="accept-btn" onClick={() => acceptInvite(invite.id)}>
-//                   수락
-//                 </button>
-//               </li>
-//             ))}
-//           </ul>
-//           <button className="close-btn" onClick={() => setShowPopup(false)}>닫기</button>
-//         </div>
-//       )}
-
-//       <div className="navbar-links">
-//         <Link to="/">Dashboard</Link>
-//         <Link to="/statistics">Statistics</Link>
-//         <Link to="/team-status">Team</Link>
-//         <Link to="/settings">Settings</Link>
-//         {user ? (
-//           <Link
-//             to="/login"
-//             onClick={(e) => {
-//               e.preventDefault(); // 기본 이동 방지
-//               handleLogout(); // 로그아웃 함수 실행
-//             }}
-//           >
-//             Logout
-//           </Link>
-//         ) : (
-//           <Link to="/login">Login</Link>
-//         )}
-//       </div>
-//     </nav>
-//   );
-// };
-
-// export default Navbar;
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom"; // ✅ useNavigate 추가
 import axios from "axios";
 import { getAccessToken } from "../utils/authUtils"; // ✅ 로그인 상태 확인을 위한 accessToken 가져오기
+import ProfileModal from "./ProfileModal"; // ✅ 모달 컴포넌트 가져오기
 import "../styles/Navbar.css";
+import defaultProfileImage from "../assets/images/basicprofile.jpg"; // ✅ 기본 프로필 이미지 추가
+import { FaUserCircle, FaCogs, FaSignOutAlt } from "react-icons/fa"; // ✅ 아이콘 추가
+
 
 const Navbar = () => {
   const [invitations, setInvitations] = useState([]);
   const [showPopup, setShowPopup] = useState(false);
   const [user, setUser] = useState(null);
+  const [showDropdown, setShowDropdown] = useState(false);
+  const [showProfileModal, setShowProfileModal] = useState(false); // ✅ 모달 상태
   const navigate = useNavigate(); // ✅ 페이지 이동을 위한 useNavigate 추가
 
   // ✅ 사용자 정보 불러오기
@@ -290,25 +134,49 @@ const Navbar = () => {
         </div>
       )}
 
-      <div className="navbar-links">
-        <Link to="/">Dashboard</Link>
-        <Link to="/statistics">Statistics</Link>
-        <Link to="/team-status">Team</Link>
-        <Link to="/settings">Settings</Link>
-        {user ? (
-          <Link
-            to="/login"
-            onClick={(e) => {
-              e.preventDefault(); 
-              handleLogout(); 
-            }}
-          >
-            Logout
-          </Link>
+      <div className="navbar-menu">
+        <Link to="/">대시보드</Link>
+        <Link to="/statistics">통계</Link>
+        <Link to="/team-status">팀원</Link>
+          {/* ✅ 프로필을 텍스트로 표시 */}
+          {user ? (
+          <div className="profile-link">
+            <span onClick={() => setShowDropdown(!showDropdown)}>프로필</span>
+            {showDropdown && (
+              <div className="profile-dropdown">
+                {/* ✅ 프로필 사진과 유저네임 나란히 배치 */}
+                <div className="dropdown-header">
+                  <img 
+                    src={user.profileImage || defaultProfileImage} 
+                    alt="Profile" 
+                    className="dropdown-profile-image" 
+                  />
+                  <p className="dropdown-username">{user.username}</p>
+                </div>
+
+                <span className="dropdown-item" onClick={() => setShowProfileModal(true)}>
+                  <FaUserCircle className="icon" /> 내 프로필
+                </span>
+                
+                <Link to="/settings" className="dropdown-item">
+                  <FaCogs className="icon" /> 설정
+                </Link>
+                
+                <button className="dropdown-item logout-btn" onClick={handleLogout}>
+                  <FaSignOutAlt className="icon" /> 로그아웃
+                </button>
+              </div>
+            )}
+          </div>
         ) : (
-          <Link to="/login">Login</Link>
+          <Link to="/login" className="login-btn">로그인</Link>
         )}
       </div>
+
+      <ProfileModal isOpen={showProfileModal} onClose={() => setShowProfileModal(false)}
+        user={user}
+        onUpdate={setUser}
+      />
     </nav>
   );
 };

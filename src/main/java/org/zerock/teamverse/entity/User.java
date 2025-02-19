@@ -50,9 +50,25 @@ public class User {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt = LocalDateTime.now();
 
-    // ✅ 기존 ManyToMany 삭제 후 OneToMany 추가
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TeamMember> teamProjects; // 사용자가 속한 팀 프로젝트 목록
+
+      // ✅ 추가된 필드들 (회원 정보 모달에서 사용)
+      @Column(name = "company_name")
+      private String companyName;  // 회사명
+  
+      @Column(name = "department")
+      private String department;   // 부서명
+  
+      @Column(name = "position")
+      private String position;     // 직책 (예: 팀장, 개발자 등)
+  
+      @Column(name = "phone_number")
+      private String phoneNumber;  // 휴대폰 번호
+  
+      @Column(name = "password_reset_token")
+      private String passwordResetToken; // 비밀번호 재설정 토큰
+
     public enum Role {
         ADMIN, MEMBER
     }

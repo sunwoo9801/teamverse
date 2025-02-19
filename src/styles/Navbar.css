@@ -13,6 +13,12 @@
   color: white;
 }
 
+.navbar-menu {
+  display: flex;
+  align-items: center;
+  gap: 25px; /* ✅ 메뉴 간격 동일하게 조정 */
+}
+
 .login-btn {
   background-color: white;
   color: #4B70E2;
@@ -103,3 +109,112 @@
   background-color: #bbb;
   color: white;
 }
+
+/* 다혜 추가 */
+/* ✅ 프로필 아이콘 스타일 */
+.profile-container {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.profile-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 2px solid #ddd;
+  transition: 0.3s;
+}
+
+.profile-icon:hover {
+  border-color: #007bff;
+}
+
+.navbar-menu a,
+.profile-link span {
+  text-decoration: none;
+  color: white;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+/* ✅ 프로필 드롭다운 */
+.profile-link {
+  position: relative;
+}
+
+/* ✅ 드롭다운 메뉴 스타일 */
+.profile-dropdown {
+  position: absolute;
+  right: 0;
+  top: 60px; /* ✅ 기존 50px에서 약간 아래로 이동 */
+  width: 200px; /* ✅ 드롭다운 너비 확장 */
+  background: white;
+  border: 1px solid #ddd;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  z-index: 1000;
+  padding: 5px 0; /* ✅ 내부 아이템 간격 조정 */
+}
+
+/* ✅ 드롭다운 상단: 프로필 사진과 유저네임 정렬 */
+.dropdown-header {
+  display: flex;
+  align-items: center;
+  padding: 12px;
+  border-bottom: 1px solid #ddd;
+  background-color: #f8f9fa;
+}
+
+.dropdown-profile-image {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.dropdown-username {
+  font-size: 14px;
+  font-weight: bold;
+  color: #333;
+}
+
+/* ✅ 드롭다운 내부 아이템 스타일 */
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* ✅ 아이콘과 텍스트 간격 */
+  padding: 12px;
+  text-decoration: none;
+  color: #333 !important;
+  transition: background 0.2s;
+}
+
+.dropdown-item:hover {
+  background: #f1f1f1;
+}
+
+/* ✅ 아이콘 스타일 */
+.icon {
+  font-size: 18px;
+  color: #555;
+}
+
+/* ✅ 로그아웃 버튼 스타일 */
+.logout-btn {
+  width: 100%;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: red !important;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logout-btn:hover {
+  background: #ffecec;
+}
+

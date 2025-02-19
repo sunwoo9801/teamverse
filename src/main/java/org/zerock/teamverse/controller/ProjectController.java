@@ -31,27 +31,26 @@ public class ProjectController {
         this.userService = userService;
 
     }
-
-    // ✅ 로그인한 유저의 프로젝트만 조회
+    
+    // ✅ 로그인한 유저의 프로젝트 조회 (초대받은 프로젝트도 포함)
     @GetMapping
     public ResponseEntity<List<Project>> getUserProjects(Authentication authentication) {
-        if (authentication == null || !authentication.isAuthenticated()) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Collections.emptyList());
-        }
-
-        String email = authentication.getName(); // 현재 로그인한 사용자의 이메일 가져오기
-        User user = userService.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("User not found"));
-
-        List<Project> projects = projectService.getProjectsByOwner(user);
-
-        // 로그 추가 (name 필드 확인)
-        projects.forEach(project -> {
-            System.out.println("📌 반환 프로젝트: ID = " + project.getId() + ", Name = " + project.getName());
-        });
-
-        return ResponseEntity.ok(projects);
+    if (authentication == null || !authentication.isAuthenticated()) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Collections.emptyList());
     }
+
+    String email = authentication.getName();
+    User user = userService.findByEmail(email)
+            .orElseThrow(() -> new RuntimeException("User not found"));
+
+    // ✅ 소유한 프로젝트 + 초대된 프로젝트 모두 가져오기
+    List<Project> ownedProjects = projectService.getProjectsByOwner(user);
+    List<Project> invitedProjects = projectService.getProjectsByUser(user);
+    
+    ownedProjects.addAll(invitedProjects); // ✅ 리스트 병합
+
+    return ResponseEntity.ok(ownedProjects);
+}
 
     @PostMapping
     public ResponseEntity<Project> createProject(@RequestBody Project project, Authentication authentication) {
@@ -123,4 +122,10 @@ public class ProjectController {
         return ResponseEntity.ok("초대가 성공적으로 전송되었습니다.");
     }
 
+    // ✅ 특정 프로젝트에 속한 팀원 목록 반환
+    @GetMapping("/{projectId}/team-members")
+    public ResponseEntity<List<User>> getProjectTeamMembers(@PathVariable Long projectId) {
+        List<User> teamMembers = projectService.getProjectTeamMembers(projectId);
+        return ResponseEntity.ok(teamMembers);
+    }
 }

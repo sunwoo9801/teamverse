@@ -21,6 +21,19 @@ public class TaskService {
     }
 
     public Task createTask(Task task) {
+
+    // 📌 TaskService에서 color 값 확인
+    System.out.println("📌 [TaskService] 저장 요청된 Task color: " + task.getColor());
+
+    if (task.getColor() == null || task.getColor().isEmpty()) {
+        System.out.println("❌ [TaskService] color 값이 없음, 기본 색상 적용");
+        task.setColor("#ff99a5");
+    }
+
+    Task savedTask = taskRepository.save(task);
+    System.out.println("🎨 [TaskService] 저장된 Task color: " + savedTask.getColor());
+
+
         return taskRepository.save(task);
     }
 
@@ -44,6 +57,18 @@ public class TaskService {
         task.setDescription(taskDTO.getDescription()); // ✅ 작업 내용 업데이트
         task.setProject(project);
         task.setAssignedTo(assignedUser);
+        task.setColor(taskDTO.getColor()); // ✅ 색상 값 저장
+
+
+        // ✅ color 값이 정상적으로 들어오는지 로그 확인
+        System.out.println("📌 전달받은 TaskDTO color: " + taskDTO.getColor());
+        if (taskDTO.getColor() == null || taskDTO.getColor().isEmpty()) {
+            System.out.println("❌ color 값이 없음, 기본 색상 적용");
+            task.setColor("#ff99a5");
+        } else {
+            System.out.println("✅ 저장할 color 값: " + taskDTO.getColor());
+            task.setColor(taskDTO.getColor());
+        }
 
         return taskRepository.save(task);
     }

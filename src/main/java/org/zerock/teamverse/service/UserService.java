@@ -1,31 +1,3 @@
-/* 레포지토리 활용해 주요 비즈니스 로직을 캡슐화
- * 예: 사용자 등록, 로그인 인증, 작업 상태 변경 등의 로직 구현
- */
-
-// package org.zerock.teamverse.service;
-
-// // import org.springframework.security.core.userdetails.UsernameNotFoundException;
-// import org.springframework.stereotype.Service;
-// import org.zerock.teamverse.entity.User;
-// import org.zerock.teamverse.repository.UserRepository;
-
-// import jakarta.transaction.Transactional;
-
-// @Service
-// public class UserService {
-//     private final UserRepository userRepository;
-
-//     public UserService(UserRepository userRepository) {
-//         this.userRepository = userRepository;
-//     }
-
-//     @Transactional
-//     public User registerUser(User user) { 
-//         // 사용자 등록 로직 (중복 체크, 비밀번호 암호화 등)
-//         return userRepository.save(user);
-//     }    
-// }
-
 package org.zerock.teamverse.service;
 
 import org.springframework.security.crypto.password.PasswordEncoder;

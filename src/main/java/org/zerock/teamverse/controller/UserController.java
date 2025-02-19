@@ -44,19 +44,6 @@ public class UserController {
 		}
 	}
 
-	// 로그인
-	// @PostMapping("/login")
-	// public ResponseEntity<LoginResponse> login(@RequestBody @Valid LoginRequest
-	// loginRequest) {
-	// return userService.authenticate(loginRequest)
-	// .map(tokens -> {
-	// // tokens 값 확인 및 기본값 설정
-	// String accessToken = tokens.getOrDefault("accessToken", "");
-	// String refreshToken = tokens.getOrDefault("refreshToken", "");
-	// return ResponseEntity.ok(new LoginResponse(accessToken, refreshToken));
-	// })
-	// .orElse(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
-	// }
 	@PostMapping("/login")
 	public ResponseEntity<LoginResponse> login(
 			@RequestBody @Valid LoginRequest loginRequest,
@@ -123,14 +110,6 @@ public class UserController {
 		return ResponseEntity.ok(Map.of("accessToken", newAccessToken));
 	}
 
-	// ✅ 사용자 정보 조회 (경로를 명확히 `/api/auth/me`로 변경)
-	// @GetMapping("/me")
-	// public ResponseEntity<Map<String, String>> getMyInfo(Authentication
-	// authentication) {
-	// return userService.getAuthenticatedUserInfo(authentication)
-	// .map(ResponseEntity::ok)
-	// .orElse(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
-	// }
 	@GetMapping("/me")
 	public ResponseEntity<Map<String, Object>> getMyInfo(Authentication authentication) {
 		if (authentication == null) {

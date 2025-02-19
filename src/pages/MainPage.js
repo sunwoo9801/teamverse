@@ -1,203 +1,4 @@
-// import React, { useState, useEffect } from "react";
-// import Sidebar from "../components/Sidebar";
-// import GanttChart from "../components/GanttChart";
-// import Chatbox from "../components/Chatbox";
-// import Dashboard from "../components/Dashboard";
-// import TaskBoard from "../components/TaskBoard";
-// import "../styles/MainPage.css";
-// import axios from "axios";
-// import { useNavigate, useParams } from "react-router-dom";
 
-// const MainPage = () => {
-//     const [projects, setProjects] = useState([]);
-//     const [selectedProject, setSelectedProject] = useState(null);
-//     const [showModal, setShowModal] = useState(false);
-//     const [projectName, setProjectName] = useState("");
-//     const [user, setUser] = useState(null);
-//     const { userId } = useParams(); // ✅ userId 가져오기
-//     const navigate = useNavigate(); // 수정: useNavigate 훅 사용
-
-
-//     // 🔹 로그인한 유저 정보 가져오기
-//     const fetchUserInfo = async () => {
-//         const token = localStorage.getItem("accessToken");
-//         if (!token) {
-//             navigate("/login"); // 수정: 로그인하지 않은 경우 로그인 페이지로 이동
-//             return;
-//         }
-
-//         try {
-//             const response = await axios.get("http://localhost:8082/api/auth/me", {
-//                 headers: {
-//                     Authorization: `Bearer ${token}`,
-//                     "Content-Type": "application/json",
-//                 },
-//             });
-
-//             console.log("✅ 로그인한 사용자 정보:", response.data);
-//             setUser(response.data);
-//             localStorage.setItem("user", JSON.stringify(response.data));
-
-
-//             // 수정: 로그인 후 사용자 ID 기반 URL 이동
-//             navigate(`/dashboard/${response.data.id}`);
-
-//         } catch (error) {
-//             console.error("❌ 사용자 정보 불러오기 실패:", error);
-//             navigate("/login"); // 수정: 사용자 정보 로드 실패 시 로그인 페이지로 이동
-
-//         }
-//     };
-
-//     // 🔹 로그인한 유저의 프로젝트 불러오기
-//     const fetchProjects = async () => {
-//         const token = localStorage.getItem("accessToken");
-//         if (!token) return;
-
-//         try {
-//             const response = await axios.get("http://localhost:8082/api/user/projects", {
-//                 headers: {
-//                     Authorization: `Bearer ${token}`,
-//                     "Content-Type": "application/json",
-//                 },
-//             });
-
-//             console.log("✅ 프로젝트 목록:", response.data);
-//             setProjects(response.data);
-
-//             // const savedProjectId = localStorage.getItem("selectedProjectId");
-//             // if (savedProjectId) {
-//             //     const foundProject = response.data.find(proj => proj.id === parseInt(savedProjectId));
-//             //     if (foundProject) {
-//             //         setSelectedProject(foundProject);
-//             //     }
-//             // }
-
-//             if (response.data.length > 0) {
-//                 const savedProjectId = localStorage.getItem("selectedProjectId");
-//                 if (savedProjectId) {
-//                     const foundProject = response.data.find(proj => proj.id === parseInt(savedProjectId));
-//                     if (foundProject) {
-//                         setSelectedProject(foundProject);
-//                     }
-//                 }
-//             }
-//         } catch (error) {
-//             console.error("❌ 프로젝트 목록 불러오기 실패:", error);
-//             alert("프로젝트 데이터를 불러올 수 없습니다.");
-//         }
-//     };
-
-//     // ✅ 처음 렌더링될 때 유저 정보 및 프로젝트 가져오기
-//     // useEffect(() => {
-//     //     fetchUserInfo();
-//     //     fetchProjects();
-//     // }, []);
-//     useEffect(() => {
-//         const fetchUserInfo = async () => {
-//             const token = localStorage.getItem("accessToken");
-//             if (!token) {
-//                 console.error("🚨 토큰이 없습니다! 로그인 페이지로 이동합니다.");
-//                 navigate("/login");
-//                 return;
-//             }
-
-//             try {
-//                 const response = await axios.get("http://localhost:8082/api/auth/me", {
-//                     headers: { Authorization: `Bearer ${token}` },
-//                 });
-
-//                 console.log("📌 MainPage에서 가져온 사용자 정보:", response.data);
-
-//                 if (response.data.id !== parseInt(userId)) {
-//                     console.warn("🚨 URL의 userId와 로그인한 사용자 ID가 다름!");
-//                     navigate(`/dashboard/${response.data.id}`);
-//                 }
-
-//                 setUser(response.data);
-//             } catch (error) {
-//                 console.error("❌ 사용자 정보를 불러오는 데 실패했습니다:", error);
-//                 navigate("/login"); // 🚨 401 Unauthorized 응답이 오면 로그인 페이지로 이동
-//             }
-//         };
-
-//         fetchUserInfo();
-//     }, [userId, navigate]);
-
-
-
-//     const handleCreateProject = async () => {
-//         const token = localStorage.getItem("accessToken");
-//         if (!token) {
-//             alert("로그인이 필요합니다.");
-//             return;
-//         }
-
-//         try {
-//             const response = await axios.post(
-//                 "http://localhost:8082/api/user/projects",
-//                 { name: projectName, startDate: new Date().toISOString().split("T")[0] },
-//                 {
-//                     headers: {
-//                         Authorization: `Bearer ${token}`,
-//                         "Content-Type": "application/json",
-//                     },
-//                 }
-//             );
-
-//             console.log("✅ 프로젝트 생성 성공:", response.data);
-//             setProjects([...projects, response.data]);
-//             setSelectedProject(response.data);
-//             localStorage.setItem("selectedProjectId", response.data.id);
-//             setShowModal(false);
-//         } catch (error) {
-//             console.error("❌ 프로젝트 생성 실패:", error);
-//             alert("프로젝트 생성에 실패했습니다.");
-//         }
-//     };
-
-//     return (
-//         <div className="main-page">
-//             <div className="content">
-//                 {projects.length === 0 ? (
-//                     <div className="empty-gantt">
-//                         <p>현재 프로젝트가 없습니다.</p>
-//                         <button className="create-project-btn" onClick={() => setShowModal(true)}>
-//                             새로운 프로젝트 생성
-//                         </button>
-//                     </div>
-//                 ) : (
-//                     <GanttChart project={projects[0]} />
-//                 )}
-//                 <TaskBoard />
-//                 <Dashboard tasks={[]} />
-//             </div>
-//             <div className="chatbox-container">
-//                 <Sidebar />
-//                 <Chatbox />
-//             </div>
-
-//             {/* 🔹 프로젝트 생성 모달 */}
-//             {showModal && (
-//                 <div className="modal">
-//                     <div className="modal-content">
-//                         <h2>새 프로젝트 생성</h2>
-//                         <input
-//                             type="text"
-//                             placeholder="프로젝트 이름"
-//                             value={projectName}
-//                             onChange={(e) => setProjectName(e.target.value)}
-//                         />
-//                         <button onClick={handleCreateProject}>생성</button>
-//                         <button onClick={() => setShowModal(false)}>취소</button>
-//                     </div>
-//                 </div>
-//             )}
-//         </div>
-//     );
-// };
-
-// export default MainPage;
 
 import React, { useState, useEffect } from "react";
 import Sidebar from "../components/Sidebar";
@@ -209,6 +10,10 @@ import "../styles/MainPage.css";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import { getAccessToken } from "../utils/authUtils";
+import InviteList from "../components/InviteList"; // ✅ 초대 목록 컴포넌트 추가
+import { getStompClient } from "../api/websocket"; // ✅ getStompClient 사용
+
+
 
 const MainPage = () => {
     const [projects, setProjects] = useState([]); // ✅ 프로젝트 목록 저장
@@ -220,7 +25,7 @@ const MainPage = () => {
     const { userId } = useParams();
     const navigate = useNavigate(); // ✅ 페이지 이동
     const [projectDescription, setProjectDescription] = useState(""); // ✅ 설명 추가
-
+    const [invites, setInvites] = useState([]); // ✅ 초대 목록 상태 추가
 
     // ✅ 로그인한 사용자의 프로젝트 목록 불러오기
     const fetchProjects = async () => {
@@ -230,7 +35,7 @@ const MainPage = () => {
             navigate("/login");
             return;
         }
-
+    
         try {
             const response = await axios.get("http://localhost:8082/api/user/projects", {
                 headers: {
@@ -239,26 +44,28 @@ const MainPage = () => {
                 },
                 withCredentials: true,
             });
-
+    
             console.log("✅ 서버에서 가져온 프로젝트 목록:", response.data);
             if (response.data && response.data.length > 0) {
-                const formattedProjects = response.data.map(project => ({
-                    ...project,
-                    name: project.name ? project.name : "🚨 이름 없음", // ✅ 이름이 없으면 기본값 설정
-                }));
-                setProjects(formattedProjects);
-                handleProjectSelect(formattedProjects[0]); // ✅ 첫 번째 프로젝트 선택
+                const uniqueProjects = response.data.reduce((acc, project) => {
+                    if (!acc.some((p) => p.id === project.id)) {
+                        acc.push(project);
+                    }
+                    return acc;
+                }, []);
+    
+                setProjects(uniqueProjects);
+                setSelectedProject(uniqueProjects[0]);
+                fetchTasks(uniqueProjects[0].id);
             }
         } catch (error) {
             console.error("❌ 프로젝트 목록 불러오기 실패:", error);
-            if (error.response?.status === 401) {
-                localStorage.removeItem("accessToken");
-                sessionStorage.removeItem("accessToken");
-                navigate("/login");
-            }
         }
     };
+    
 
+
+    
     // 새로운 Access Token 발급
     const refreshAccessToken = async () => {
         const refreshToken = localStorage.getItem("refreshToken");
@@ -371,14 +178,62 @@ const MainPage = () => {
         navigate(`/task?projectId=${projectId}`);
     };
 
-    useEffect(() => {
-        fetchProjects();
+    const fetchInvites = async () => {
+        const token = getAccessToken();
+        try {
+          const response = await axios.get("http://localhost:8082/api/team/invites", {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+          console.log("📌 받은 초대 목록:", response.data);
+          setInvites(response.data);
+        } catch (error) {
+          console.error("❌ 초대 목록 불러오기 실패:", error);
+        }
+      };
+
+      useEffect(() => {
+        fetchProjects(); // ✅ 로그인 시 프로젝트 목록 조회
+        fetchInvites(); // ✅ 로그인 시 초대 목록 조회
+
+        const stompClient = getStompClient(); // ✅ WebSocket 가져오기
+    
+        if (!stompClient.connected) { // ✅ 기존 연결이 없을 때만 활성화
+            console.log("🟢 WebSocket 활성화 시도...");
+            stompClient.activate();
+        }
+    
+        const onWebSocketConnect = () => {
+            console.log("✅ WebSocket 연결 성공 & 구독 시작");
+            stompClient.subscribe("/topic/projects", (message) => {
+                console.log("📩 새 프로젝트 업데이트 수신:", message.body);
+                fetchProjects();
+            });
+        };
+    
+        // ✅ 중복 등록 방지: 이미 등록된 경우 새로 추가하지 않음
+        if (!stompClient.onConnect) {
+            stompClient.onConnect = onWebSocketConnect;
+        }
+    
+        return () => {
+            console.log("🛑 WebSocket 해제");
+            if (stompClient && stompClient.connected) {
+                stompClient.deactivate();
+            }
+        };
     }, []);
+    
+    useEffect(() => {
+        if (selectedProject) {
+            console.log("🔄 선택된 프로젝트 변경됨:", selectedProject.id);
+        }
+    }, [selectedProject]);
 
 
     return (
         <div className="main-page">
             <div className="content">
+                
                 {/* ✅ 프로젝트 목록 표시 */}
                 <div className="project-list">
                     <h2>📂 프로젝트 목록</h2>
@@ -429,11 +284,13 @@ const MainPage = () => {
                 <Dashboard tasks={[]} />
             </div>
             <div className="chatbox-container">
-                <Sidebar />
-                <Chatbox />
+            <Sidebar projectId={selectedProject?.id} />
+            <Chatbox projectId={selectedProject ? selectedProject.id : null} />
+                <InviteList refreshProjects={fetchProjects} />
+
             </div>
 
-            {/* 🔹 프로젝트 생성 모달 */}
+    {/* 🔹 프로젝트 생성 모달 */}
             {showModal && (
                 <div className="modal">
                     <div className="modal-content">

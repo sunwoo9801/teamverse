@@ -111,5 +111,12 @@ public class ProjectServiceImpl implements ProjectService { // ✅ 기존 기능
         return projectRepository.findByOwner(owner); // owner_id 기반 프로젝트 목록 가져오기
     }
 
+    // ✅ 특정 프로젝트의 팀원 목록 조회
+    @Override
+    public List<User> getProjectTeamMembers(Long projectId) {
+        List<TeamMember> teamMembers = teamMemberRepository.findByProject_Id(projectId);
+        return teamMembers.stream().map(TeamMember::getUser).toList();
+    }
 
+    
 }

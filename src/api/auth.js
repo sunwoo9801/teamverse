@@ -42,42 +42,15 @@ export const signup = async (name, email, password) => {
 	}
 };
 
-
-// export const login = async (email, password) => {
-//     try {
-//         const response = await axios.post(`${API_BASE_URL}/login`, { email, password }, { withCredentials: true });
-//         return response.data;
-//     } catch (error) {
-//         return { message: error.response?.data?.message || "로그인 실패" };
-//     }
-// export const login = async (email, password, duration = 30) => {
-//     try {
-//         const response = await axios.post("http://localhost:8082/api/auth/login", { email, password }, {
-//             params: { duration }, // 🔹 로그인 연장 옵션 전달
-//             withCredentials: true 
-//         });
-//         return response.data;
-//     } catch (error) {
-//         return { message: error.response?.data?.message || "로그인 실패" };
-//     } 
-
-// };
 export const login = async (email, password, rememberMe) => {
-// 	try {
-// 		const duration = rememberMe ? "forever" : "30"; // 🔹 "forever" 또는 "30" 설정
-// 		const response = await axios.post("http://localhost:8082/api/auth/login", { email, password }, {
-// 			params: { duration }, // 로그인 유지 옵션 전달
-// 			withCredentials: true
-// 		});
-// 		return response.data;
-// 	} catch (error) {
-// 		return { message: error.response?.data?.message || "로그인 실패" };
-// 	}
-// };
+	
 try {
 	const response = await authAxios.post("/login", { email, password }, {
 			params: { rememberMe }, // ✅ 로그인 유지 옵션 전달
+			
 	});
+	console.log("📌 로그인 API 응답:", response.data); // ✅ 백엔드 응답 확인용 로그
+
 	return response.data;
 } catch (error) {
 	return { message: error.response?.data?.message || "로그인 실패" };

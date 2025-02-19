@@ -37,7 +37,8 @@ public class Task {
     @Enumerated(EnumType.STRING)
     private Status status = Status.TODO; // 작업 상태
 
-    private String color; // Gantt 차트에서 작업 색상
+    @Column(nullable = false)
+    private String color;    
 
     @Column(name = "start_date", nullable = false) // ✅ 작업 시작일 추가
     private LocalDate startDate;
@@ -57,4 +58,6 @@ public class Task {
     public enum Status {
         DRAFT, EDITING, TODO, IN_PROGRESS, DONE
     }
+
+    
 }

@@ -35,6 +35,7 @@ public class TaskController {
   // Task 생성 API
   @PostMapping
   public ResponseEntity<Task> createTask(@RequestBody TaskDTO taskDTO) {
+
     // 프로젝트 조회
     Project project = projectService.getProjectById(taskDTO.getProjectId())
         .orElseThrow(() -> new IllegalArgumentException("Invalid project ID"));
@@ -55,9 +56,14 @@ public class TaskController {
     task.setDescription(taskDTO.getDescription()); // ✅ 작업 내용 반영
     task.setProject(project);
     task.setAssignedTo(assignedUser); // ✅ 담당자 설정
+    task.setColor(taskDTO.getColor()); // ✅ 색상 값 저장
+
+
+
 
     Task createdTask = taskService.createTask(task);
     messagingTemplate.convertAndSend("/topic/tasks", createdTask); // 작업 생성 이벤트 전송
+
     return ResponseEntity.ok(createdTask);
   }
 
@@ -79,24 +85,6 @@ public class TaskController {
     return ResponseEntity.ok(new TaskDTO(task));
   }
 
-  // Task 업데이트 API
-  // @PutMapping("/{id}")
-  // public ResponseEntity<Task> updateTask(@PathVariable Long id, @RequestBody
-  // TaskDTO taskDTO) {
-  // // DTO를 엔티티로 변환
-  // Project project = projectService.getProjectById(taskDTO.getProjectId())
-  // .orElseThrow(() -> new IllegalArgumentException("Invalid project ID"));
-  // Task taskDetails = new Task();
-  // taskDetails.setName(taskDTO.getName());
-  // taskDetails.setStatus(Task.Status.valueOf(taskDTO.getStatus()));
-  // taskDetails.setDueDate(taskDTO.getDueDate());
-  // taskDetails.setProject(project);
-
-  // Task updatedTask = taskService.updateTask(id, taskDetails);
-  // messagingTemplate.convertAndSend("/topic/tasks", updatedTask); // 작업 수정 이벤트
-  // 전송
-  // return ResponseEntity.ok(updatedTask);
-  // }
   @PutMapping("/{id}")
   public ResponseEntity<Task> updateTask(@PathVariable Long id, @RequestBody TaskDTO taskDTO) {
     Project project = projectService.getProjectById(taskDTO.getProjectId())

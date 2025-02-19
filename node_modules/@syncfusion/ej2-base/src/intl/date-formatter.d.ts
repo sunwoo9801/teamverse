@@ -19,6 +19,7 @@ export interface FormatOptions {
     dateSeperator?: string;
     isIslamic?: boolean;
     weekOfYear?: string;
+    firstDayOfWeek?: number;
 }
 export declare const datePartMatcher: {
     [key: string]: Object;

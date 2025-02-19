@@ -28,6 +28,7 @@ public class SecurityConfig {
         http
             .cors(cors -> cors.configurationSource(corsConfigurationSource())) // ✅ CORS 설정 활성화
             .csrf().disable()
+
             .sessionManagement()
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and()
@@ -35,12 +36,19 @@ public class SecurityConfig {
                     .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // ✅ OPTIONS 요청 허용
                     .requestMatchers("/api/auth/register", "/api/auth/login").permitAll() // ✅ 로그인 및 회원가입 허용
                     .requestMatchers("/api/auth/logout").authenticated()
-                    .requestMatchers("/api/team/invite").authenticated() 
-                       .requestMatchers("/api/user/projects/**").authenticated() 
+                    .requestMatchers("/api/team/invite").authenticated()  
+                    .requestMatchers("/api/user/projects/**").authenticated() 
                     .requestMatchers("/api/user").authenticated() // ✅ 인증된 사용자만 /api/user 접근 가능
+                    .requestMatchers("/ws/**").permitAll() // ✅ WebSocket 요청 허용
+                    .requestMatchers("/topic/**").permitAll() // ✅ STOMP 메시지 브로커 허용
+                    .requestMatchers("/app/**").permitAll() // ✅ STOMP 메시지 브로커 허용
+                    .requestMatchers("/user/**").permitAll() // ✅ 개인 메시지 전송 허용
+                    
+
                     
                     .anyRequest().authenticated()
             )
+            
             .exceptionHandling(exception -> exception
                     .authenticationEntryPoint((request, response, authException) -> {
                         response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
@@ -74,6 +82,11 @@ public class SecurityConfig {
     
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
+
+        configuration.setAllowedOriginPatterns(List.of("http://localhost:3000")); // 특정 도메인 지정
+
+        source.registerCorsConfiguration("/**", configuration);
+    
         return source;
     }
 

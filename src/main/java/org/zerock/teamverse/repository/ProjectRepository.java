@@ -12,7 +12,8 @@ import org.zerock.teamverse.entity.User;
 public interface ProjectRepository extends JpaRepository<Project, Long> {
     // 특정 팀의 프로젝트를 조회하는 메서드
     List<Project> findByTeamId(Long teamId);
-    List<Project> findByTeamMembers_User(User user);
+    List<Project> findByTeamMembers_User(User user); // ✅ 특정 사용자가 속한 프로젝트 조회
+
     List<Project> findByOwner(User owner); // owner_id 기준으로 프로젝트 조회
     
 }

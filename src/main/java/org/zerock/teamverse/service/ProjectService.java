@@ -25,4 +25,7 @@ public interface ProjectService {
     void inviteUserToProject(Project project, User invitedUser);
 
     List<Project> getProjectsByOwner(User owner); // owner_id 기준으로 가져오기
+
+    // ✅ 특정 프로젝트의 팀원 목록 조회
+    List<User> getProjectTeamMembers(Long projectId);
 }

@@ -65,7 +65,16 @@ const TaskPage = () => {
         withCredentials: true,
       });
 
-      setTasks(response.data);
+      // ✅ formattedTasks 변환 (tasks 배열을 가공)
+    const formattedTasks = response.data.map((task) => ({
+      id: task.id,
+      name: task.name,
+      start: task.startDate ? new Date(task.startDate + "T00:00:00") : null, // ✅ 날짜 변환
+      end: task.dueDate ? new Date(task.dueDate + "T23:59:59") : null, // ✅ 마감일 변환
+      color: task.color || "#ff99a5",
+    }));
+    setTasks(response.data);
+
     } catch (error) {
       console.error("❌ Task 목록 불러오기 실패:", error);
     }
@@ -111,41 +120,6 @@ const TaskPage = () => {
     }
   }, [projectId]);
 
-//   return (
-//     <div className="task-page">
-//       <h1>{project ? project.name : "로딩 중..."}</h1> {/* ✅ 프로젝트 이름 표시 */}
-//       <button onClick={() => { setEditTask(null); setIsModalOpen(true); }}>+ 업무 추가</button>
-
-//       {/* ✅ Task 목록 표시 */}
-//       <ul>
-//         {tasks.map((task) => (
-//           <li key={task.id}>
-//             <strong>{task.name}</strong> - {task.status}
-//             <br /> 🗓 **시작일**: {task.startDate} | ⏳ **마감일**: {task.dueDate}
-//             <button onClick={() => { setEditTask(task); setIsModalOpen(true); }}>수정</button> 
-//             <button onClick={() => setSelectedTask(task)} style={{ marginLeft: "10px", color: "blue" }}>상세 보기</button>
-//             <button onClick={() => handleDeleteTask(task.id)} style={{ marginLeft: "10px", color: "red" }}>삭제</button> 
-//           </li>
-//         ))}
-//       </ul>
-
-//       {/* ✅ Task 추가 & 수정 모달 */}
-//       {isModalOpen && (
-//         <TaskModal
-//           onClose={() => setIsModalOpen(false)}
-//           projectId={projectId}
-//           refreshTasks={refreshTasks}
-//           editTask={editTask} // ✅ 수정할 Task 전달
-//         />
-//       )}
-
-//       {/* ✅ Task 상세 보기 모달 */}
-//       {selectedTask && (
-//         <TaskDetailModal task={selectedTask} onClose={() => setSelectedTask(null)} />
-//       )}
-//     </div>
-//   );
-// };
 return (
   <div className="task-page"> {/* ✅ 수정: 전체 페이지 스타일 적용 */}
     {/* ✅ 프로젝트 이름 + 구분선 */}
@@ -198,7 +172,7 @@ return (
 
       {/* ✅ 오른쪽: 간트 차트 */}
       <div className="gantt-chart-container">
-        <GanttChart tasks={tasks} />
+      <GanttChart tasks={tasks} />
       </div>
     </div>
 

@@ -18,6 +18,7 @@ const GanttChart = ({ tasks }) => {
     return checkDate >= taskStart && checkDate <= taskEnd;
   };
 
+
   // Task 데이터를 받아서 Gantt 차트에 반영
   const formattedTasks = tasks.map((task) => ({
     id: task.id,
@@ -25,8 +26,8 @@ const GanttChart = ({ tasks }) => {
     start: new Date(task.startDate),  // ❌ startDate를 직접 변환 (undefined 가능성 있음)
     end: new Date(task.dueDate),      // ❌ dueDate를 직접 변환 (undefined 가능성 있음)
     color: task.color || "#ff99a5",
-    
-}));
+
+  }));
 
   // ✅ 현재 주의 시작 날짜 계산
   function getStartOfWeek(date) {
@@ -95,7 +96,7 @@ const GanttChart = ({ tasks }) => {
     return task.start <= monthEnd && task.end >= monthStart;
   };
 
-  
+
   const calculateProgressBarStyle = (task, index) => {
 
     const taskStart = new Date(task.start);
@@ -109,8 +110,8 @@ const GanttChart = ({ tasks }) => {
 
     // ✅ 주간 범위를 벗어난 Task 숨기기
     if (taskEnd < weekStart || taskStart > weekEnd) {
-        console.log(`❌ Task ${task.name} is out of range`);
-        return { display: 'none' };
+      console.log(`❌ Task ${task.name} is out of range`);
+      return { display: 'none' };
     }
 
     // ✅ 현재 주간에 맞게 `taskStart`, `taskEnd` 조정
@@ -131,15 +132,15 @@ const GanttChart = ({ tasks }) => {
     const taskDurationDays = Math.floor((adjustedTaskEnd - adjustedTaskStart) / (1000 * 60 * 60 * 24)) + 1;
     const width = Math.min(100 - offset, taskDurationDays * dayWidth);
     return {
-        position: 'absolute',
-        top: `${60 + index * 30}px`,
-        left: `${offset}%`,
-        width: `${width}%`,
-        backgroundColor: task.color || "#ff99a5", // ✅ 선택한 색상 적용
-        height: '12px',
-        borderRadius: '6px',
+      position: 'absolute',
+      top: `${60 + index * 30}px`,
+      left: `${offset}%`,
+      width: `${width}%`,
+      backgroundColor: task.color || "#ff99a5", // ✅ 선택한 색상 적용
+      height: '12px',
+      borderRadius: '6px',
     };
-};
+  };
 
 
 
@@ -158,32 +159,32 @@ const GanttChart = ({ tasks }) => {
       {viewMode === 'week' && (
         <>
           <div className="week-navigation">
-            <button onClick={handlePreviousWeek}>&lt;</button>
+            <button className="week-nav" onClick={handlePreviousWeek}>&lt;</button>
             <span>
               {currentWeekStart.toLocaleDateString('en-US', { month: 'long', day: 'numeric' })} ~{" "}
               {new Date(currentWeekStart.getTime() + 6 * 24 * 60 * 60 * 1000).toLocaleDateString('en-US', { month: 'long', day: 'numeric' })}
             </span>
-            <button onClick={handleNextWeek}>&gt;</button>
+            <button className="week-nav" onClick={handleNextWeek}>&gt;</button>
           </div>
 
           <div className="calendar">
-  {getWeekDates().map((day, index) => (
-    <div key={index} className="calendar-day">
-      <div className="day-name">{day.day}</div>
-      <div className="day-date">{day.date.toLocaleDateString('en-US', { day: 'numeric', month: 'short' })}</div>
-    </div>
-  ))}
+            {getWeekDates().map((day, index) => (
+              <div key={index} className="calendar-day">
+                <div className="day-name">{day.day}</div>
+                <div className="day-date">{day.date.toLocaleDateString('en-US', { day: 'numeric', month: 'short' })}</div>
+              </div>
+            ))}
 
-  {/* ✅ 하나의 progress-bar로 이어지게 표시 */}
-  {formattedTasks.map((task, index) => {
-    const progressBarStyle = calculateProgressBarStyle(task, index);
-    return (
-        <div key={task.id} className="progress-bar" style={progressBarStyle}>
-            {task.name}
-        </div>
-    );
-})}
-</div>
+            {/* ✅ 하나의 progress-bar로 이어지게 표시 */}
+            {formattedTasks.map((task, index) => {
+              const progressBarStyle = calculateProgressBarStyle(task, index);
+              return (
+                <div key={task.id} className="progress-bar" style={progressBarStyle}>
+                  {task.name}
+                </div>
+              );
+            })}
+          </div>
 
 
 

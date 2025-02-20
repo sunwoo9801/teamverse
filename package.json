@@ -8,6 +8,7 @@
     "@mui/icons-material": "^6.4.2",
     "@mui/material": "^6.4.2",
     "@react-google-maps/api": "^2.20.6",
+    "@stomp/stompjs": "^7.0.0",
     "@syncfusion/ej2-react-gantt": "^28.1.38",
     "axios": "^1.7.9",
     "chart.js": "^4.4.7",

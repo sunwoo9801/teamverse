@@ -36,6 +36,10 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // ✅ OPTIONS 요청 허용
                         .requestMatchers("/api/auth/register").permitAll() // ✅ 회원가입 허용
                         .requestMatchers("/api/auth/login").permitAll() // ✅ 로그인 허용
+                  .requestMatchers("/ws/**").permitAll() // ✅ WebSocket 요청 허용
+                  .requestMatchers("/topic/**").permitAll() // ✅ STOMP 메시지 브로커 허용
+                  .requestMatchers("/app/**").permitAll() // ✅ STOMP 메시지 브로커 허용
+                  .requestMatchers("/user/**").permitAll() // ✅ 개인 메시지 전송 허용
                         .requestMatchers("/api/auth/logout").authenticated()
                         .requestMatchers("/api/team/invite").authenticated()
                         .requestMatchers("/api/user/projects/**").authenticated()
@@ -43,6 +47,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/places/search").authenticated()
                         .requestMatchers("/api/user").authenticated() 
                         .requestMatchers("/api/auth").authenticated()
+
 
                         .anyRequest().authenticated())
                 .exceptionHandling(exception -> exception
@@ -75,6 +80,11 @@ public class SecurityConfig {
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
+
+        configuration.setAllowedOriginPatterns(List.of("http://localhost:3000")); // 특정 도메인 지정
+
+        source.registerCorsConfiguration("/**", configuration);
+
         return source;
     }
 

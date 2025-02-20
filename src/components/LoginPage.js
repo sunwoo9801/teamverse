@@ -38,9 +38,6 @@ const LoginPage = () => {
 		e.preventDefault();
 		const response = await login(email, password, rememberMe); // ✅ rememberMe 값을 전달
 
-		// if (response.accessToken) {
-		// 	localStorage.setItem("token", response.accessToken);
-		// 	localStorage.setItem("refreshToken", response.refreshToken);
 
 		if (response.accessToken && response.refreshToken) { // ✅ refreshToken이 있는지 확인
 			handleLoginSuccess(response.accessToken, response.refreshToken, rememberMe);
@@ -54,6 +51,8 @@ const LoginPage = () => {
 			console.log(" 로그인한 사용자 정보: ", userInfo); //디버깅 로그
 			if (userInfo && userInfo.id) {
 				localStorage.setItem("user", JSON.stringify(userInfo));
+				localStorage.setItem("email", userInfo.email); // ✅ 이메일도 따로 저장!
+
 				alert("로그인 성공!");
 				navigate(`/dashboard/${userInfo.id}`); // 수정: 로그인 후 /dashboard/{사용자 ID}로 이동
 			} else {

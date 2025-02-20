@@ -20,6 +20,8 @@ const TaskModal = ({ onClose, projectId, refreshTasks, editTask }) => {
     descriptionElements: editTask ? [<div dangerouslySetInnerHTML={{ __html: editTask.description }} />] : [],
     status: editTask ? editTask.status : "TODO",
     locations: editTask ? editTask.locations || [] : [],
+        color: editTask ? editTask.color : "#ff99a5", // ✅ 색상 필드 추가
+
   });
 
 
@@ -51,6 +53,8 @@ const TaskModal = ({ onClose, projectId, refreshTasks, editTask }) => {
         descriptionElements: [<div dangerouslySetInnerHTML={{ __html: editTask.description }} />],
         status: editTask.status,
         locations: editTask.locations || [],
+        color: editTask.color || "#ff99a5", // ✅ 기존에 색상이 없으면 기본값 사용
+
       });
     }
 
@@ -81,6 +85,13 @@ const TaskModal = ({ onClose, projectId, refreshTasks, editTask }) => {
     }));
   };
 
+  // ✅ 색상 변경 핸들러
+  const handleColorChange = (e) => {
+    const newColor = e.target.value;
+    console.log("🎨 선택한 색상:", newColor); // ✅ 콘솔에서 선택된 색상 확인
+    setTaskData({ ...taskData, color: newColor }); // ✅ taskData에 color 저장
+
+  };
 
   // **description에 직접 입력 가능하도록 수정**
   const handleTextChange = (e) => {
@@ -180,7 +191,7 @@ const TaskModal = ({ onClose, projectId, refreshTasks, editTask }) => {
       if (isEditMode) {
         await axios.put(
           `http://localhost:8082/api/user/tasks/${editTask.id}`,
-          { ...taskData, projectId },
+          { ...taskData, color: taskData.color, projectId }, // ✅ color 포함
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -191,9 +202,9 @@ const TaskModal = ({ onClose, projectId, refreshTasks, editTask }) => {
         );
         alert("업무가 성공적으로 수정되었습니다!");
       } else {
-        await axios.post(
-          "http://localhost:8082/api/user/tasks",
-          { ...taskData, projectId },
+        // ✅ 생성 API 호출
+        await axios.post("http://localhost:8082/api/user/tasks",
+          { ...taskData, color: taskData.color, projectId }, // ✅ color 포함
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -205,8 +216,8 @@ const TaskModal = ({ onClose, projectId, refreshTasks, editTask }) => {
         alert("업무가 성공적으로 등록되었습니다!");
       }
 
-      refreshTasks();
-      onClose();
+      refreshTasks(); // ✅ Task 목록 갱신
+      onClose(); // ✅ 모달 닫기
     } catch (error) {
       console.error("❌ Task 저장 실패:", error);
       alert("업무 저장에 실패했습니다.");
@@ -308,13 +319,19 @@ const TaskModal = ({ onClose, projectId, refreshTasks, editTask }) => {
             </div>
           )}
 
+ {/* ✅ 색상 선택 기능 */}
+        <label>색상 선택</label>
+        <input type="color" name="color" value={taskData.color} onChange={handleColorChange} />
 
-          <div className="modal-actions">
-            <button onClick={onClose}>취소</button>
-            <button onClick={handleSubmit}>{isEditMode ? "수정" : "등록"}</button>
-          </div>
+        {/* ✅ 버튼 영역 */}
+        <div className="modal-actions">
+          <button onClick={onClose}>취소</button>
+          <button onClick={handleSubmit} disabled={!taskData.name || !taskData.assignedTo || !taskData.startDate || !taskData.dueDate || !taskData.description || !taskData.status}>
+            {isEditMode ? "수정" : "등록"}
+          </button>
         </div>
       </div>
+    </div>
     </div>
   );
 };

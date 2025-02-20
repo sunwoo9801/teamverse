@@ -1,19 +1,3 @@
-// // 로그인 성공 시 토큰 저장
-// export const handleLoginSuccess = (accessToken, refreshToken) => {
-//     localStorage.setItem("accessToken", accessToken);
-//     localStorage.setItem("refreshToken", refreshToken);
-
-// };
-
-// // 로그아웃 처리
-// export const handleLogout = () => {
-//     localStorage.removeItem("accessToken");
-//     localStorage.removeItem("refreshToken");
-//     window.location.href = "/login";
-// };
-
-// 로그인 성공 시 토큰 저장
-
 import axios from "axios";
 
 
@@ -21,9 +5,11 @@ export const handleLoginSuccess = (accessToken, refreshToken, rememberMe) => {
     console.log("✅ Login Success - rememberMe:", rememberMe);
     console.log("✅ accessToken:", accessToken);
     console.log("✅ refreshToken:", refreshToken);
+
     if (rememberMe) {
         localStorage.setItem("accessToken", accessToken);
         localStorage.setItem("refreshToken", refreshToken);
+
     } else {
         sessionStorage.setItem("accessToken", accessToken);
         sessionStorage.setItem("refreshToken", refreshToken); // ✅ rememberMe가 false여도 refreshToken 저장

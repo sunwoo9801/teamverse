@@ -35,15 +35,16 @@ public class TaskController {
   // Task 생성 API
   @PostMapping
   public ResponseEntity<Task> createTask(@RequestBody TaskDTO taskDTO) {
+
     // 프로젝트 조회
     Project project = projectService.getProjectById(taskDTO.getProjectId())
-        .orElseThrow(() -> new IllegalArgumentException("Invalid project ID"));
+      .orElseThrow(() -> new IllegalArgumentException("Invalid project ID"));
 
     // 담당자 조회
     User assignedUser = null;
     if (taskDTO.getAssignedTo() != null) {
       assignedUser = userService.findById(taskDTO.getAssignedTo())
-          .orElseThrow(() -> new IllegalArgumentException("Invalid assigned user ID"));
+        .orElseThrow(() -> new IllegalArgumentException("Invalid assigned user ID"));
     }
 
     // DTO → 엔티티 변환
@@ -55,9 +56,14 @@ public class TaskController {
     task.setDescription(taskDTO.getDescription()); // ✅ 작업 내용 반영
     task.setProject(project);
     task.setAssignedTo(assignedUser); // ✅ 담당자 설정
+    task.setColor(taskDTO.getColor()); // ✅ 색상 값 저장
+
+
+
 
     Task createdTask = taskService.createTask(task);
     messagingTemplate.convertAndSend("/topic/tasks", createdTask); // 작업 생성 이벤트 전송
+
     return ResponseEntity.ok(createdTask);
   }
 
@@ -65,9 +71,9 @@ public class TaskController {
   @GetMapping
   public ResponseEntity<List<TaskDTO>> getTasksByProjectId(@RequestParam Long projectId) {
     List<TaskDTO> tasks = taskService.getTasksByProjectId(projectId)
-        .stream()
-        .map(TaskDTO::new)
-        .collect(Collectors.toList());
+      .stream()
+      .map(TaskDTO::new)
+      .collect(Collectors.toList());
     return ResponseEntity.ok(tasks);
   }
 
@@ -75,37 +81,19 @@ public class TaskController {
   @GetMapping("/{id}")
   public ResponseEntity<TaskDTO> getTaskById(@PathVariable Long id) {
     Task task = taskService.getTaskById(id)
-        .orElseThrow(() -> new RuntimeException("Task not found"));
+      .orElseThrow(() -> new RuntimeException("Task not found"));
     return ResponseEntity.ok(new TaskDTO(task));
   }
 
-  // Task 업데이트 API
-  // @PutMapping("/{id}")
-  // public ResponseEntity<Task> updateTask(@PathVariable Long id, @RequestBody
-  // TaskDTO taskDTO) {
-  // // DTO를 엔티티로 변환
-  // Project project = projectService.getProjectById(taskDTO.getProjectId())
-  // .orElseThrow(() -> new IllegalArgumentException("Invalid project ID"));
-  // Task taskDetails = new Task();
-  // taskDetails.setName(taskDTO.getName());
-  // taskDetails.setStatus(Task.Status.valueOf(taskDTO.getStatus()));
-  // taskDetails.setDueDate(taskDTO.getDueDate());
-  // taskDetails.setProject(project);
-
-  // Task updatedTask = taskService.updateTask(id, taskDetails);
-  // messagingTemplate.convertAndSend("/topic/tasks", updatedTask); // 작업 수정 이벤트
-  // 전송
-  // return ResponseEntity.ok(updatedTask);
-  // }
   @PutMapping("/{id}")
   public ResponseEntity<Task> updateTask(@PathVariable Long id, @RequestBody TaskDTO taskDTO) {
     Project project = projectService.getProjectById(taskDTO.getProjectId())
-        .orElseThrow(() -> new IllegalArgumentException("Invalid project ID"));
+      .orElseThrow(() -> new IllegalArgumentException("Invalid project ID"));
 
     User assignedUser = null;
     if (taskDTO.getAssignedTo() != null) {
       assignedUser = userService.findById(taskDTO.getAssignedTo())
-          .orElseThrow(() -> new IllegalArgumentException("Invalid assigned user ID"));
+        .orElseThrow(() -> new IllegalArgumentException("Invalid assigned user ID"));
     }
 
     // 기존 Task 정보 가져와 업데이트
@@ -127,9 +115,9 @@ public class TaskController {
   @GetMapping("/status")
   public ResponseEntity<List<TaskDTO>> getTasksByStatus(@RequestParam Task.Status status) {
     List<TaskDTO> tasks = taskService.getTasksByStatus(status)
-        .stream()
-        .map(TaskDTO::new)
-        .collect(Collectors.toList());
+      .stream()
+      .map(TaskDTO::new)
+      .collect(Collectors.toList());
     return ResponseEntity.ok(tasks);
   }
 
@@ -137,9 +125,9 @@ public class TaskController {
   @GetMapping("/user/{userId}")
   public ResponseEntity<List<TaskDTO>> getTasksByAssignedUser(@PathVariable Long userId) {
     List<TaskDTO> tasks = taskService.getTasksByAssignedUser(userId)
-        .stream()
-        .map(TaskDTO::new)
-        .collect(Collectors.toList());
+      .stream()
+      .map(TaskDTO::new)
+      .collect(Collectors.toList());
     return ResponseEntity.ok(tasks);
   }
 }

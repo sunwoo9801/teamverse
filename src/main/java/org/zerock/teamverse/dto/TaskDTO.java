@@ -13,6 +13,7 @@ public class TaskDTO {
 	private String description;
 	private Long projectId;
 	private Long assignedTo; // ✅ 담당자 ID 추가
+    private String color; // ✅ 추가: 작업 색상 필드
 
 
 	//기본 생성자(필수)
@@ -26,6 +27,8 @@ public class TaskDTO {
 		this.startDate = task.getStartDate(); 
 		this.dueDate = task.getDueDate();
 		this.description = task.getDescription(); 
+        this.color = task.getColor(); // ✅ 추가: 엔티티에서 color 값 가져오기
+
 
 		if (task.getProject() != null) {
 			this.projectId = task.getProject().getId();
@@ -99,4 +102,9 @@ public class TaskDTO {
 	public void setAssignedTo(Long assignedTo) {
 		this.assignedTo = assignedTo;
 	}
+
+	public String getColor() { return color; } // ✅ 추가: Getter
+    public void setColor(String color) { this.color = color; } // ✅ 추가: Setter
+
+
 }

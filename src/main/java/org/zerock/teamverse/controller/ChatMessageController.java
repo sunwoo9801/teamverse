@@ -14,6 +14,8 @@ import org.zerock.teamverse.entity.User;
 import org.zerock.teamverse.service.ChatMessageService;
 import org.zerock.teamverse.service.ProjectService;
 import org.zerock.teamverse.service.UserService;
+import org.springframework.transaction.annotation.Transactional;
+
 
 import java.util.Collections;
 import java.util.List;
@@ -43,6 +45,8 @@ public class ChatMessageController {
 
     // ✅ WebSocket을 통해 채팅 메시지 전송 및 DB 저장
     @MessageMapping("/chat")
+    @Transactional  // 🔥 트랜잭션 적용
+
     public void sendMessage(@Payload ChatMessage chatMessage) {
         System.out.println("📩 채팅 메시지 수신: " + chatMessage.getContent());
 

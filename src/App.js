@@ -8,7 +8,7 @@ import LoginPage from "./components/LoginPage";
 import SessionTimeout from "./components/SessionTimeout"; // 자동 세션 관리
 import LandingPage from './components/LandingPage';
 import TaskPage from './pages/TaskPage';
-
+import TaskBoard from './components/TaskBoard';
 
 const tasks = [
   { id: 1, name: 'Design Phase', status: 'Done', dueDate: '2025-01-30', assignee: 'Alice' },
@@ -42,6 +42,7 @@ function MainLayout() {
         <Route path="/statistics" element={<StatisticsPage tasks={tasks} />} /> {/* tasks 전달 */}
         <Route path="/team-status" element={<TeamStatusPage />} /> 
         <Route path="/task" element={<TaskPage />} /> 
+        <Route path="/TaskBoard" element={<TaskBoard />} /> 
       </Routes>
     </>
   );

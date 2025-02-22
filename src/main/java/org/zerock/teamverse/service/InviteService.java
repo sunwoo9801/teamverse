@@ -31,34 +31,30 @@ public class InviteService {
 
     }
 
-    // ✅ 초대 생성 및 WebSocket 전송
+    // ✅ 초대 생성 및 반환
     @Transactional
-    public void createInvite(User sender, User receiver, Project project) {
+    public Invite createInvite(User sender, User receiver, Project project) {
         Invite invite = new Invite();
         invite.setSender(sender);
         invite.setReceiver(receiver);
         invite.setProject(project);
         invite.setStatus(Invite.InviteStatus.PENDING);
-        inviteRepository.save(invite);
 
-        // ✅ WebSocket을 통해 초대 알림 전송
-        // messagingTemplate.convertAndSend("/topic/invites/" + receiver.getEmail(), invite);
-        // ✅ WebSocket을 통해 초대 알림 전송
-        messagingTemplate.convertAndSend("/topic/invites", invite); // ✅ 수정: 이메일 없이 브로드캐스트// ✅ PENDING 상태의 초대 알림 전송
-
+        inviteRepository.save(invite); // ✅ DB에 저장
+        return invite; // ✅ 초대 객체 반환
     }
 
     // ✅ 초대 수락
     @Transactional
-    public void acceptInvite(Long inviteId) {
+    public Invite acceptInvite(Long inviteId) {
         Invite invite = inviteRepository.findById(inviteId)
-          .orElseThrow(() -> new RuntimeException("초대를 찾을 수 없습니다."));
+                .orElseThrow(() -> new RuntimeException("초대를 찾을 수 없습니다."));
 
-        invite.setStatus(Invite.InviteStatus.ACCEPTED);
+        invite.setStatus(Invite.InviteStatus.ACCEPTED); // ✅ 초대 상태 변경
+        inviteRepository.save(invite);
 
-        // ✅ 프로젝트 멤버로 추가 (이미 존재하는지 확인 후 추가)
+        // ✅ 팀 멤버 추가 (이미 존재하는지 확인 후 추가)
         boolean alreadyMember = teamMemberRepository.existsByProjectAndUser(invite.getProject(), invite.getReceiver());
-
         if (!alreadyMember) {
             TeamMember teamMember = new TeamMember();
             teamMember.setProject(invite.getProject());
@@ -67,11 +63,14 @@ public class InviteService {
             teamMemberRepository.save(teamMember);
         }
 
-        inviteRepository.save(invite);
+        return invite; // ✅ 초대 객체 반환
     }
+    
 
     public List<Invite> getUserInvites(User receiver) {
-        return inviteRepository.findByReceiver(receiver);
+        // return inviteRepository.findByReceiver(receiver);
+        return inviteRepository.findByReceiverAndStatus(receiver, Invite.InviteStatus.PENDING); // ✅ PENDING 상태만 조회
+
     }
 
 }

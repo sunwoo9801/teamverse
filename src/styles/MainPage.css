@@ -1,6 +1,6 @@
 .main-page {
   display: grid;
-  grid-template-columns: 6fr 1.5fr; /* content 영역을 넓게 설정 */
+  grid-template-columns: 1.5fr 6fr 1.5fr; /* ✅ 왼쪽 사이드바 추가 */
   grid-template-rows: auto;
   height: 100vh;
   gap: 10px;
@@ -17,6 +17,7 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
+  background-color: #F4F7FC;
 }
 
 .filter-and-search {
@@ -30,9 +31,9 @@
 .chatbox-container {
   display: flex;
   flex-direction: column;
-  background: #ecf0f3;
+  background: #F4F7FC;
   border-radius: 12px;
-  padding: 20px;
+  /* padding: 20px; */
 }
 
 .empty-project {

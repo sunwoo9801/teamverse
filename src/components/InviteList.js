@@ -2,10 +2,14 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { getAccessToken } from "../utils/authUtils";
 import "../styles/InviteList.css";
+import { getStompClient } from "../api/websocket";
+
 
 const InviteList = ({ refreshProjects }) => {
   const [invites, setInvites] = useState([]);
   const [showPopup, setShowPopup] = useState(false);
+  const userEmail = localStorage.getItem("email") || sessionStorage.getItem("email");
+
 
   // ✅ 로컬 스토리지에서 처리된 초대 목록 불러오기
   const getStoredAcceptedInvites = () => {
@@ -42,11 +46,43 @@ const InviteList = ({ refreshProjects }) => {
 
 
 
-
-      useEffect(() => {
-        fetchInvites();
-      }, []);
-
+  useEffect(() => {
+    fetchInvites();
+  
+    if (!userEmail) return;
+  
+    const stompClient = getStompClient();
+    if (!stompClient.connected) {
+      stompClient.activate(); // ✅ WebSocket 연결 활성화
+    }
+  
+    // ✅ WebSocket이 완전히 연결된 후 구독 실행
+    const onConnect = () => {
+      console.log("✅ WebSocket 연결 성공, 초대 알림 구독 시작");
+      const subscription = stompClient.subscribe(`/topic/invites/${userEmail}`, (message) => {
+        console.log("📩 실시간 초대 알림 수신:", message.body);
+        fetchInvites(); // ✅ 초대 목록 다시 불러오기
+      });
+  
+      return () => {
+        subscription.unsubscribe();
+      };
+    };
+  
+    // ✅ 이미 연결되었으면 바로 실행, 아니면 `onConnect` 설정
+    if (stompClient.connected) {
+      onConnect();
+    } else {
+      stompClient.onConnect = onConnect;
+    }
+  
+    return () => {
+      if (stompClient.connected) {
+        stompClient.deactivate(); // ✅ WebSocket 연결 해제
+      }
+    };
+  }, [userEmail]);
+  
 
 
   // ✅ 초대 수락 처리

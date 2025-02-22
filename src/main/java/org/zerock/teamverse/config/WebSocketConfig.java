@@ -19,7 +19,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
           .setHandshakeHandler(new DefaultHandshakeHandler()); // ✅ 핸드셰이크 문제 해결
         registry.addEndpoint("/ws").setAllowedOriginPatterns("*");
 
-        //.withSockJS(); // ✅ SockJS가 필요 없다면 제거
+        // .withSockJS(); // ✅ SockJS가 필요 없다면 제거
 
     }
 

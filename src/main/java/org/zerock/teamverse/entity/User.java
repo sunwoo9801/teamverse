@@ -11,6 +11,8 @@ import lombok.Data;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 /**
@@ -21,7 +23,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @Data
 @Entity
 @Table(name = "users")
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "teamProjects"}) // ✅ 순환 참조 방지
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "activityLogs", "teamProjects"})
 
 public class User {
 
@@ -65,6 +67,21 @@ public class User {
   
       @Column(name = "phone_number")
       private String phoneNumber;  // 휴대폰 번호
+
+
+    @Column(name = "profile_image", nullable = true) // 🔴 **수정: 프로필 이미지 필드 추가**
+    private String profileImage;
+
+    // ✅ 활동 로그와 연결
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore // ✅ ActivityLog의 역참조를 무시하여 순환 참조 방지
+    private List<ActivityLog> activityLogs;
+    
+    // ✅ **프로필 이미지의 Getter 메서드 추가**
+    public String getProfileImage() {
+        return profileImage != null ? profileImage : "/assets/images/basicprofile.jpg"; // 기본 이미지 반환
+    }
+
   
       @Column(name = "password_reset_token")
       private String passwordResetToken; // 비밀번호 재설정 토큰

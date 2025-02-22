@@ -36,18 +36,21 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // ✅ OPTIONS 요청 허용
                         .requestMatchers("/api/auth/register").permitAll() // ✅ 회원가입 허용
                         .requestMatchers("/api/auth/login").permitAll() // ✅ 로그인 허용
-                  .requestMatchers("/ws/**").permitAll() // ✅ WebSocket 요청 허용
-                  .requestMatchers("/topic/**").permitAll() // ✅ STOMP 메시지 브로커 허용
-                  .requestMatchers("/app/**").permitAll() // ✅ STOMP 메시지 브로커 허용
-                  .requestMatchers("/user/**").permitAll() // ✅ 개인 메시지 전송 허용
+                        .requestMatchers("/ws/**").permitAll() // ✅ WebSocket 요청 허용
+                        .requestMatchers("/topic/**").permitAll() // ✅ STOMP 메시지 브로커 허용
+                        .requestMatchers("/app/**").permitAll() // ✅ STOMP 메시지 브로커 허용
+                        .requestMatchers("/user/**").permitAll() // ✅ 개인 메시지 전송 허용
                         .requestMatchers("/api/auth/logout").authenticated()
                         .requestMatchers("/api/team/invite").authenticated()
                         .requestMatchers("/api/user/projects/**").authenticated()
                         .requestMatchers("/api/config/google-maps-key").authenticated()
                         .requestMatchers("/api/places/search").authenticated()
-                        .requestMatchers("/api/user").authenticated() 
+                        .requestMatchers("/api/user").authenticated()
                         .requestMatchers("/api/auth").authenticated()
-
+                        .requestMatchers("/api/activity/**").authenticated()
+                        .requestMatchers("/api/auth/{id}").authenticated()
+                        .requestMatchers("/api/activity/post").authenticated()
+                        .requestMatchers("/api/activity/feed/**").authenticated() // ✅ 피드 조회는 인증된 사용자만 가능
 
                         .anyRequest().authenticated())
                 .exceptionHandling(exception -> exception

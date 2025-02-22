@@ -18,6 +18,7 @@ import jakarta.validation.Valid;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/auth") // ✅ URL 확인
@@ -211,4 +212,6 @@ public class UserController {
 
 		return ResponseEntity.ok("로그아웃 성공");
 	}
+
+	
 }

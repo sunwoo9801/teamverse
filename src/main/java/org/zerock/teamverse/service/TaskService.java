@@ -1,5 +1,6 @@
 package org.zerock.teamverse.service;
 
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.zerock.teamverse.dto.TaskDTO;
@@ -15,24 +16,23 @@ import java.util.Optional;
 public class TaskService {
 
     private final TaskRepository taskRepository;
+    private final SimpMessagingTemplate messagingTemplate; // ✅ WebSocket 브로드캐스트 추가
 
-    public TaskService(TaskRepository taskRepository) {
+    public TaskService(TaskRepository taskRepository, SimpMessagingTemplate messagingTemplate) {
         this.taskRepository = taskRepository;
+        this.messagingTemplate = messagingTemplate;
     }
 
     public Task createTask(Task task) {
 
-    // 📌 TaskService에서 color 값 확인
-    System.out.println("📌 [TaskService] 저장 요청된 Task color: " + task.getColor());
+        if (task.getColor() == null || task.getColor().isEmpty()) {
+            System.out.println("❌ [TaskService] color 값이 없음, 기본 색상 적용");
+            task.setColor("#ff99a5");
+        }
 
-    if (task.getColor() == null || task.getColor().isEmpty()) {
-        System.out.println("❌ [TaskService] color 값이 없음, 기본 색상 적용");
-        task.setColor("#ff99a5");
-    }
+        Task savedTask = taskRepository.save(task);
 
-    Task savedTask = taskRepository.save(task);
-    System.out.println("🎨 [TaskService] 저장된 Task color: " + savedTask.getColor());
-
+        messagingTemplate.convertAndSend("/topic/tasks/" + task.getProject().getId(), savedTask);
 
         return taskRepository.save(task);
     }
@@ -59,7 +59,6 @@ public class TaskService {
         task.setAssignedTo(assignedUser);
         task.setColor(taskDTO.getColor()); // ✅ 색상 값 저장
 
-
         // ✅ color 값이 정상적으로 들어오는지 로그 확인
         System.out.println("📌 전달받은 TaskDTO color: " + taskDTO.getColor());
         if (taskDTO.getColor() == null || taskDTO.getColor().isEmpty()) {
@@ -72,14 +71,15 @@ public class TaskService {
 
         return taskRepository.save(task);
     }
+
     public void deleteTask(Long id) {
         Task task = taskRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Task not found"));
         taskRepository.delete(task);
     }
 
-     // 상태별 작업 조회
-     public List<Task> getTasksByStatus(Task.Status status) {
+    // 상태별 작업 조회
+    public List<Task> getTasksByStatus(Task.Status status) {
         return taskRepository.findByStatus(status); // 상태에 따라 작업 필터링
     }
 

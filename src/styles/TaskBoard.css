@@ -1,72 +1,87 @@
-.task-board {
-  display: flex;
-  padding: 20px;
-  gap: 20px;
-  background-color: #f4f4f9;
+/* 🔹 TaskBoard 전체 레이아웃 설정 */
+.task-board-container {
+  display: flex; /* ✅ LeftSidebar와 TaskBoard를 나란히 배치 */
+  height: 100vh;
+  background: #f4f7fb; /* 💡 배경색 추가 */
 }
 
-.task-column {
-  flex: 1;
-  background: #ffffff;
+.left-sidebar {
+  width: 200px;
+  background: white;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+  padding: 20px;
   border-radius: 8px;
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
-  padding: 16px;
+  gap: 15px;
 }
 
-.task-column-header {
-  font-size: 18px;
-  font-weight: bold;
-  margin-bottom: 10px;
+/* 🔹 TaskBoard 스타일 */
+.task-board {
+  flex: 1; /* ✅ 남은 공간을 모두 차지 */
+  padding: 20px;
   text-align: center;
-  color: #555;
 }
 
-.task-column-body {
-  flex: 1;
-  overflow-y: auto;
-  padding: 10px;
+/* 🔹 카드 레이아웃 (반응형) */
+.task-board-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); /* 💡 카드 크기 조정 */
+  gap: 45px; /* 💡 카드 간 간격 */
+  margin-top: 30px;
+  justify-items: center;
+  padding: 0 20px;
 }
 
+/* 🔹 개별 카드 스타일 */
 .task-card {
-  background: #e3e4e8;
-  border-radius: 8px;
-  padding: 10px;
-  margin-bottom: 10px;
-  cursor: grab;
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  background: linear-gradient(135deg, #70a0f4, #b889fa); /* 💡 그라디언트 효과 */
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 4px 4px 15px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease-in-out;
+  width: 100%;
+  max-width: 320px;
+  text-align: left;
+  color: #ffffff; /* 💡 텍스트 색상 */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
-.task-card:active {
-  cursor: grabbing;
+/* 🔹 카드 Hover 효과 */
+.task-card:hover {
+  transform: translateY(-5px); /* 💡 떠오르는 효과 */
+  box-shadow: 6px 6px 20px rgba(0, 0, 0, 0.15);
 }
 
-.task-name {
-  font-size: 16px;
+/* 🔹 프로젝트 제목 */
+.task-card h3 {
+  margin: 0 0 12px;
+  font-size: 20px;
   font-weight: bold;
-  margin-bottom: 5px;
+  color: #ffffff;
 }
 
-.task-assignee {
+/* 🔹 프로젝트 설명 */
+.task-card p {
+  margin: 8px 0;
   font-size: 14px;
-  color: #666;
+  opacity: 0.9;
 }
 
-.task-due-date {
+/* 🔹 프로젝트 날짜 스타일 */
+.project-date {
   font-size: 12px;
-  color: #888;
+  opacity: 0.8;
+  align-self: flex-end;
 }
 
-.task-progress-bar {
-  height: 8px;
-  background: #ddd;
-  border-radius: 4px;
-  overflow: hidden;
-  margin-top: 5px;
+/* 💡 반응형 스타일 */
+@media (max-width: 768px) {
+  .task-board-grid {
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  }
 }
 
-.task-progress {
-  height: 100%;
-  background: #70a0f4;
-}
+

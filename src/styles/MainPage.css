@@ -10,13 +10,12 @@
 .sidebar-container {
   background: #ecf0f3;
   border-radius: 12px;
-  padding: 20px;
+  padding: 10px;
 }
 
 .content {
   display: flex;
   flex-direction: column;
-  gap: 10px;
   background-color: #F4F7FC;
 }
 
@@ -33,7 +32,7 @@
   flex-direction: column;
   background: #F4F7FC;
   border-radius: 12px;
-  /* padding: 20px; */
+  padding: 10px;
 }
 
 .empty-project {
@@ -114,36 +113,100 @@
   color: gray;
   margin-top: 20px;
 }
-
-#다혜가 만든 테스트용
-/* 프로젝트 목록 스타일 */
-.project-list-container {
+.header-title {
+  color: #1C3FAA; /* 기본 색상을 네이비 블루로 설정 */
+  font-size: 1.5rem;
+  font-weight: bold;
   display: flex;
-  flex-wrap: wrap; /* ✅ 프로젝트 목록이 여러 줄에 표시될 수 있도록 함 */
-  gap: 10px;
-  list-style: none;
-  padding: 0;
-  max-height: 300px; /* ✅ 목록이 너무 길어지는 경우 대비 */
-  overflow-y: auto;
+  align-items: center;
+  transition: color 0.3s ease; /* 부드러운 색상 전환 효과 */
 }
 
-.project-btn {
+.header-title:hover {
+  color: #2F80ED; /* 마우스를 올리면 밝은 블루로 변경 */
+}
+
+
+/* 프로젝트 아이콘 */
+.project-icon {
+  width: 60px;
+  height: 60px;
+  transition: opacity 0.2s ease-in-out;
+}
+/* 선택된 프로젝트 스타일 */
+/* .project-btn.active .project-icon {
+  opacity: 0.7;
+} */
+/* ✅ li 요소의 기본 점(●) 제거 */
+.project-item {
+  list-style: none; /* 🔹 리스트 스타일 제거 */
+  text-align: center;
+}
+
+/* ✅ 반응형: 화면이 작아지면 한 줄에 2개 */
+@media (max-width: 800px) {
+  .project-list-container {
+      grid-template-columns: repeat(2, 1fr); /* 작은 화면에서는 2개씩 */
+  }
+}
+
+/* ✅ 반응형: 화면이 더 작아지면 한 줄에 1개 */
+@media (max-width: 500px) {
+  .project-list-container {
+      grid-template-columns: repeat(1, 1fr); /* 작은 화면에서는 1개씩 */
+  }
+}
+
+.h2{
+
+}
+/* 프로젝트 목록을 가로 4개씩 표시 */
+.project-list-container {
+  display: grid !important; /* ✅ 강제로 grid 적용 */
+  grid-template-columns: repeat(5, auto); /* ✅ 한 줄에 4개씩 */
+  gap: 10px; /* 아이콘 간격 */
   padding: 10px;
+  justify-content: flex-start;
+  width: 100%; /* ✅ 부모 크기 맞춤 */
+  
+}
+/* 프로젝트 버튼 스타일 */
+.project-btn {
+  padding: 5px;
   border: none;
-  background-color: #f0f0f0;
+  background-color: transparent; /* ✅ 기본적으로 배경 투명 */
   cursor: pointer;
   border-radius: 5px;
-  transition: background 0.3s;
+  transition: background 0.3s, transform 0.2s ease-in-out;
+  display: flex;
+  flex-direction: column; /* ✅ 아이콘 위, 텍스트 아래 정렬 */
+  align-items: center;
+  justify-content: center;
+  width: 100%;
 }
 
+/* ✅ 선택된 프로젝트 스타일 */
 .project-btn.active {
-  background-color: #4B70E2;
-  color: white;
+  color: #333333;
   font-weight: bold;
+}
+
+/* ✅ 프로젝트 아이콘 */
+.project-icon {
+  width: 60px;
+  height: 60px;
+  max-width: 90px; /* ✅ 아이콘 크기에 맞게 조정 */
+
+}
+/* ✅ 선택되지 않은 프로젝트의 아이콘 투명도 효과 */
+.project-btn:not(.active) .project-icon {
+  opacity: 0.7; /* ✅ 아이콘 살짝 투명하게 */
 }
 
 .no-project-selected {
   text-align: center;
   font-style: italic;
   color: gray;
+
 }
+

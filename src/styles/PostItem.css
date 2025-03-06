@@ -1,0 +1,25 @@
+.post-item {
+  background: #ffffff;
+  border: 1px solid #ddd;
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 10px;
+}
+
+.post-item p {
+  margin: 0;
+}
+
+.post-item button {
+  margin-top: 5px;
+  background-color: #70a0f4;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.post-item button:hover {
+  background-color: #5b8ddb;
+}

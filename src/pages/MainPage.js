@@ -1,5 +1,3 @@
-
-
 import React, { useState, useEffect } from "react";
 import Sidebar from "../components/Sidebar";
 import GanttChart from "../components/GanttChart";
@@ -12,8 +10,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { getAccessToken } from "../utils/authUtils";
 import InviteList from "../components/InviteList"; // ✅ 초대 목록 컴포넌트 추가
 import { getStompClient } from "../api/websocket"; // ✅ getStompClient 사용
-
-
+import LeftSidebar from "../components/LeftSidebar"; // ✅ 왼쪽 사이드바 추가
 
 const MainPage = () => {
     const [projects, setProjects] = useState([]); // ✅ 프로젝트 목록 저장
@@ -26,6 +23,9 @@ const MainPage = () => {
     const navigate = useNavigate(); // ✅ 페이지 이동
     const [projectDescription, setProjectDescription] = useState(""); // ✅ 설명 추가
     const [invites, setInvites] = useState([]); // ✅ 초대 목록 상태 추가
+    const [showProjectList, setShowProjectList] = useState(false);
+
+
 
     // ✅ 로그인한 사용자의 프로젝트 목록 불러오기
     const fetchProjects = async () => {
@@ -166,6 +166,7 @@ const MainPage = () => {
             console.error(`❌ 프로젝트 ${projectId}의 작업 목록 불러오기 실패:`, error);
         }
     };
+
     // ✅ 프로젝트 선택 시 처리 함수
     const handleProjectSelect = (project) => {
         setSelectedProject(project);
@@ -229,9 +230,21 @@ const MainPage = () => {
         }
     }, [selectedProject]);
 
+    const handleShowProjectList = () => {
+        setShowProjectList(true);
+
+        // ✅ 프로젝트 데이터를 함께 전달하여 이동
+        navigate("/TaskBoard", { state: { projects } });
+    };
+
+
 
     return (
         <div className="main-page">
+            {/* ✅ 왼쪽 사이드바 */}
+                    {/* ✅ LeftSidebar에 onCreateProject 함수 전달 */}
+                    <LeftSidebar onCreateProject={() => setShowModal(true)} onShowProjectList={handleShowProjectList} />
+
             <div className="content">
 
                 {/* ✅ 프로젝트 목록 표시 */}
@@ -258,9 +271,11 @@ const MainPage = () => {
                             ))}
                         </ul>
                     )}
-                    <button className="create-project-btn" onClick={() => setShowModal(true)}>
+
+                    {/* <button className="create-project-btn" onClick={() => setShowModal(true)}>
                         새로운 프로젝트 생성
-                    </button>
+                    </button> */}
+
                 </div>
 
                 {/* ✅ 선택한 프로젝트의 간트 차트 표시 */}

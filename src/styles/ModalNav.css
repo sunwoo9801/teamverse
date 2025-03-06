@@ -1,0 +1,22 @@
+.modal-nav {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 10px;
+}
+
+.modal-nav button {
+  padding: 10px;
+  flex: 1;
+  border: none;
+  background: #f1f1f1;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.modal-nav button.active {
+  background: #6A5ACD;
+  color: white;
+  border-bottom: 2px solid #6A5ACD;
+}
+

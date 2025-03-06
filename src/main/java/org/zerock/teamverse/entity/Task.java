@@ -1,3 +1,4 @@
+
 package org.zerock.teamverse.entity;
 
 import jakarta.persistence.*;
@@ -5,6 +6,8 @@ import lombok.Data;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -54,6 +57,9 @@ public class Task {
 
     @Column(name = "updated_at")
     private LocalDateTime updatedAt = LocalDateTime.now();
+
+    @OneToMany(mappedBy = "task", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<FileInfo> files = new ArrayList<>();
 
     public enum Status {
         DRAFT, EDITING, TODO, IN_PROGRESS, DONE

@@ -1,34 +1,40 @@
 package org.zerock.teamverse.dto;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import org.zerock.teamverse.entity.Task;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class TaskDTO {
 	private Long id;
 	private String name;
 	private String status;
-	private LocalDate startDate; 
+	private LocalDate startDate;
 	private LocalDate dueDate;
 	private String description;
 	private Long projectId;
-	private Long assignedTo; // ✅ 담당자 ID 추가
-    private String color; // ✅ 추가: 작업 색상 필드
+	private Long assignedTo; // 담당자 ID 추가
+	private String color; // 작업 색상 필드
+	private List<Long> fileIds; // 파일 ID 리스트 추가
 
+	// 기본 생성자(필수)
+	public TaskDTO() {
+	}
 
-	//기본 생성자(필수)
-	public TaskDTO() {}
-	
 	// 생성자
 	public TaskDTO(Task task) {
 		this.id = task.getId();
 		this.name = task.getName();
 		this.status = task.getStatus().toString(); // Enum을 String으로 변환
-		this.startDate = task.getStartDate(); 
+		this.startDate = task.getStartDate();
 		this.dueDate = task.getDueDate();
-		this.description = task.getDescription(); 
-        this.color = task.getColor(); // ✅ 추가: 엔티티에서 color 값 가져오기
-
+		this.description = task.getDescription();
+		this.color = task.getColor(); // ✅ 추가: 엔티티에서 color 값 가져오기
 
 		if (task.getProject() != null) {
 			this.projectId = task.getProject().getId();
@@ -38,73 +44,72 @@ public class TaskDTO {
 		}
 	}
 
-	// Getter와 Setter
-	public Long getId() {
-		return id;
-	}
+	// // Getter와 Setter
+	// public Long getId() {
+	// return id;
+	// }
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+	// public void setId(Long id) {
+	// this.id = id;
+	// }
 
-	public String getName() {
-		return name;
-	}
+	// public String getName() {
+	// return name;
+	// }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+	// public void setName(String name) {
+	// this.name = name;
+	// }
 
-	public String getStatus() {
-		return status;
-	}
+	// public String getStatus() {
+	// return status;
+	// }
 
-	public void setStatus(String status) {
-		this.status = status;
-	}
+	// public void setStatus(String status) {
+	// this.status = status;
+	// }
 
-	public LocalDate getStartDate() { 
-		return startDate;
-	}
+	// public LocalDate getStartDate() {
+	// return startDate;
+	// }
 
-	public void setStartDate(LocalDate startDate) { 
-		this.startDate = startDate;
-	}
+	// public void setStartDate(LocalDate startDate) {
+	// this.startDate = startDate;
+	// }
 
-	public LocalDate getDueDate() {
-		return dueDate;
-	}
+	// public LocalDate getDueDate() {
+	// return dueDate;
+	// }
 
-	public void setDueDate(LocalDate dueDate) {
-		this.dueDate = dueDate;
-	}
+	// public void setDueDate(LocalDate dueDate) {
+	// this.dueDate = dueDate;
+	// }
 
-	public String getDescription() {
-		return description;
-	}
+	// public String getDescription() {
+	// return description;
+	// }
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
+	// public void setDescription(String description) {
+	// this.description = description;
+	// }
 
-	public Long getProjectId() {
-		return projectId;
-	}
+	// public Long getProjectId() {
+	// return projectId;
+	// }
 
-	public void setProjectId(Long projectId) {
-		this.projectId = projectId;
-	}
-	
-	public Long getAssignedTo() {
-		return assignedTo;
-	}
+	// public void setProjectId(Long projectId) {
+	// this.projectId = projectId;
+	// }
 
-	public void setAssignedTo(Long assignedTo) {
-		this.assignedTo = assignedTo;
-	}
+	// public Long getAssignedTo() {
+	// return assignedTo;
+	// }
 
-	public String getColor() { return color; } // ✅ 추가: Getter
-    public void setColor(String color) { this.color = color; } // ✅ 추가: Setter
+	// public void setAssignedTo(Long assignedTo) {
+	// this.assignedTo = assignedTo;
+	// }
 
+	// public String getColor() { return color; } // ✅ 추가: Getter
+	// public void setColor(String color) { this.color = color; } // ✅ 추가: Setter
 
 }

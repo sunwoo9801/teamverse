@@ -15,4 +15,7 @@ public interface TeamMemberRepository extends JpaRepository<TeamMember, Long> {
 
   boolean existsByProjectAndUser(Project project, User user); // ✅ 특정 프로젝트에 특정 사용자가 이미 속해 있는지 확인
 
+     // ✅ 특정 프로젝트에 특정 사용자가 속해 있는지 확인
+     boolean existsByProject_IdAndUser_Id(Long projectId, Long userId);
+
 }

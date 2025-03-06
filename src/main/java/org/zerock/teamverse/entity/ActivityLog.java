@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * ActivityLogs 엔티티
@@ -25,7 +26,7 @@ public class ActivityLog {
     @Column(name = "activity_type", nullable = false)
     private String activityType; // ✅ 활동 유형
 
-    @Column(name = "activity_description")
+    @Column(name = "activity_description", columnDefinition = "TEXT") // ✅ 긴 글 저장 가능
     private String activityDescription; // ✅ 활동 상세 설명
 
     @Column(name = "created_at", updatable = false)
@@ -34,6 +35,10 @@ public class ActivityLog {
     @ManyToOne(fetch = FetchType.LAZY) // ✅ 활동 로그는 하나의 프로젝트에 속함
     @JoinColumn(name = "project_id", nullable = false)
     private Project project;
+
+    // ✅ **FileInfo 엔티티와 OneToMany 관계 추가**
+    @OneToMany(mappedBy = "activityLog", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<FileInfo> files;
 
     // ✅ **프로필 이미지 추가 (User의 getProfileImage() 활용)**
     public String getProfileImage() {

@@ -1,0 +1,16 @@
+.task-item {
+  background: #f9f9f9;
+  border: 1px solid #ddd;
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 10px;
+}
+
+.task-item h4 {
+  margin: 0;
+}
+
+.task-item p {
+  font-size: 12px;
+  color: gray;
+}

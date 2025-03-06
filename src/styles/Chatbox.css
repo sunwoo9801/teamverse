@@ -1,22 +1,52 @@
-.chatbox .messages {
-  height: 200px;
-  overflow-y: auto;
-}
-
-.input-area {
+.messages {
   display: flex;
-  gap: 10px;
+  flex-direction: column;
+  gap: 8px; /* ✅ 메시지 간 여백 */
+  max-height: 400px;
+  overflow-y: auto;
+  padding: 10px;
+  background-color: #FFFFFF;
 }
 
-.input-area input {
-  flex: 1;
-  padding: 10px;
+/* ✅ 메시지 공통 스타일 */
+.message {
+  max-width: 75%; /* ✅ 메시지가 너무 길어지지 않도록 제한 */
+  padding: 10px 14px;
+  border-radius: 18px;
+  font-size: 14px;
+  line-height: 1.4;
+  word-wrap: break-word;
+  display: inline-block;
 }
 
-.input-area button {
-  padding: 10px;
-  background: #4b70e2;
+/* ✅ 상대방 메시지 스타일 */
+.other-message {
+  background: #f1f1f1;
+  align-self: flex-start;
+  color: #333333;
+}
+
+/* ✅ 내 메시지 스타일 */
+.my-message {
+  background: #0078ff;
   color: white;
-  border: none;
-  border-radius: 8px;
+  align-self: flex-end;
+}
+
+/* ✅ 메시지 간격 조정 */
+.message + .message {
+  margin-top: 6px; /* ✅ 메시지 사이 여백 */
+}
+
+/* ✅ 메시지 말풍선에 그림자 추가 */
+.my-message,
+.other-message {
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.inputtext{
+  background: #E9EFF6;
+}
+.button{
+  background: #2F80ED;
 }

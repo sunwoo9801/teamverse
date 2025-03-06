@@ -1,0 +1,23 @@
+.post-button {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #6a5acd;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 20px;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.post-button:hover {
+  background-color: #4b3dbb;
+}
+
+.post-button svg {
+  margin-right: 8px;
+}

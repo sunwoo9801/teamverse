@@ -28,4 +28,7 @@ public interface ProjectService {
 
     // ✅ 특정 프로젝트의 팀원 목록 조회
     List<User> getProjectTeamMembers(Long projectId);
+
+    boolean isProjectMember(Long projectId, Long userId);
+    
 }

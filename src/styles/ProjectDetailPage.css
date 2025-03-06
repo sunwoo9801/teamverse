@@ -1,0 +1,178 @@
+/* Project 상세 페이지 스타일 */
+.project-detail-page {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.project-layout {
+  display: flex;
+  flex: 1;
+}
+
+.project-content {
+  flex: 1;
+  padding: 20px;
+  background-color: #f9f9f9;
+  overflow-y: auto;
+}
+
+.task-section, .gantt-chart-section, .activity-feed-section {
+  background: white;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+}
+
+h2 {
+  margin-bottom: 10px;
+}
+
+.task-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.task-table th, .task-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.task-table th {
+  background-color: #f1f1f1;
+}
+
+.task-table button {
+  margin-right: 5px;
+  padding: 5px 10px;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.task-table button:hover {
+  opacity: 0.8;
+}
+
+.gantt-chart-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.activity-feed-section {
+  padding: 20px;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.activity-item {
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+.activity-item:last-child {
+  border-bottom: none;
+}
+
+.post-button-group {
+  display: flex;
+  gap: 10px;  /* 버튼 간격 */
+  justify-content: flex-start; /* 왼쪽 정렬 */
+  align-items: center; /* 세로 중앙 정렬 */
+  margin-bottom: 15px; /* 아래 여백 */
+}
+
+.post-button-group button {
+  background-color: #6a5acd;
+  color: white;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.post-button-group button:hover {
+  background-color: #5a4acb;
+}
+
+.post-nav {
+  display: flex;
+  gap: 20px;  /* 버튼 간격 */
+  justify-content: flex-start; /* 왼쪽 정렬 */
+  align-items: center; /* 세로 중앙 정렬 */
+  margin-bottom: 15px; /* 아래 여백 */
+  border-bottom: 2px solid #ddd; /* 네비게이션 구분선 */
+  padding-bottom: 10px;
+}
+
+.post-nav button {
+  background: none;
+  border: none;
+  font-size: 16px;
+  font-weight: bold;
+  color: #444;
+  cursor: pointer;
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.post-nav button:hover {
+  color: #6a5acd;
+  font-weight: bold;
+}
+
+.files-section {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  margin-top: 20px; /* 상단 여백 */
+  margin-bottom: 20px;
+  width: 90%; /* ✔ feed-section, task-page와 동일한 크기 */
+  max-width: 1000px; /* ✔ 최대 너비 지정 (너무 크지 않도록) */
+  margin-left: auto; /* 중앙 정렬 */
+  margin-right: auto; /* 중앙 정렬 */
+}
+
+/* 제목 스타일 (다른 섹션과 동일하게) */
+.files-section h2 {
+  font-size: 20px;
+  margin-bottom: 15px;
+  text-align: left;
+}
+
+/* 파일 목록 스타일 */
+.files-section .file-list-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.files-section .file-item {
+  background: #f9f9f9;
+  padding: 10px;
+  border-radius: 5px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  border: 1px solid #ddd;
+  width: 100%;
+}
+
+.files-section .file-item a {
+  text-decoration: none;
+  color: #333;
+  font-weight: bold;
+}
+
+.files-section .file-item a:hover {
+  text-decoration: underline;
+}

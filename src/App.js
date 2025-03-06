@@ -9,6 +9,7 @@ import SessionTimeout from "./components/SessionTimeout"; // 자동 세션 관�
 import LandingPage from './components/LandingPage';
 import TaskPage from './pages/TaskPage';
 import ProjectDetailPage from "./pages/ProjectDetailPage"; // 프로젝트 상세 페이지 import
+import TaskBoard from './components/TaskBoard';
 
 
 
@@ -44,7 +45,8 @@ function MainLayout() {
         <Route path="/statistics" element={<StatisticsPage tasks={tasks} />} /> {/* tasks 전달 */}
         <Route path="/team-status" element={<TeamStatusPage />} /> 
         <Route path="/task" element={<TaskPage />} /> 
-        <Route path="/project/:projectId" element={<ProjectDetailPage />} /> 
+        <Route path="/project/:projectId" element={<ProjectDetailPage />} />
+        <Route path="/TaskBoard" element={<TaskBoard />} />
         </Routes>
     </>
   );

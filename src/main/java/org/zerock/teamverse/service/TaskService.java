@@ -30,9 +30,11 @@ public class TaskService {
             task.setColor("#ff99a5");
         }
 
-        Task savedTask = taskRepository.save(task);
+        if (task.getDescription() == null || task.getDescription().trim().isEmpty()) {
+            task.setDescription(""); // ✅ NULL 또는 빈 값 방지
+        }
 
-        messagingTemplate.convertAndSend("/topic/tasks/" + task.getProject().getId(), savedTask);
+        Task savedTask = taskRepository.save(task);
 
         return taskRepository.save(task);
     }
@@ -87,4 +89,9 @@ public class TaskService {
     public List<Task> getTasksByAssignedUser(Long userId) {
         return taskRepository.findByAssignedTo_Id(userId); // 사용자 ID로 작업 필터링
     }
+
+    public boolean existsByNameAndProject(String name, Project project) {
+        return taskRepository.existsByNameAndProject(name, project);
+    }
+    
 }

@@ -1,0 +1,100 @@
+.project-sidebar {
+  width: 250px;
+  background: #ffffff;
+  padding: 15px;
+  box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.team-members, .team-chat {
+  margin-bottom: 20px;
+}
+
+.team-members h3, .team-chat h3 {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.team-members ul {
+  list-style: none;
+  padding: 0;
+}
+
+.team-members li {
+  padding: 5px 0;
+  border-bottom: 1px solid #ddd;
+}
+
+.team-chat input {
+  width: 100%;
+  padding: 5px;
+  margin-top: 5px;
+}
+
+.team-chat button {
+  width: 100%;
+  padding: 5px;
+  background: #007bff;
+  color: white;
+  border: none;
+  cursor: pointer;
+  margin-top: 5px;
+}
+
+.task-page {
+  padding: 20px;
+  background: #f9f9f9;
+}
+
+/* ✅ 업무 목록과 간트 차트를 가로로 배치 */
+.task-container {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+/* ✅ 업무 목록 스타일 */
+.task-list {
+  flex: 1;
+  background: white;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* ✅ 간트 차트 스타일 */
+.gantt-chart-container {
+  flex: 2;
+  background: white;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* ✅ 버튼 스타일 */
+button {
+  padding: 8px 12px;
+  margin-right: 5px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/* ✅ 상태 배지 스타일 */
+.status-badge {
+  display: inline-block;
+  padding: 5px 10px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+/* ✅ 상태별 색상 */
+.status-badge.TODO { background: #ffcc00; color: #fff; }
+.status-badge.IN_PROGRESS { background: #007bff; color: #fff; }
+.status-badge.DONE { background: #28a745; color: #fff; }
+
+/* ✅ 삭제 버튼 스타일 */
+.delete-btn {
+  background: #dc3545;
+  color: white;
+}

@@ -28,7 +28,7 @@ public class ProjectServiceImpl implements ProjectService { // ✅ 기존 기능
         this.teamMemberRepository = teamMemberRepository;
     }
 
-     public Optional<User> findById(Long id) {
+    public Optional<User> findById(Long id) {
         return userRepository.findById(id);
     }
 
@@ -117,5 +117,11 @@ public class ProjectServiceImpl implements ProjectService { // ✅ 기존 기능
         List<TeamMember> teamMembers = teamMemberRepository.findByProject_Id(projectId);
         return teamMembers.stream().map(TeamMember::getUser).toList();
     }
-
+    @Override
+    public boolean isProjectMember(Long projectId, Long userId) {
+        boolean exists = teamMemberRepository.existsByProject_IdAndUser_Id(projectId, userId);
+        System.out.println("📌 팀원 여부 확인 - 프로젝트 ID: " + projectId + ", 사용자 ID: " + userId + " → " + exists);
+        return exists;
+    }
+    
 }

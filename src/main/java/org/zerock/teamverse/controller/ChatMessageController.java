@@ -6,8 +6,12 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+import org.zerock.teamverse.dto.ChatMessageDTO;
 import org.zerock.teamverse.entity.ChatMessage;
 import org.zerock.teamverse.entity.Project;
 import org.zerock.teamverse.entity.User;
@@ -16,9 +20,16 @@ import org.zerock.teamverse.service.ProjectService;
 import org.zerock.teamverse.service.UserService;
 import org.springframework.transaction.annotation.Transactional;
 
-
+import java.security.Principal;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+
 @RestController
 @RequestMapping("/api/chat")
 public class ChatMessageController {
@@ -46,7 +57,6 @@ public class ChatMessageController {
     // ✅ WebSocket을 통해 채팅 메시지 전송 및 DB 저장
     @MessageMapping("/chat")
     @Transactional  // 🔥 트랜잭션 적용
-
     public void sendMessage(@Payload ChatMessage chatMessage) {
         System.out.println("📩 채팅 메시지 수신: " + chatMessage.getContent());
 
@@ -74,7 +84,9 @@ public class ChatMessageController {
 
         System.out.println("✅ 채팅 메시지 저장 완료! ID: " + savedMessage.getId());
 
+
         // ✅ 저장된 메시지를 WebSocket을 통해 프로젝트의 모든 팀원에게 전송
         messagingTemplate.convertAndSend("/topic/chat/" + projectId, savedMessage);
     }
+
 }

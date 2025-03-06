@@ -28,8 +28,18 @@ public class ChatMessage {
     @Column(nullable = false)
     private String content;
 
-    private boolean isAnnouncement = false;
-
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
+
+    @Column(name = "is_private_chat", nullable = false, columnDefinition = "BOOLEAN DEFAULT FALSE") // ✅ 개인 채팅 여부
+    private boolean isPrivateChat = false;
+
+    @Column(name = "is_announcement", nullable = false, columnDefinition = "BOOLEAN DEFAULT FALSE") // ✅ 공지 여부
+    private boolean isAnnouncement = false;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "recipient_id") // ✅ 개인 채팅 시 수신자 정보 저장
+    private User recipient;
+
+
 }

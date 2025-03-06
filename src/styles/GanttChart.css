@@ -5,47 +5,22 @@
   margin-top: 5px;
   font-family: 'Arial', sans-serif;
   position: relative; /* 부모 요소를 기준으로 버튼 위치 고정 */
-  padding-bottom: 40px; /* 하단 여백 추가 */
   padding: 20px;
-  /* background-color: #f4f4f9; */
-
-
-  /* background-color: #fff; */
   border-radius: 8px;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
   background-color: #fff;
   /* border-radius: 8px; */
-  margin: 20px;
-  height: 100%;
-
-}
-
-.gantt-chart {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-top: 5px;
-  font-family: 'Arial', sans-serif;
-  position: relative; /* 부모 요소를 기준으로 버튼 위치 고정 */
-  padding-bottom: 40px; /* 하단 여백 추가 */
-  padding: 20px;
-  /* background-color: #f4f4f9; */
-
-
-  /* background-color: #fff; */
-  border-radius: 8px;
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-  background-color: #fff;
-  /* border-radius: 8px; */
-  margin: 20px;
-  height: 100%;
-
+  min-height: 400px; /* 🔹 최소 높이 설정 */
+  height: auto; /* 🔹 내용에 따라 높이 자동 조정 */
+  max-height: 100%; /* 🔹 최대 높이 설정 */
+  overflow-y: auto; /* 🔹 내부 스크롤 가능 */
+  transition: height 0.3s ease-in-out; /* 🔹 부드러운 애니메이션 효과 */
 }
 
 .week-nav,
 .month-nav,
 .year-nav {
-  background-color: #70a0f4;
+  background-color: #2F80ED;
   color: white;
   border: none;
   border-radius: 50%;
@@ -66,13 +41,28 @@
   transform: scale(1.1);
 }
 
+.week-navigation {
+  display: flex;
+  align-items: center;  /* 세로 중앙 정렬 */
+  justify-content: center; /* 중앙 정렬 */
+  gap: 15px; /* 좌우 버튼과 날짜 사이 여백 */
+}
+
+
+.week-title {
+  color: #4A4A4A;
+  font-size: 1.2rem;
+  font-weight: 600;
+  text-align: center;
+  margin-top: 10px;
+}
 
 .month-calendar {
   display: flex;
   flex-direction: column; /* 헤더와 그리드를 세로로 정렬 */
   align-items: center; /* year-grid를 가로로 중앙 정렬 */
   width: 100%; /* 부모 컨테이너 너비 */
-  
+
 }
 
 .month-header {
@@ -121,7 +111,7 @@
   flex-direction: column; /* 헤더와 그리드를 세로로 정렬 */
   align-items: center; /* year-grid를 가로로 중앙 정렬 */
   width: 100%; /* 부모 컨테이너 너비 */
-  
+
 }
 
 .year-header {
@@ -194,14 +184,14 @@
   font-weight: bold;
   text-align: center;
   color: #666;
-  
+
 }
 
 .calendar-day {
   display: flex;
   flex-direction: column; /* 작업 막대를 세로로 정렬 */
   justify-content: flex-start;
-  align-items: center;  
+  align-items: center;
   align-items: center; /* 가로 중앙 정렬 */
   text-align: center; /* 텍스트 가운데 정렬 */
   padding: 5px;
@@ -209,6 +199,7 @@
   height: 50px; /* 각 날짜 셀 높이 */
   width: 100%; /* 기본 너비 */
 }
+
 endar-day.empty-day {
   background-color: transparent;
   border: none;
@@ -358,36 +349,12 @@ endar-day.empty-day {
   margin-top: 10px; /* 버튼과 내용 사이 간격 */
 }
 
-
-.view-button {
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  background-color: transparent; /* 기본 상태 투명 */
-  color: #555;
-  font-weight: bold;
-  cursor: pointer;
-  transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-.view-button.active {
-  background-color: #70a0f4; /* 활성화된 버튼 배경 */
-  color: white;
-}
-
-.view-button:hover {
-  background-color: #b889fa; /* 호버 시 배경 */
-  color: white;
-}
-
-
-
 .month-calendar {
   display: flex;
   flex-direction: column; /* 헤더와 그리드를 세로로 정렬 */
   align-items: center; /* year-grid를 가로로 중앙 정렬 */
   width: 100%; /* 부모 컨테이너 너비 */
-  
+
 }
 
 .month-header {
@@ -436,7 +403,7 @@ endar-day.empty-day {
   flex-direction: column; /* 헤더와 그리드를 세로로 정렬 */
   align-items: center; /* year-grid를 가로로 중앙 정렬 */
   width: 100%; /* 부모 컨테이너 너비 */
-  
+
 }
 
 .year-header {
@@ -508,14 +475,14 @@ endar-day.empty-day {
   font-weight: bold;
   text-align: center;
   color: #666;
-  
+
 }
 
 .calendar-day {
   display: flex;
   flex-direction: column; /* 작업 막대를 세로로 정렬 */
   justify-content: flex-start;
-  align-items: center;  
+  align-items: center;
   align-items: center; /* 가로 중앙 정렬 */
   text-align: center; /* 텍스트 가운데 정렬 */
   padding: 5px;
@@ -678,7 +645,7 @@ endar-day.empty-day {
 }
 
 .view-button.active {
-  background-color: #70a0f4; /* 활성화된 버튼 배경 */
+  background-color: #2F80ED; /* 활성화된 버튼 배경 */
   color: white;
 }
 

@@ -1,3 +1,4 @@
+/*
 .task-board {
   display: flex;
   padding: 20px;
@@ -70,3 +71,93 @@
   height: 100%;
   background: #70a0f4;
 }
+*/
+
+/* 🔹 TaskBoard 전체 레이아웃 설정 */
+.task-board-container {
+  display: flex; /* ✅ LeftSidebar와 TaskBoard를 나란히 배치 */
+  height: 100vh;
+  background: #f4f7fb; /* 💡 배경색 추가 */
+}
+
+.left-sidebar {
+  width: 200px;
+  background: white;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* 🔹 TaskBoard 스타일 */
+.task-board {
+  flex: 1; /* ✅ 남은 공간을 모두 차지 */
+  padding: 20px;
+  text-align: center;
+}
+
+/* 🔹 카드 레이아웃 (반응형) */
+.task-board-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); /* 💡 카드 크기 조정 */
+  gap: 45px; /* 💡 카드 간 간격 */
+  margin-top: 30px;
+  justify-items: center;
+  padding: 0 20px;
+}
+
+/* 🔹 개별 카드 스타일 */
+.task-card {
+  background: linear-gradient(135deg, #70a0f4, #b889fa); /* 💡 그라디언트 효과 */
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 4px 4px 15px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease-in-out;
+  width: 100%;
+  max-width: 320px;
+  text-align: left;
+  color: #ffffff; /* 💡 텍스트 색상 */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* 🔹 카드 Hover 효과 */
+.task-card:hover {
+  transform: translateY(-5px); /* 💡 떠오르는 효과 */
+  box-shadow: 6px 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* 🔹 프로젝트 제목 */
+.task-card h3 {
+  margin: 0 0 12px;
+  font-size: 20px;
+  font-weight: bold;
+  color: #ffffff;
+}
+
+/* 🔹 프로젝트 설명 */
+.task-card p {
+  margin: 8px 0;
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+/* 🔹 프로젝트 날짜 스타일 */
+.project-date {
+  font-size: 12px;
+  opacity: 0.8;
+  align-self: flex-end;
+}
+
+/* 💡 반응형 스타일 */
+@media (max-width: 768px) {
+  .task-board-grid {
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  }
+}
+
+
+

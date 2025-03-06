@@ -9,6 +9,8 @@ const GanttChart = ({ tasks }) => {
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
   const today = new Date();
+  const [chartHeight, setChartHeight] = useState("400px"); // ✅ 최소 높이 설정
+
 
   const isTaskOnDate = (date, task) => {
     const taskStart = new Date(task.start).setHours(0, 0, 0, 0);
@@ -147,6 +149,15 @@ const GanttChart = ({ tasks }) => {
 
   useEffect(() => {
   }, [viewMode, currentWeekStart, tasks]);
+
+  useEffect(() => {
+    if (tasks.length > 6) {
+      // ✅ 업무가 6개 이상이면 높이를 자동으로 증가
+      setChartHeight(`${400 + (tasks.length - 6) * 60}px`);
+    } else {
+      setChartHeight("400px"); // ✅ 기본 높이 유지
+    }
+  }, [tasks]);
 
   return (
     <div className="gantt-chart">

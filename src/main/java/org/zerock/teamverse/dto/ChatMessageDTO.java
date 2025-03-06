@@ -1,5 +1,7 @@
 package org.zerock.teamverse.dto;
 
+import java.time.LocalDateTime;
+
 public class ChatMessageDTO {
     private Long id;
     private String content;

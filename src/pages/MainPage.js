@@ -11,6 +11,9 @@ import { getAccessToken } from "../utils/authUtils";
 import InviteList from "../components/InviteList"; // ✅ 초대 목록 컴포넌트 추가
 import { getStompClient } from "../api/websocket"; // ✅ getStompClient 사용
 import LeftSidebar from "../components/LeftSidebar"; // ✅ 왼쪽 사이드바 추가
+import folderIcon from "../assets/images/free-icon-folder-4192685.png"; // 📂 일반 폴더 아이콘
+import emptyFolderIcon from "../assets/images/free-icon-open-folder-5082720.png"; // 📂 빈 폴더 아이콘
+
 
 const MainPage = () => {
     const [projects, setProjects] = useState([]); // ✅ 프로젝트 목록 저장
@@ -179,6 +182,14 @@ const MainPage = () => {
         navigate(`/task?projectId=${projectId}`);
     };
 
+    const handleShowProjectList = () => {
+        setShowProjectList(true);
+
+        // ✅ 프로젝트 데이터를 함께 전달하여 이동
+        navigate("/TaskBoard", { state: { projects } });
+    };
+
+
     const fetchInvites = async () => {
         const token = getAccessToken();
         try {
@@ -191,6 +202,12 @@ const MainPage = () => {
           console.error("❌ 초대 목록 불러오기 실패:", error);
         }
       };
+
+    useEffect(() => {
+        if (selectedProject) {
+            console.log("🔄 선택된 프로젝트 변경됨:", selectedProject.id);
+        }
+    }, [selectedProject]);
 
       useEffect(() => {
         fetchProjects(); // ✅ 로그인 시 프로젝트 목록 조회
@@ -224,18 +241,6 @@ const MainPage = () => {
         };
     }, []);
 
-    useEffect(() => {
-        if (selectedProject) {
-            console.log("🔄 선택된 프로젝트 변경됨:", selectedProject.id);
-        }
-    }, [selectedProject]);
-
-    const handleShowProjectList = () => {
-        setShowProjectList(true);
-
-        // ✅ 프로젝트 데이터를 함께 전달하여 이동
-        navigate("/TaskBoard", { state: { projects } });
-    };
 
 
 
@@ -249,23 +254,27 @@ const MainPage = () => {
 
                 {/* ✅ 프로젝트 목록 표시 */}
                 <div className="project-list">
-                    <h2>📂 프로젝트 목록</h2>
+                    <h2>내 프로젝트</h2>
                     {projects.length === 0 ? (
                         <p>현재 프로젝트가 없습니다.</p>
                     ) : (
                         <ul className="project-list-container">
                             {projects.map((project) => (
-                                <li key={project.id}>
+                                    <li key={project.id} className="project-item"> {/* ✅ 기본 리스트 스타일 제거 */}
                                     <button
                                         className={`project-btn ${selectedProject?.id === project.id ? "active" : ""}`}
-                                        onClick={() =>
-                                            handleProjectSelect(project)
-                                            // {setSelectedProject(project);
-                                            // localStorage.setItem("selectedProjectId", project.id)}
-                                        }
+                                        onClick={() => handleProjectSelect(project)}
                                     >
-                                        {/* 수정: 프로젝트 이름이 없을 경우 대비 */}
-                                        {project?.name || "🚨 이름 없음"}
+                                        {/* ✅ 프로젝트 아이콘 */}
+                                        <img
+                                            src={selectedProject?.id === project.id ? emptyFolderIcon : folderIcon}
+                                            alt="프로젝트 아이콘"
+                                            className="project-icon"
+                                        />
+                                        {/* ✅ 프로젝트 이름 (아이콘 아래) */}
+                                        <span className="project-name">
+                                            {project?.name || "🚨 이름 없음"}
+                                        </span>
                                     </button>
                                 </li>
                             ))}
@@ -283,25 +292,21 @@ const MainPage = () => {
                     <div className="project-details">
                          {/* ✅ 클릭 시 TaskPage로 이동 */}
                          <h2
-                            className="clickable-title"
+                            className="header-title"
                             onClick={() => handleProjectClick(selectedProject.id)}
-                            style={{ cursor: "pointer", color: "blue", textDecoration: "underline" }} // ✅ 스타일 추가
                         >
-                            📊 {selectedProject.name} - 간트차트
+                             {selectedProject.name} - 간트차트
                         </h2>
                         <GanttChart project={selectedProject} tasks={tasks} />
                     </div>
                 ) : (
                     <p className="no-project-selected">📌 프로젝트를 선택해주세요.</p>
                 )}
-
-                <TaskBoard />
-                <Dashboard tasks={[]} />
             </div>
             <div className="chatbox-container">
             <Sidebar projectId={selectedProject?.id} />
             <Chatbox projectId={selectedProject ? selectedProject.id : null} />
-                <InviteList refreshProjects={fetchProjects} />
+            <InviteList refreshProjects={fetchProjects} />
 
             </div>
 

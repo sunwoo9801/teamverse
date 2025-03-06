@@ -112,9 +112,15 @@ const Navbar = () => {
     fetchUserInfo();
   }, []);
 
+  
+
   return (
     <nav className="navbar">
       <div className="navbar-logo">TeamVerse</div>
+      {/* <Link to="/dashboard/:userId" className="navbar-logo">
+        TeamVerse
+      </Link> */}
+
 
       {/* ✅ 초대 팝업 */}
       {showPopup && (
@@ -135,7 +141,7 @@ const Navbar = () => {
       )}
 
       <div className="navbar-menu">
-        <Link to="/">대시보드</Link>
+        <Link to="/dashboard/:userId">대시보드</Link>
         <Link to="/statistics">통계</Link>
         <Link to="/team-status">팀원</Link>
           {/* ✅ 프로필을 텍스트로 표시 */}

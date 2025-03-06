@@ -28,7 +28,7 @@
 /* ✅ 모달 컨텐츠 */
 .modal-content {
   background: white;
-  width: 420px;
+  width: 350px;
   border-radius: 12px;
   display: flex;
   flex-direction: column;

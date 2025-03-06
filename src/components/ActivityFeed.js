@@ -251,7 +251,7 @@ const ActivityFeed = ({ projectId }) => {
         withCredentials: true,
       });
 
-  
+
       console.log("📌 받아온 업무 데이터:", taskResponse.data);
 
       setActivities(activityResponse.data); // Post 데이터

@@ -36,10 +36,10 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // ✅ OPTIONS 요청 허용
                         .requestMatchers("/api/auth/register").permitAll() // ✅ 회원가입 허용
                         .requestMatchers("/api/auth/login").permitAll() // ✅ 로그인 허용
-                  .requestMatchers("/ws/**").permitAll() // ✅ WebSocket 요청 허용
-                  .requestMatchers("/topic/**").permitAll() // ✅ STOMP 메시지 브로커 허용
-                  .requestMatchers("/app/**").permitAll() // ✅ STOMP 메시지 브로커 허용
-                  .requestMatchers("/user/**").permitAll() // ✅ 개인 메시지 전송 허용
+                        .requestMatchers("/ws/**").permitAll() // ✅ WebSocket 요청 허용
+                        .requestMatchers("/topic/**").permitAll() // ✅ STOMP 메시지 브로커 허용
+                        .requestMatchers("/app/**").permitAll() // ✅ STOMP 메시지 브로커 허용
+                        .requestMatchers("/user/**").permitAll() // ✅ 개인 메시지 전송 허용
                         .requestMatchers("/api/auth/logout").authenticated()
                         .requestMatchers("/api/team/invite").authenticated()
                         .requestMatchers("/api/user/projects/**").authenticated()
@@ -47,7 +47,9 @@ public class SecurityConfig {
                         .requestMatchers("/api/places/search").authenticated()
                         .requestMatchers("/api/user").authenticated() 
                         .requestMatchers("/api/auth").authenticated()
-
+                        .requestMatchers("/api/auth/**").permitAll() // ✅ 인증 없이 접근 가능
+                        .requestMatchers(HttpMethod.POST, "/api/chat/private/send").hasAnyRole("USER", "MEMBER") // ✅ 사용자 역할 필요
+                        .requestMatchers("/api/chat/private/**").authenticated() // ✅ 개인 메시지 API 보호
 
                         .anyRequest().authenticated())
                 .exceptionHandling(exception -> exception
@@ -72,16 +74,15 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOriginPatterns(List.of("*")); // 모든 출처 허용
+        configuration.setAllowedOriginPatterns(List.of("*")); // 모든 출처 허용'
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setExposedHeaders(List.of("Authorization")); // ✅ 클라이언트가 Authorization 헤더 접근 가능
         configuration.setAllowCredentials(true); // ✅ JWT 포함 요청 허용
+        configuration.setAllowedOrigins(List.of("http://localhost:3000")); // ✅ React 개발 서버만 허용
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
-
-        configuration.setAllowedOriginPatterns(List.of("http://localhost:3000")); // 특정 도메인 지정
 
         source.registerCorsConfiguration("/**", configuration);
 
@@ -99,4 +100,6 @@ public class SecurityConfig {
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
         return configuration.getAuthenticationManager();
     }
+
+    
 }

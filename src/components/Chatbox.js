@@ -13,6 +13,7 @@ const Chatbox = ({ projectId }) => {
   const fetchChatMessages = async () => {
     if (!projectId) return;
     const token = getAccessToken();
+    
     try {
       const response = await axios.get(`http://localhost:8082/api/chat/${projectId}`, {
         headers: { Authorization: `Bearer ${token}` },
@@ -54,32 +55,39 @@ const Chatbox = ({ projectId }) => {
 
 useEffect(() => {
   if (!projectId) return;
+
   fetchChatMessages();
 
-  const stompClient = getStompClient();
-  stompClientRef.current = stompClient;
+  // WebSocket 연결이 이미 활성화되어 있으면 재사용
+  if (!stompClientRef.current || !stompClientRef.current.connected) {
+      const stompClient = getStompClient();
+      stompClientRef.current = stompClient;
 
-  stompClient.onConnect = () => {
-      console.log(`✅ WebSocket 연결 성공! 프로젝트 ${projectId} 구독 중...`);
-      
-      stompClient.subscribe(`/topic/chat/${projectId}`, (message) => {
+      stompClient.onConnect = () => {
+          console.log(`✅ WebSocket 연결 성공! 프로젝트 ${projectId} 구독 중...`);
+
+          stompClient.subscribe(`/topic/chat/${projectId}`, (message) => {
+              const receivedMessage = JSON.parse(message.body);
+              console.log("📨 새 메시지 수신:", receivedMessage);
+
+              setMessages((prevMessages) => [...prevMessages, receivedMessage]);
+
+              // ✅ 사파리에서는 강제 업데이트
+              fetchChatMessages();
+          });
+      };
+
+      stompClient.activate();
+  } else {
+      // ✅ 이미 WebSocket이 연결되어 있다면, 추가 구독만 실행
+      stompClientRef.current.subscribe(`/topic/chat/${projectId}`, (message) => {
           const receivedMessage = JSON.parse(message.body);
-          console.log("📨 새 메시지 수신:", receivedMessage);
-          
-          // ✅ 상태를 이전 값 기반으로 업데이트
           setMessages((prevMessages) => [...prevMessages, receivedMessage]);
-
-              // ✅ 사파리에서는 메시지 목록을 강제 업데이트
-          fetchChatMessages();
-
       });
-  };
-
-  stompClient.activate();
+  }
 
   return () => {
-      console.log("🛑 WebSocket 해제");
-      stompClient.deactivate();
+      console.log("🛑 팀 채팅 WebSocket 구독 해제 (연결은 유지)");
   };
 }, [projectId]);
 
@@ -98,8 +106,10 @@ useEffect(() => {
           <div key={index} className={`message ${msg.sender.email === localStorage.getItem("email") ? "my-message" : "other-message"}`}>
             <span className="sender">{msg.sender.username}</span>
             <p>{msg.content}</p>
-            <span className="timestamp">{new Date(msg.timestamp).toLocaleTimeString()}</span>
-          </div>
+            <span className="timestamp">
+            {new Date(msg.timestamp).toLocaleTimeString("ko-KR", { hour: "2-digit", minute: "2-digit" })}
+          </span>
+                </div>
         ))}
         <div ref={messageEndRef} />
       </div>
@@ -112,7 +122,7 @@ useEffect(() => {
           onKeyPress={(e) => e.key === "Enter" && sendMessage()}
           placeholder="메시지를 입력하세요..."
         />
-        <button className="button" onClick={sendMessage}>📨</button>
+        <button className="button" onClick={sendMessage}>전송</button>
       </div>
     </div>
   );

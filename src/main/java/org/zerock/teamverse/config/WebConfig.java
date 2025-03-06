@@ -33,7 +33,9 @@ public class WebConfig {
 						 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS") // ✅ OPTIONS 허용
 						 .allowedHeaders("*")
 						 .exposedHeaders("Authorization") // ✅ 응답 헤더에 Authorization 포함
-						 .allowCredentials(true); // ✅ 쿠키 포함 허용
+						 .allowCredentials(true) // ✅ 쿠키 포함 허용
+						 .allowedOrigins("http://localhost:3000"); // 프론트엔드 주소
+
 
 			}
 		};

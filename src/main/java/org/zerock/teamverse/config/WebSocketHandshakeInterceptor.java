@@ -30,4 +30,5 @@ public class WebSocketHandshakeInterceptor implements HandshakeInterceptor {
                                WebSocketHandler wsHandler, Exception exception) {
         // Handshake 이후 처리할 내용 없음
     }
+    
 }

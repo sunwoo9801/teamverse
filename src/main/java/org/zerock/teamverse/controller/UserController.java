@@ -18,6 +18,7 @@ import jakarta.validation.Valid;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/auth") // ✅ URL 확인
@@ -36,14 +37,27 @@ public class UserController {
 	// 회원가입
 	@PostMapping("/register")
 	public ResponseEntity<?> registerUser(@RequestBody @Valid UserRegistrationDTO userDTO) {
-			try {
-					userService.register(userDTO);
-					return ResponseEntity.ok("회원가입이 완료되었습니다.");
-			} catch (IllegalArgumentException e) {
-					return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-			}
+		try {
+			userService.register(userDTO);
+			return ResponseEntity.ok("회원가입이 완료되었습니다.");
+		} catch (IllegalArgumentException e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+		}
 	}
 
+	// 로그인
+	// @PostMapping("/login")
+	// public ResponseEntity<LoginResponse> login(@RequestBody @Valid LoginRequest
+	// loginRequest) {
+	// return userService.authenticate(loginRequest)
+	// .map(tokens -> {
+	// // tokens 값 확인 및 기본값 설정
+	// String accessToken = tokens.getOrDefault("accessToken", "");
+	// String refreshToken = tokens.getOrDefault("refreshToken", "");
+	// return ResponseEntity.ok(new LoginResponse(accessToken, refreshToken));
+	// })
+	// .orElse(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
+	// }
 	@PostMapping("/login")
 	public ResponseEntity<LoginResponse> login(
 			@RequestBody @Valid LoginRequest loginRequest,
@@ -54,9 +68,9 @@ public class UserController {
 		// Integer.parseInt(duration); // ✅ 변환 처리
 
 		return userService.authenticate(loginRequest)
-				.map(tokens -> {
-					String accessToken = tokens.getOrDefault("accessToken", "");
-					String refreshToken = tokens.getOrDefault("refreshToken", ""); // ✅ 항상 refreshToken 발급
+		.map(tokens -> {
+				String accessToken = tokens.getOrDefault("accessToken", "");
+				String refreshToken = tokens.getOrDefault("refreshToken", ""); // ✅ 항상 refreshToken 발급
 
 					// int refreshTokenExpiry = (durationValue == 30) ? 1800 : 60 * 60 * 24 * 365;
 					// // 🔹 30분 또는 영구 유지
@@ -110,6 +124,14 @@ public class UserController {
 		return ResponseEntity.ok(Map.of("accessToken", newAccessToken));
 	}
 
+	// ✅ 사용자 정보 조회 (경로를 명확히 /api/auth/me로 변경)
+	// @GetMapping("/me")
+	// public ResponseEntity<Map<String, String>> getMyInfo(Authentication
+	// authentication) {
+	// return userService.getAuthenticatedUserInfo(authentication)
+	// .map(ResponseEntity::ok)
+	// .orElse(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
+	// }
 	@GetMapping("/me")
 	public ResponseEntity<Map<String, Object>> getMyInfo(Authentication authentication) {
 		if (authentication == null) {
@@ -126,12 +148,6 @@ public class UserController {
 		response.put("role", user.getRole().name());
 		response.put("username", user.getUsername());
 
-		// ✅ 추가된 필드 반영
-		response.put("companyName", user.getCompanyName()); // 회사명
-		response.put("department", user.getDepartment()); // 부서명
-		response.put("position", user.getPosition()); // 직책
-		response.put("phoneNumber", user.getPhoneNumber()); // 휴대폰 번호
-
 		return ResponseEntity.ok(response);
 	}
 
@@ -147,26 +163,12 @@ public class UserController {
 			user.setUsername(updates.get("username"));
 		}
 
-		// email
+		// email 변경
 		if (updates.containsKey("email") && updates.get("email") != null) {
 			if (userService.existsByEmail(updates.get("email"))) {
 				return ResponseEntity.badRequest().body("Email already in use");
 			}
 			user.setEmail(updates.get("email"));
-		}
-
-		// ✅ 추가된 필드 업데이트
-		if (updates.containsKey("companyName") && updates.get("companyName") != null) {
-			user.setCompanyName(updates.get("companyName"));
-		}
-		if (updates.containsKey("department") && updates.get("department") != null) {
-			user.setDepartment(updates.get("department"));
-		}
-		if (updates.containsKey("position") && updates.get("position") != null) {
-			user.setPosition(updates.get("position"));
-		}
-		if (updates.containsKey("phoneNumber") && updates.get("phoneNumber") != null) {
-			user.setPhoneNumber(updates.get("phoneNumber"));
 		}
 
 		// password 변경 (암호화)
@@ -175,7 +177,7 @@ public class UserController {
 		}
 
 		userService.saveUser(user); // 변경된 사용자 저장
-		return ResponseEntity.ok("사용자 정보가 업데이트되었습니다.");
+		return ResponseEntity.ok("User information updated successfully");
 	}
 
 	// 사용자 삭제
@@ -211,4 +213,5 @@ public class UserController {
 
 		return ResponseEntity.ok("로그아웃 성공");
 	}
+
 }

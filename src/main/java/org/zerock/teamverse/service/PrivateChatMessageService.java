@@ -9,6 +9,8 @@ import org.zerock.teamverse.entity.User;
 import org.zerock.teamverse.repository.PrivateChatMessageRepository;
 import org.zerock.teamverse.repository.UserRepository;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 
 @Service
@@ -36,18 +38,19 @@ public class PrivateChatMessageService {
              throw new RuntimeException("❌ recipientId(" + messageDTO.getRecipientId() + ")에 해당하는 사용자를 찾을 수 없음.");
          }
  
-         System.out.println("📌 저장할 메시지: " + messageDTO.getContent());
-         System.out.println("📤 sender: " + sender.getUsername() + " (" + sender.getId() + ")");
-         System.out.println("📥 recipient: " + recipient.getUsername() + " (" + recipient.getId() + ")");
- 
          PrivateChatMessage message = new PrivateChatMessage();
          message.setSender(sender);
          message.setRecipient(recipient);
          message.setContent(messageDTO.getContent());
- 
+         message.setTimestamp(LocalDateTime.now());  // ✅ 현재 시간 설정
+
+
          // ✅ 메시지 저장
          PrivateChatMessage savedMessage = privateChatMessageRepository.save(message);
- 
+         
+         // ✅ 즉시 데이터베이스에 반영 (flush 강제 실행)
+        //  privateChatMessageRepository.flush();
+
          // ✅ sender, recipient 강제 로드 (JPA Lazy 로딩 문제 방지)
          savedMessage.setSender(userRepository.findById(savedMessage.getSender().getId()).orElse(null));
          savedMessage.setRecipient(userRepository.findById(savedMessage.getRecipient().getId()).orElse(null));

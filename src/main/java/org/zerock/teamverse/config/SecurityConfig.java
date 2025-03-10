@@ -33,6 +33,7 @@ public class SecurityConfig {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/api/chat/private/save").authenticated() // ✅ 메시지 저장은 인증 필요
                         .requestMatchers("/uploads/**").permitAll() // ✅ 정적 파일 접근 허용
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // ✅ OPTIONS 요청 허용
                         .requestMatchers("/api/auth/register").permitAll() // ✅ 회원가입 허용
@@ -41,6 +42,7 @@ public class SecurityConfig {
                         .requestMatchers("/topic/**").permitAll() // ✅ STOMP 메시지 브로커 허용
                         .requestMatchers("/app/**").permitAll() // ✅ STOMP 메시지 브로커 허용
                         .requestMatchers("/user/**").permitAll() // ✅ 개인 메시지 전송 허용
+                        .requestMatchers("/payment/complete").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/activity/post").authenticated()
                         .requestMatchers("/api/auth/logout").authenticated()
                         .requestMatchers("/api/team/invite").authenticated()

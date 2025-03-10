@@ -99,7 +99,7 @@ useEffect(() => {
   }, 100);
 }, [messages]);
   return (
-    <div className="chatbox-container">
+    <div className="team-chatbox-container">
       <h3>💬 팀 채팅</h3>
       <div className="messages">
         {messages.map((msg, index) => (

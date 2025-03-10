@@ -1,67 +1,53 @@
 /* ✅ 모달 컨테이너 */
-.modal-content {
+.profile-modal-content {
   background: white;
-  width: 420px; /* 모달 너비 */
-  border-radius: 12px;
-  display: flex;
-  flex-direction: column; /* 세로 정렬 */
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
-  padding-bottom: 10px;
-}
-
-/* ✅ 모달 오버레이 (배경을 어둡게 & 흐림 효과 추가) */
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.4); /* 어두운 반투명 배경 */
-  /* backdrop-filter: blur(5px); 배경 흐림 효과 */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 9999; /* 모달이 가장 위에 있도록 설정 */
-}
-
-/* ✅ 모달 컨텐츠 */
-.modal-content {
-  background: white;
-  width: 350px;
+  width: 320px; /* ✅ 모달 크기 축소 */
   border-radius: 12px;
   display: flex;
   flex-direction: column;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   overflow: hidden;
-  padding-bottom: 10px;
-  position: fixed; /* ✅ 중앙 고정 */
+  padding-bottom: 8px;
+  position: fixed;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%); /* 정확한 중앙 배치 */
+  transform: translate(-50%, -50%);
 }
 
+/* ✅ 모달 오버레이 */
+.profile-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0); 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
 
 /* ✅ 닫기 버튼 */
-.close-btn {
+.profile-modal-close-btn {
   position: absolute;
-  top: 15px;
-  right: 15px;
+  top: 12px; /* ✅ 위치 조정 */
+  right: 12px;
   background: none;
   border: none;
-  font-size: 20px;
+  font-size: 16px;
   cursor: pointer;
   color: #999;
 }
 
-.close-btn:hover {
+.profile-modal-close-btn:hover {
   color: black;
 }
 
 /* ✅ 프로필 헤더 */
-.profile-header {
-  background: linear-gradient(to bottom, #c3b1e1, #ffffff); /* 보라색 → 흰색 */
-  padding: 40px 20px 20px;
+.profile-modal-header {
+  background: linear-gradient(to bottom, #c3b1e1, #ffffff);
+  padding: 30px 15px 15px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -70,41 +56,42 @@
 }
 
 /* ✅ 프로필 이미지 */
-.profile-image {
-  width: 80px;
-  height: 80px;
+.profile-modal-image {
+  width: 60px;
+  height: 60px;
   border-radius: 50%;
-  border: 3px solid white;
+  border: 2px solid white;
   background-color: #f0f0f0;
 }
 
 /* ✅ 사용자 이름 */
-.profile-username {
-  font-size: 18px;
+.profile-modal-username {
+  font-size: 20px;
   font-weight: bold;
-  margin-top: 10px;
+  margin-top: 8px;
   color: #333;
 }
 
 /* ✅ 사용자 정보 */
-.profile-info {
-  padding: 15px 20px;
+.profile-modal-info {
+  padding: 10px 15px;
 }
 
 /* ✅ 정보 아이템 */
-.info-item {
+.profile-modal-info-item {
   display: flex;
   align-items: center;
-  justify-content: space-between; /* 아이콘과 값 사이 공간 확보 */
-  font-size: 14px;
+  justify-content: space-between;
+  font-size: 15px;
   color: #444;
-  margin-bottom: 12px;
-  padding-bottom: 5px;
+  margin-bottom: 8px;
+  padding-bottom: 4px;
   border-bottom: 1px solid #eee;
+  padding: 10px;
 }
 
 /* ✅ 아이콘과 텍스트 간격 */
-.info-item strong {
+.profile-modal-info-item strong {
   display: flex;
   align-items: center;
   min-width: 100px;
@@ -112,21 +99,21 @@
 }
 
 /* ✅ 버튼 컨테이너 */
-.profile-actions {
+.profile-modal-actions {
   display: flex;
   justify-content: space-between;
-  padding: 10px 20px;
+  padding: 8px 15px;
   background: white;
   border-top: 1px solid #ddd;
 }
 
 /* ✅ 채팅 버튼 */
-.chat-btn {
+.profile-modal-chat-btn {
   background: white;
   border: 1px solid #ccc;
-  padding: 10px 15px;
-  border-radius: 8px;
-  font-size: 14px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 12px;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -135,18 +122,18 @@
 }
 
 /* ✅ 정보 수정 버튼 */
-.edit-btn {
+.profile-modal-edit-btn {
   background: #007bff;
   color: white;
   border: none;
-  padding: 10px 15px;
-  border-radius: 8px;
-  font-size: 14px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 12px;
   cursor: pointer;
   flex: 1;
   justify-content: center;
 }
 
-.edit-btn:hover {
+.profile-modal-edit-btn:hover {
   background: #0056b3;
 }

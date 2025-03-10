@@ -17,7 +17,7 @@ public class PlacesController {
 
     private final RestTemplate restTemplate = new RestTemplate();
 
-    // ✅ Google Maps API 키 반환하는 엔드포인트 추가
+    // Google Maps API 키 반환하는 엔드포인트 추가
     @GetMapping("/google-maps-key")
     public String getGoogleMapsApiKey() {
         return googleMapsApiKey;
@@ -46,7 +46,7 @@ public class PlacesController {
                         + "&key=" + googleMapsApiKey;
 
                 place.put("mapImageUrl", staticMapUrl);
-                place.put("formatted_address", formattedAddress); // ✅ 주소 필드 추가
+                place.put("formatted_address", formattedAddress); // 주소 필드 추가
                 return place;
             }).collect(Collectors.toList());
 

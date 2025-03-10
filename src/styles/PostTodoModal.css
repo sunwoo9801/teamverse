@@ -55,7 +55,7 @@ textarea {
   border-radius: 4px;
 }
 
-/* ✅ 모달 네비게이션 스타일 */
+/* 모달 네비게이션 스타일 */
 .modal-nav {
   display: flex;
   justify-content: space-between;
@@ -117,7 +117,7 @@ textarea {
   display: block;
 }
 
-/* ✅ 삭제 버튼 스타일 */
+/* 삭제 버튼 스타일 */
 .delete-image-btn {
   position: absolute;
   top: 5px;
@@ -135,7 +135,7 @@ textarea {
   opacity: 0; /* 기본적으로 숨김 */
 }
 
-/* ✅ 마우스를 올리면 삭제 버튼 표시 */
+/* 마우스를 올리면 삭제 버튼 표시 */
 .image-container:hover .delete-image-btn {
   opacity: 1;
 }

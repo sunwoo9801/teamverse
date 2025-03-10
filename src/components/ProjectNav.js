@@ -1,6 +1,6 @@
 import React from "react";
-import { FaHome, FaTasks, FaChartBar, FaFolderOpen, FaStickyNote } from "react-icons/fa"; // ✅ react-icons 사용
-import "../styles/ProjectNav.css"; // ✅ 스타일 파일 추가
+import { FaHome, FaTasks, FaChartBar, FaFolderOpen, FaStickyNote } from "react-icons/fa"; // react-icons 사용
+import "../styles/ProjectNav.css"; // 스타일 파일 추가
 
 const ProjectNav = ({ activeTab, setActiveTab }) => {
     return (

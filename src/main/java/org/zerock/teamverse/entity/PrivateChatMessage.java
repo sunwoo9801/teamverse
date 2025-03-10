@@ -17,12 +17,12 @@ public class PrivateChatMessage {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)  // ✅ LAZY 로딩으로 최적화
+    @ManyToOne(fetch = FetchType.LAZY)  // LAZY 로딩으로 최적화
     @JoinColumn(name = "sender_id", nullable = false)
-    @OnDelete(action = OnDeleteAction.SET_NULL)  // ✅ User 삭제 시 sender_id를 NULL로 설정
+    @OnDelete(action = OnDeleteAction.SET_NULL)  // User 삭제 시 sender_id를 NULL로 설정
     private User sender;
 
-    @ManyToOne(fetch = FetchType.LAZY)  // ✅ LAZY 로딩으로 최적화
+    @ManyToOne(fetch = FetchType.LAZY)  // LAZY 로딩으로 최적화
     @JoinColumn(name = "recipient_id", nullable = false)
     private User recipient;
 

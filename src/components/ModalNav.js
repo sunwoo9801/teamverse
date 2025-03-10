@@ -1,5 +1,5 @@
 import React from "react";
-import "../styles/ModalNav.css"; // ✅ 스타일 추가
+import "../styles/ModalNav.css"; 
 
 const ModalNav = ({ activeTab, setActiveTab }) => {
     return (

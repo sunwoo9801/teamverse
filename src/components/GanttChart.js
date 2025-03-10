@@ -2,20 +2,19 @@ import React, { useState, useEffect } from 'react';
 import '../styles/GanttChart.css';
 
 
-// ✅ 수정: Task 데이터를 props로 받아서 사용하도록 변경
 const GanttChart = ({ tasks }) => {
-  const [viewMode, setViewMode] = useState('week'); // ✅ 현재 보기 모드 (week, month, year)
+  const [viewMode, setViewMode] = useState('week'); // 현재 보기 모드 (week, month, year)
   const [currentWeekStart, setCurrentWeekStart] = useState(getStartOfWeek(new Date()));
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
   const today = new Date();
-  const [chartHeight, setChartHeight] = useState("400px"); // ✅ 최소 높이 설정
+  const [chartHeight, setChartHeight] = useState("400px"); // 최소 높이 설정
 
 
   const isTaskOnDate = (date, task) => {
     const taskStart = new Date(task.start).setHours(0, 0, 0, 0);
     const taskEnd = new Date(task.end).setHours(23, 59, 59, 999);
-    const checkDate = new Date(date).setHours(12, 0, 0, 0); // ✅ 날짜 중앙으로 설정 (비교 오류 방지)
+    const checkDate = new Date(date).setHours(12, 0, 0, 0); // 날짜 중앙으로 설정 (비교 오류 방지)
 
     return checkDate >= taskStart && checkDate <= taskEnd;
   };
@@ -31,7 +30,7 @@ const GanttChart = ({ tasks }) => {
 
   }));
 
-  // ✅ 현재 주의 시작 날짜 계산
+  // 현재 주의 시작 날짜 계산
   function getStartOfWeek(date) {
     const start = new Date(date);
     const dayOfWeek = start.getDay(); // 현재 요일 (0: 일요일, 1: 월요일, ..., 6: 토요일)
@@ -44,17 +43,17 @@ const GanttChart = ({ tasks }) => {
   // 주간 날짜 목록 생성
   const getWeekDates = () => {
     return Array.from({ length: 7 }, (_, i) => {
-      const date = new Date(currentWeekStart); // ✅ 현재 주 시작(월요일)에서 시작
-      date.setDate(currentWeekStart.getDate() + i); // ✅ 하루씩 더하면서 한 주를 채움
-      date.setHours(0, 0, 0, 0); // ✅ 00:00:00으로 초기화
+      const date = new Date(currentWeekStart); // 현재 주 시작(월요일)에서 시작
+      date.setDate(currentWeekStart.getDate() + i); // 하루씩 더하면서 한 주를 채움
+      date.setHours(0, 0, 0, 0); // 00:00:00으로 초기화
       return {
         day: date.toLocaleDateString('en-US', { weekday: 'short' }), // 'Mon', 'Tue' 형태
-        date: new Date(date), // ✅ Date 객체로 변환
+        date: new Date(date), // Date 객체로 변환
       };
     });
   };
 
-  // ✅ 월간 날짜 목록 생성
+  // 월간 날짜 목록 생성
   const getMonthDates = () => {
     const firstDayOfMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), 1);
     const lastDayOfMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 0);
@@ -71,7 +70,7 @@ const GanttChart = ({ tasks }) => {
 
     return dates;
   };
-  // ✅ 이전/다음 주 & 월 이동 기능
+  // 이전/다음 주 & 월 이동 기능
   const handlePreviousWeek = () => setCurrentWeekStart(new Date(currentWeekStart.setDate(currentWeekStart.getDate() - 7)));
   const handleNextWeek = () => setCurrentWeekStart(new Date(currentWeekStart.setDate(currentWeekStart.getDate() + 7)));
   const handlePreviousMonth = () => setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1, 1));
@@ -110,13 +109,13 @@ const GanttChart = ({ tasks }) => {
     weekEnd.setDate(weekEnd.getDate() + 6);
     weekEnd.setHours(23, 59, 59, 999);
 
-    // ✅ 주간 범위를 벗어난 Task 숨기기
+    // 주간 범위를 벗어난 Task 숨기기
     if (taskEnd < weekStart || taskStart > weekEnd) {
       console.log(`❌ Task ${task.name} is out of range`);
       return { display: 'none' };
     }
 
-    // ✅ 현재 주간에 맞게 `taskStart`, `taskEnd` 조정
+    // 현재 주간에 맞게 `taskStart`, `taskEnd` 조정
     let adjustedTaskStart = new Date(Math.max(taskStart.getTime(), weekStart.getTime()));
     let adjustedTaskEnd = new Date(Math.min(taskEnd.getTime(), weekEnd.getTime()));
 
@@ -126,11 +125,11 @@ const GanttChart = ({ tasks }) => {
     const totalDaysInWeek = 7;
     const dayWidth = 100 / totalDaysInWeek;
 
-    // ✅ 시작 위치 계산
+    // 시작 위치 계산
     const offsetDays = (adjustedTaskStart - weekStart) / (1000 * 60 * 60 * 24);
     const offset = offsetDays * dayWidth;
 
-    // ✅ 정확한 기간 계산
+    // 정확한 기간 계산
     const taskDurationDays = Math.floor((adjustedTaskEnd - adjustedTaskStart) / (1000 * 60 * 60 * 24)) + 1;
     const width = Math.min(100 - offset, taskDurationDays * dayWidth);
     return {
@@ -138,7 +137,7 @@ const GanttChart = ({ tasks }) => {
       top: `${60 + index * 30}px`,
       left: `${offset}%`,
       width: `${width}%`,
-      backgroundColor: task.color || "#ff99a5", // ✅ 선택한 색상 적용
+      backgroundColor: task.color || "#ff99a5", // 선택한 색상 적용
       height: '12px',
       borderRadius: '6px',
     };
@@ -152,10 +151,10 @@ const GanttChart = ({ tasks }) => {
 
   useEffect(() => {
     if (tasks.length > 6) {
-      // ✅ 업무가 6개 이상이면 높이를 자동으로 증가
+      // 업무가 6개 이상이면 높이를 자동으로 증가
       setChartHeight(`${400 + (tasks.length - 6) * 60}px`);
     } else {
-      setChartHeight("400px"); // ✅ 기본 높이 유지
+      setChartHeight("400px"); // 기본 높이 유지
     }
   }, [tasks]);
 
@@ -186,7 +185,7 @@ const GanttChart = ({ tasks }) => {
               </div>
             ))}
 
-            {/* ✅ 하나의 progress-bar로 이어지게 표시 */}
+            {/* 하나의 progress-bar로 이어지게 표시 */}
             {formattedTasks.map((task, index) => {
               const progressBarStyle = calculateProgressBarStyle(task, index);
               return (

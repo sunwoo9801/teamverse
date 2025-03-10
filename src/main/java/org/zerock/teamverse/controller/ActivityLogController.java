@@ -25,7 +25,7 @@ public class ActivityLogController {
     private final ActivityLogService activityLogService;
     private final UserService userService;
     private final ProjectRepository projectRepository; // 추가
-    private final TaskService taskService; // ✅ Task 서비스 추가
+    private final TaskService taskService; // Task 서비스 추가
 
     public ActivityLogController(ActivityLogService activityLogService,
             UserService userService,
@@ -72,7 +72,7 @@ public ResponseEntity<ActivityLogDTO> logTaskCreation(@RequestBody Map<String, O
     User user = userService.findByEmail(email)
             .orElseThrow(() -> new RuntimeException("User not found"));
 
-    // ✅ Task 객체 생성
+    // Task 객체 생성
     Task task = new Task();
     task.setName(requestBody.get("name").toString());
     task.setDescription(requestBody.get("description") != null ? requestBody.get("description").toString() : "");
@@ -80,13 +80,13 @@ public ResponseEntity<ActivityLogDTO> logTaskCreation(@RequestBody Map<String, O
     task.setDueDate(java.time.LocalDate.parse(requestBody.get("dueDate").toString()));
     task.setStatus(Task.Status.valueOf(requestBody.get("status").toString()));
 
-    // ✅ 프로젝트 설정
+    // 프로젝트 설정
     Long projectId = Long.parseLong(requestBody.get("projectId").toString());
     Project project = projectRepository.findById(projectId)
             .orElseThrow(() -> new RuntimeException("프로젝트를 찾을 수 없습니다."));
     task.setProject(project);
 
-    // ✅ 파일 리스트 변환
+    // 파일 리스트 변환
     List<String> fileUrls = new ArrayList<>();
     if (requestBody.containsKey("files")) {
         Object filesObj = requestBody.get("files");
@@ -97,7 +97,7 @@ public ResponseEntity<ActivityLogDTO> logTaskCreation(@RequestBody Map<String, O
         }
     }
 
-    // ✅ 수정된 메서드 사용 (파일 리스트 포함)
+    // 수정된 메서드 사용 (파일 리스트 포함)
     ActivityLogDTO activityLogDTO = activityLogService.logTaskCreation(user, task, fileUrls);
 
     return ResponseEntity.ok(activityLogDTO);
@@ -158,7 +158,7 @@ public ResponseEntity<ActivityLogDTO> logTaskCreation(@RequestBody Map<String, O
         User user = userService.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        // ✅ Null 체크 및 안전한 변환 (예외 방지)
+        // Null 체크 및 안전한 변환 (예외 방지)
         String title = requestBody.get("title") != null ? requestBody.get("title").toString() : "";
         String content = requestBody.get("content") != null ? requestBody.get("content").toString() : "";
 
@@ -176,7 +176,7 @@ public ResponseEntity<ActivityLogDTO> logTaskCreation(@RequestBody Map<String, O
         Project project = projectRepository.findById(projectId)
                 .orElseThrow(() -> new RuntimeException("프로젝트를 찾을 수 없습니다."));
 
-        // ✅ `files` 필드를 List<String>으로 변환
+        // `files` 필드를 List<String>으로 변환
         List<String> fileUrls = new ArrayList<>();
         if (requestBody.containsKey("files")) {
             Object filesObj = requestBody.get("files");
@@ -187,7 +187,7 @@ public ResponseEntity<ActivityLogDTO> logTaskCreation(@RequestBody Map<String, O
             }
         }
 
-        // ✅ 수정된 메서드 사용 (title, content, files 함께 전달)
+        // 수정된 메서드 사용 (title, content, files 함께 전달)
         ActivityLogDTO activityLogDTO = activityLogService.logPostCreation(user, project, title, content, fileUrls);
 
         return ResponseEntity.ok(activityLogDTO);

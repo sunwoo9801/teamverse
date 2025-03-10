@@ -21,26 +21,26 @@ public class ActivityLog {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
-    private User user; // ✅ 활동을 수행한 사용자
+    private User user; // 활동을 수행한 사용자
 
     @Column(name = "activity_type", nullable = false)
-    private String activityType; // ✅ 활동 유형
+    private String activityType; // 활동 유형
 
-    @Column(name = "activity_description", columnDefinition = "TEXT") // ✅ 긴 글 저장 가능
-    private String activityDescription; // ✅ 활동 상세 설명
+    @Column(name = "activity_description", columnDefinition = "TEXT") // 긴 글 저장 가능
+    private String activityDescription; // 활동 상세 설명
 
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
 
-    @ManyToOne(fetch = FetchType.LAZY) // ✅ 활동 로그는 하나의 프로젝트에 속함
+    @ManyToOne(fetch = FetchType.LAZY) // 활동 로그는 하나의 프로젝트에 속함
     @JoinColumn(name = "project_id", nullable = false)
     private Project project;
 
-    // ✅ **FileInfo 엔티티와 OneToMany 관계 추가**
+    // **FileInfo 엔티티와 OneToMany 관계 추가**
     @OneToMany(mappedBy = "activityLog", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<FileInfo> files;
 
-    // ✅ **프로필 이미지 추가 (User의 getProfileImage() 활용)**
+    // **프로필 이미지 추가 (User의 getProfileImage() 활용)**
     public String getProfileImage() {
         return user != null ? user.getProfileImage() : "/assets/images/basicprofile.jpg";
     }

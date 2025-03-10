@@ -26,7 +26,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @Getter
 @Setter
 @Table(name = "projects")
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "teamMembers"}) // ✅ 순환 참조 방지
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "teamMembers"}) // 순환 참조 방지
 
 public class Project {
 
@@ -59,25 +59,25 @@ public class Project {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt = LocalDateTime.now();
 
-    // ✅ 기존의 다대다 관계 삭제 후, 일대다 관계로 변경
+    // 기존의 다대다 관계 삭제 후, 일대다 관계로 변경
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnore // ✅ 순환 참조 방지
+    @JsonIgnore // 순환 참조 방지
     private List<TeamMember> teamMembers;
 
-    // ✅ 프로젝트 생성 시 자동으로 생성 날짜 저장
+    // 프로젝트 생성 시 자동으로 생성 날짜 저장
     @PrePersist
     protected void onCreate() {
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
     }
 
-    // ✅ 프로젝트 수정 시 자동으로 수정 날짜 갱신
+    // 프로젝트 수정 시 자동으로 수정 날짜 갱신
     @PreUpdate
     protected void onUpdate() {
         this.updatedAt = LocalDateTime.now();
     }
 
-    // ✅ 팀 멤버 추가
+    // 팀 멤버 추가
     public void addTeamMember(TeamMember teamMember) {
         this.teamMembers.add(teamMember);
     }

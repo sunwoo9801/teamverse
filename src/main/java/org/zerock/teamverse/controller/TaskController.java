@@ -65,7 +65,7 @@ public class TaskController {
       task.setAssignedTo(assignedUser);
       task.setColor(taskDTO.getColor());
   
-      // ✅ Task 저장 (activity_log에는 저장 X)
+      // Task 저장 (activity_log에는 저장 X)
       Task createdTask = taskService.createTask(task);
   
       return ResponseEntity.ok(createdTask);

@@ -10,5 +10,5 @@ import org.zerock.teamverse.entity.User;
 public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByUsername(String username); // 사용자 이름으로 검색
     Optional<User> findByEmail(String email); // 이메일로 검색
-    Optional<User> findById(Long id); // ✅ 사용자 ID로 검색
+    Optional<User> findById(Long id); // 사용자 ID로 검색
 }

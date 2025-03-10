@@ -34,12 +34,12 @@ public class TaskDTO {
 		this.startDate = task.getStartDate();
 		this.dueDate = task.getDueDate();
 		this.description = task.getDescription();
-		this.color = task.getColor(); // ✅ 추가: 엔티티에서 color 값 가져오기
+		this.color = task.getColor(); // 추가: 엔티티에서 color 값 가져오기
 
 		if (task.getProject() != null) {
 			this.projectId = task.getProject().getId();
 		}
-		if (task.getAssignedTo() != null) { // ✅ 담당자가 있을 경우
+		if (task.getAssignedTo() != null) { // 담당자가 있을 경우
 			this.assignedTo = task.getAssignedTo().getId();
 		}
 	}
@@ -109,7 +109,7 @@ public class TaskDTO {
 	// this.assignedTo = assignedTo;
 	// }
 
-	// public String getColor() { return color; } // ✅ 추가: Getter
-	// public void setColor(String color) { this.color = color; } // ✅ 추가: Setter
+	// public String getColor() { return color; } // 추가: Getter
+	// public void setColor(String color) { this.color = color; } // 추가: Setter
 
 }

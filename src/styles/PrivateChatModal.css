@@ -1,10 +1,10 @@
-/* ✅ 개인 채팅 모달 (이동 가능) */
+/* 개인 채팅 모달 (이동 가능) */
 .private-chat-modal {
     position: fixed;
     top: 50px;
     left: 50px;
     width: 320px;
-    height: 400px; /* ✅ 기본 높이 설정 */
+    height: 400px; /* 기본 높이 설정 */
     background: white;
     border: 1px solid #ddd;
     border-radius: 15px;
@@ -13,18 +13,18 @@
     flex-direction: column;
     z-index: 1000;
     cursor: grab;
-    overflow: hidden; /* ✅ 전체 스크롤 방지 */
+    overflow: hidden; /* 전체 스크롤 방지 */
   }
   
-  /* ✅ 개인 채팅 창 내부 스타일 */
+  /* 개인 채팅 창 내부 스타일 */
   .private-chat-content {
     display: flex;
     flex-direction: column;
-    flex-grow: 1; /* ✅ 입력창과 함께 전체 높이 조절 */
+    flex-grow: 1; /* 입력창과 함께 전체 높이 조절 */
     padding: 15px;
   }
   
-  /* ✅ 헤더를 드래그할 수 있도록 설정 */
+  /* 헤더를 드래그할 수 있도록 설정 */
   .private-chat-header {
     cursor: grab;
     font-weight: bold;
@@ -34,19 +34,19 @@
     border-radius: 15px 15px 0 0;
   }
   
-  /* ✅ 메시지 창 스타일 (스크롤 가능) */
+  /* 메시지 창 스타일 (스크롤 가능) */
   .private-messages {
-    flex-grow: 1; /* ✅ 메시지가 많아질 경우 자동 확장 */
-    overflow-y: auto; /* ✅ 채팅이 많아지면 스크롤 */
+    flex-grow: 1; /* 메시지가 많아질 경우 자동 확장 */
+    overflow-y: auto; /* 채팅이 많아지면 스크롤 */
     padding: 10px;
     background-color: #f9f9f9;
     display: flex;
     flex-direction: column;
     gap: 5px;
-    max-height: 300px; /* ✅ 최대 높이 지정 */
+    max-height: 300px; /* 최대 높이 지정 */
   }
   
-  /* ✅ 메시지 스타일 */
+  /* 메시지 스타일 */
   .private-message {
     padding: 8px 12px;
     border-radius: 15px;
@@ -55,21 +55,21 @@
     font-size: 14px;
   }
 
-  /* ✅ 보낸 메시지 */
+  /* 보낸 메시지 */
   .sent {
     background-color: #007aff;
     color: white;
     align-self: flex-end;
   }
 
-  /* ✅ 받은 메시지 */
+  /* 받은 메시지 */
   .received {
     background-color: #e5e5ea;
     color: black;
     align-self: flex-start;
   }
   
-  /* ✅ 입력창 스타일 */
+  /* 입력창 스타일 */
   .private-message-input {
     display: flex;
     align-items: center;
@@ -81,7 +81,7 @@
     bottom: 0;
   }
   
-  /* ✅ 입력 칸 */
+  /* 입력 칸 */
   .private-inputtext {
     flex-grow: 1;
     padding: 8px 12px;
@@ -93,7 +93,7 @@
     transition: 0.2s ease-in-out;
   }
   
-  /* ✅ 전송 버튼 */
+  /* 전송 버튼 */
   .private-button {
     background: #fee500;
     color: black;
@@ -116,7 +116,7 @@
     transform: scale(0.98);
   }
   
-  /* ✅ 닫기 버튼 */
+  /* 닫기 버튼 */
   .private-close-btn {
     background: transparent;
     border: none;

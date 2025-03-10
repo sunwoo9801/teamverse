@@ -55,7 +55,7 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TeamMember> teamProjects; // 사용자가 속한 팀 프로젝트 목록
 
-      // ✅ 추가된 필드들 (회원 정보 모달에서 사용)
+      // 추가된 필드들 (회원 정보 모달에서 사용)
       @Column(name = "company_name")
       private String companyName;  // 회사명
   
@@ -72,12 +72,12 @@ public class User {
     @Column(name = "profile_image", nullable = true) // 🔴 **수정: 프로필 이미지 필드 추가**
     private String profileImage;
 
-    // ✅ 활동 로그와 연결
+    // 활동 로그와 연결
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnore // ✅ ActivityLog의 역참조를 무시하여 순환 참조 방지
+    @JsonIgnore // ActivityLog의 역참조를 무시하여 순환 참조 방지
     private List<ActivityLog> activityLogs;
     
-    // ✅ **프로필 이미지의 Getter 메서드 추가**
+    // **프로필 이미지의 Getter 메서드 추가**
     public String getProfileImage() {
         return profileImage != null ? profileImage : "/assets/images/basicprofile.jpg"; // 기본 이미지 반환
     }

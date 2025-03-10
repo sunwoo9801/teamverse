@@ -45,14 +45,14 @@
   background: #f9f9f9;
 }
 
-/* ✅ 업무 목록과 간트 차트를 가로로 배치 */
+/* 업무 목록과 간트 차트를 가로로 배치 */
 .task-container {
   display: flex;
   justify-content: space-between;
   gap: 20px;
 }
 
-/* ✅ 업무 목록 스타일 */
+/* 업무 목록 스타일 */
 .task-list {
   flex: 1;
   background: white;
@@ -61,7 +61,7 @@
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-/* ✅ 간트 차트 스타일 */
+/* 간트 차트 스타일 */
 .gantt-chart-container {
   flex: 2;
   background: white;
@@ -70,7 +70,7 @@
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-/* ✅ 버튼 스타일 */
+/* 버튼 스타일 */
 button {
   padding: 8px 12px;
   margin-right: 5px;
@@ -79,7 +79,7 @@ button {
   cursor: pointer;
 }
 
-/* ✅ 상태 배지 스타일 */
+/* 상태 배지 스타일 */
 .status-badge {
   display: inline-block;
   padding: 5px 10px;
@@ -88,12 +88,12 @@ button {
   font-weight: bold;
 }
 
-/* ✅ 상태별 색상 */
+/* 상태별 색상 */
 .status-badge.TODO { background: #ffcc00; color: #fff; }
 .status-badge.IN_PROGRESS { background: #007bff; color: #fff; }
 .status-badge.DONE { background: #28a745; color: #fff; }
 
-/* ✅ 삭제 버튼 스타일 */
+/* 삭제 버튼 스타일 */
 .delete-btn {
   background: #dc3545;
   color: white;

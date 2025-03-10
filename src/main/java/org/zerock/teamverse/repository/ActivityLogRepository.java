@@ -9,12 +9,12 @@ import java.util.List;
 
 public interface ActivityLogRepository extends JpaRepository<ActivityLog, Long> {
     
-    // ✅ 특정 사용자의 활동 로그를 최신순으로 가져오기
+    // 특정 사용자의 활동 로그를 최신순으로 가져오기
     List<ActivityLog> findByUser_IdOrderByCreatedAtDesc(Long userId);
-  // ✅ 기존의 projectId가 아닌 project 엔티티를 기준으로 검색
+  // 기존의 projectId가 아닌 project 엔티티를 기준으로 검색
     List<ActivityLog> findByProject(Project project);
 
-     // ✅ 특정 프로젝트의 모든 활동 로그 (TASK + POST 포함)
+     // 특정 프로젝트의 모든 활동 로그 (TASK + POST 포함)
      List<ActivityLog> findByProjectOrderByCreatedAtDesc(Project project);
 
      boolean existsByActivityTypeAndProjectAndUser(String activityType, Project project, User user);

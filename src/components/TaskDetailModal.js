@@ -1,8 +1,8 @@
 import React from "react";
-import "../styles/TaskDetailModal.css"; // ✅ 스타일 추가 예정
+import "../styles/TaskDetailModal.css"; // 스타일 추가 예정
 
 const TaskDetailModal = ({ task, onClose }) => {
-  if (!task) return null; // ✅ task가 없으면 아무것도 표시하지 않음
+  if (!task) return null; // task가 없으면 아무것도 표시하지 않음
 
   return (
     <div className="modal-overlay">

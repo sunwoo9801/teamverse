@@ -16,13 +16,13 @@ public class ChatMessage {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "project_id", nullable = false) // ✅ 프로젝트 기반 채팅
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"}) // ✅ Lazy 로딩 문제 해결
+    @JoinColumn(name = "project_id", nullable = false) // 프로젝트 기반 채팅
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"}) // Lazy 로딩 문제 해결
     private Project project;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "sender_id", nullable = false)
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"}) // ✅ Lazy 로딩 문제 해결
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"}) // Lazy 로딩 문제 해결
     private User sender;
 
     @Column(nullable = false)
@@ -31,14 +31,14 @@ public class ChatMessage {
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
 
-    @Column(name = "is_private_chat", nullable = false, columnDefinition = "BOOLEAN DEFAULT FALSE") // ✅ 개인 채팅 여부
+    @Column(name = "is_private_chat", nullable = false, columnDefinition = "BOOLEAN DEFAULT FALSE") // 개인 채팅 여부
     private boolean isPrivateChat = false;
 
-    @Column(name = "is_announcement", nullable = false, columnDefinition = "BOOLEAN DEFAULT FALSE") // ✅ 공지 여부
+    @Column(name = "is_announcement", nullable = false, columnDefinition = "BOOLEAN DEFAULT FALSE") // 공지 여부
     private boolean isAnnouncement = false;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "recipient_id") // ✅ 개인 채팅 시 수신자 정보 저장
+    @JoinColumn(name = "recipient_id") // 개인 채팅 시 수신자 정보 저장
     private User recipient;
 
 

@@ -51,7 +51,7 @@
 }
 
 .online {
-  background-color: #28a745;
+  background-color: #007bff;
 }
 
 .offline {
@@ -98,7 +98,7 @@
 
 .invite-button {
   padding: 10px 20px;
-  background-color: #4caf50;
+  background-color: #007bff;
   color: white;
   border: none;
   cursor: pointer;
@@ -106,7 +106,7 @@
 }
 
 .invite-button:hover {
-  background-color: #45a049;
+  background-color: #0370e6;
 }
 
 /* 초대 팝업 스타일 */

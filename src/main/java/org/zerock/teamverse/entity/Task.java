@@ -43,13 +43,13 @@ public class Task {
     @Column(nullable = false)
     private String color;
 
-    @Column(name = "start_date", nullable = false) // ✅ 작업 시작일 추가
+    @Column(name = "start_date", nullable = false) // 작업 시작일 추가
     private LocalDate startDate;
 
     @Column(name = "due_date", nullable = false)
     private LocalDate dueDate; // 작업 마감일
 
-    @Column(name = "description", columnDefinition = "TEXT") // ✅ 작업 내용 추가
+    @Column(name = "description", columnDefinition = "TEXT") // 작업 내용 추가
     private String description;
 
     @Column(name = "created_at", updatable = false)

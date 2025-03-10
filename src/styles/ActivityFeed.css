@@ -13,13 +13,14 @@
   border: 1px solid #e0e0e0;
 }
 
+
 .activity-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-/* ✅ 프로필 사진과 사용자 정보 사이 간격 조정 */
+/* 프로필 사진과 사용자 정보 사이 간격 조정 */
 .profile-img {
   width: 40px;
   height: 40px;
@@ -33,7 +34,7 @@
   gap: 2px; /* 🔹 이름과 타임스탬프 사이 간격 줄임 */
 }
 
-/* ✅ 프로필 이미지와 사용자 이름을 자연스럽게 정렬 */
+/* 프로필 이미지와 사용자 이름을 자연스럽게 정렬 */
 .user-container {
   display: flex;
   align-items: center;
@@ -95,7 +96,7 @@
 
 
 .activity-content.has-image {
-  max-height: none; /* ✅ 이미지가 포함된 경우 제한 없음 */
+  max-height: none; /* 이미지가 포함된 경우 제한 없음 */
 }
 
 .uploaded-image {
@@ -105,7 +106,7 @@
   display: block;
 }
 
-/* ✅ 깔끔한 "전체 보기" 버튼 스타일 */
+/* 깔끔한 "전체 보기" 버튼 스타일 */
 .toggle-expand-button {
   display: flex !important;  /* 🔹 항상 보이도록 강제 */
   align-items: center;
@@ -140,7 +141,7 @@
   margin-top: 5px;
 }
 
-/* ✅ 업무(Task) 스타일 */
+/* 업무(Task) 스타일 */
 .task-info {
   background: #f4f4f4;
   padding: 10px;
@@ -172,7 +173,7 @@
   color: white;
 }
 
-/* ✅ 좋아요, 북마크, 다시 알림 버튼 */
+/* 좋아요, 북마크, 다시 알림 버튼 */
 .activity-actions {
   display: flex;
   align-items: center;
@@ -187,7 +188,7 @@
   color: #555;
 }
 
-/* ✅ 댓글 입력창 스타일 */
+/* 댓글 입력창 스타일 */
 .comment-box {
   display: flex;
   align-items: center;
@@ -210,7 +211,7 @@
   font-size: 18px;
 }
 
-/* ✅ 리액션 버튼과 개수 정렬 */
+/* 리액션 버튼과 개수 정렬 */
 .reaction-summary {
   display: flex;
   align-items: center; /* 🔹 세로 중앙 정렬 */
@@ -218,13 +219,13 @@
   margin-top: 5px; /* 🔹 여백 추가 */
 }
 
-/* ✅ 리액션 버튼 스타일 */
+/* 리액션 버튼 스타일 */
 .reaction-container {
   position: relative;
   display: inline-block;
 }
 
-/* ✅ 리액션 기본 버튼 (🙂) */
+/* 리액션 기본 버튼 (🙂) */
 .reaction-button {
   background: none;
   border: none;
@@ -238,7 +239,7 @@
   transform: scale(1.2);
 }
 
-/* ✅ 리액션 박스 */
+/* 리액션 박스 */
 .reaction-box {
   position: absolute;
   top: 35px; /* 🔹 좋아요 버튼 바로 아래 */
@@ -259,7 +260,7 @@
   white-space: nowrap; /* 🔹 글자 줄바꿈 방지 */
 }
 
-/* ✅ 마우스 오버 시 리액션 박스 표시 */
+/* 마우스 오버 시 리액션 박스 표시 */
 .reaction-container:hover .reaction-box {
   opacity: 1;
   visibility: visible;
@@ -267,7 +268,7 @@
 }
 
 
-/* ✅ 개별 리액션 버튼 스타일 */
+/* 개별 리액션 버튼 스타일 */
 .reaction-item {
   background: none;
   border: none;
@@ -282,7 +283,7 @@
   transition: transform 0.2s ease-in-out;
 }
 
-/* ✅ 마우스를 올렸을 때 크기 확대 */
+/* 마우스를 올렸을 때 크기 확대 */
 .reaction-item:hover {
   transform: scale(1.2);
 }

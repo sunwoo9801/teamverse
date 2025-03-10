@@ -1,5 +1,5 @@
 import axios from "axios";
-import { getAccessToken } from "../utils/authUtils"; // ✅ 토큰 포함 가능
+import { getAccessToken } from "../utils/authUtils"; // 토큰 포함 가능
 
 export const searchPlaces = async (query) => {
   try {
@@ -8,7 +8,7 @@ export const searchPlaces = async (query) => {
     const response = await axios.get(`http://localhost:8082/api/places/search`, {
       params: { query },
       headers: {
-        Authorization: `Bearer ${token}`, // ✅ 인증 필요시 추가
+        Authorization: `Bearer ${token}`, // 인증 필요시 추가
       },
     });
 

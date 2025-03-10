@@ -32,7 +32,7 @@ public class ProjectController {
 
     }
 
-    // ✅ 로그인한 유저의 프로젝트 조회 (초대받은 프로젝트도 포함)
+    // 로그인한 유저의 프로젝트 조회 (초대받은 프로젝트도 포함)
     @GetMapping
     public ResponseEntity<List<Project>> getUserProjects(Authentication authentication) {
         if (authentication == null || !authentication.isAuthenticated()) {
@@ -43,11 +43,11 @@ public class ProjectController {
         User user = userService.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        // ✅ 소유한 프로젝트 + 초대된 프로젝트 모두 가져오기
+        // 소유한 프로젝트 + 초대된 프로젝트 모두 가져오기
         List<Project> ownedProjects = projectService.getProjectsByOwner(user);
         List<Project> invitedProjects = projectService.getProjectsByUser(user);
 
-        ownedProjects.addAll(invitedProjects); // ✅ 리스트 병합
+        ownedProjects.addAll(invitedProjects); // 리스트 병합
 
         return ResponseEntity.ok(ownedProjects);
     }
@@ -58,11 +58,11 @@ public class ProjectController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
-        // ✅ 현재 로그인한 사용자 가져오기
+        // 현재 로그인한 사용자 가져오기
         User currentUser = userService.findByEmail(authentication.getName())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        // ✅ `User` 객체를 함께 전달하여 프로젝트 생성
+        // `User` 객체를 함께 전달하여 프로젝트 생성
         Project createdProject = projectService.createProjectForUser(project, currentUser);
 
         System.out.println("📌 프로젝트 생성 완료: ID = " + createdProject.getId() + ", Name = " + createdProject.getName()); // 로그
@@ -97,21 +97,21 @@ public class ProjectController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
-        // ✅ 현재 로그인한 사용자 가져오기
+        // 현재 로그인한 사용자 가져오기
         String email = authentication.getName();
         User currentUser = userService.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        // ✅ 프로젝트 존재 여부 확인
+        // 프로젝트 존재 여부 확인
         Project project = projectService.getProjectById(id)
                 .orElseThrow(() -> new RuntimeException("프로젝트를 찾을 수 없습니다."));
 
-        // ✅ 사용자가 프로젝트의 소유자인지 확인
+        // 사용자가 프로젝트의 소유자인지 확인
         if (!project.getOwner().equals(currentUser)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null); // 🚨 소유자가 아니면 수정 불가
         }
 
-        // ✅ 프로젝트 정보 업데이트
+        // 프로젝트 정보 업데이트
         Project updatedProject = projectService.updateProject(id, projectDetails);
         return ResponseEntity.ok(updatedProject);
     }
@@ -146,14 +146,14 @@ public class ProjectController {
         return ResponseEntity.ok("초대가 성공적으로 전송되었습니다.");
     }
 
-    // ✅ 특정 프로젝트에 속한 팀원 목록 반환
+    // 특정 프로젝트에 속한 팀원 목록 반환
     @GetMapping("/{projectId}/team-members")
     public ResponseEntity<List<User>> getProjectTeamMembers(@PathVariable Long projectId) {
         List<User> teamMembers = projectService.getProjectTeamMembers(projectId);
         return ResponseEntity.ok(teamMembers);
     }
 
-    // ✅ 특정 프로젝트 조회 (팀원만 접근 가능하도록 수정)
+    // 특정 프로젝트 조회 (팀원만 접근 가능하도록 수정)
     @GetMapping("/{id}")
     public ResponseEntity<Project> getProjectById(@PathVariable Long id, Authentication authentication) {
         if (authentication == null || !authentication.isAuthenticated()) {
@@ -167,9 +167,9 @@ public class ProjectController {
         Project project = projectService.getProjectById(id)
                 .orElseThrow(() -> new RuntimeException("프로젝트를 찾을 수 없습니다."));
 
-        // ✅ 해당 사용자가 프로젝트 팀원인지 확인
+        // 해당 사용자가 프로젝트 팀원인지 확인
         boolean isMember = projectService.isProjectMember(project.getId(), user.getId());
-        System.out.println("✅ [" + user.getEmail() + "] 사용자가 프로젝트 [" + project.getName() + "]의 팀원인가? " + isMember);
+        System.out.println("[" + user.getEmail() + "] 사용자가 프로젝트 [" + project.getName() + "]의 팀원인가? " + isMember);
 
         if (!isMember) {
             System.out.println("🚨 접근 거부됨: " + user.getEmail() + "는 프로젝트 [" + project.getName() + "]의 팀원이 아님!");

@@ -17,7 +17,7 @@ const Chatbox = ({ projectId }) => {
     try {
       const response = await axios.get(`http://localhost:8082/api/chat/${projectId}`, {
         headers: { Authorization: `Bearer ${token}` },
-        "Cache-Control": "no-cache, no-store, must-revalidate", // ✅ 사파리 캐싱 방지
+        "Cache-Control": "no-cache, no-store, must-revalidate", // 사파리 캐싱 방지
         Pragma: "no-cache",
         Expires: "0",
       });
@@ -64,7 +64,7 @@ useEffect(() => {
       stompClientRef.current = stompClient;
 
       stompClient.onConnect = () => {
-          console.log(`✅ WebSocket 연결 성공! 프로젝트 ${projectId} 구독 중...`);
+          console.log(`WebSocket 연결 성공! 프로젝트 ${projectId} 구독 중...`);
 
           stompClient.subscribe(`/topic/chat/${projectId}`, (message) => {
               const receivedMessage = JSON.parse(message.body);
@@ -72,14 +72,14 @@ useEffect(() => {
 
               setMessages((prevMessages) => [...prevMessages, receivedMessage]);
 
-              // ✅ 사파리에서는 강제 업데이트
+              // 사파리에서는 강제 업데이트
               fetchChatMessages();
           });
       };
 
       stompClient.activate();
   } else {
-      // ✅ 이미 WebSocket이 연결되어 있다면, 추가 구독만 실행
+      // 이미 WebSocket이 연결되어 있다면, 추가 구독만 실행
       stompClientRef.current.subscribe(`/topic/chat/${projectId}`, (message) => {
           const receivedMessage = JSON.parse(message.body);
           setMessages((prevMessages) => [...prevMessages, receivedMessage]);
@@ -93,13 +93,13 @@ useEffect(() => {
 
 
 useEffect(() => {
-  // ✅ messages 변경될 때마다 최신 메시지로 스크롤
+  // messages 변경될 때마다 최신 메시지로 스크롤
   setTimeout(() => {
     messageEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, 100);
 }, [messages]);
   return (
-    <div className="chatbox-container">
+    <div className="team-chatbox-container">
       <h3>💬 팀 채팅</h3>
       <div className="messages">
         {messages.map((msg, index) => (

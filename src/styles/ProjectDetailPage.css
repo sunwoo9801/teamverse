@@ -17,7 +17,7 @@
   overflow-y: auto;
 }
 
-/* ✅ 프로젝트 설명 (p) 스타일 */
+/* 프로젝트 설명 (p) 스타일 */
 .project-content p {
   font-size: 14px; /* 🔹 글씨 크기 작게 */
   margin-top: 0px; /* 🔹 위쪽 여백 제거 */
@@ -66,7 +66,7 @@ h2 {
   opacity: 0.8;
 }
 
-/* ✅ Gantt Chart 탭 상단 (프로젝트 제목 + 업무 추가 버튼) */
+/* Gantt Chart 탭 상단 (프로젝트 제목 + 업무 추가 버튼) */
 .task-page-header {
   display: flex;
   justify-content: space-between; /* 양쪽 끝 정렬 */
@@ -74,7 +74,7 @@ h2 {
   margin-bottom: 10px;
 }
 
-/* ✅ 업무 추가 버튼 */
+/* 업무 추가 버튼 */
 .task-add-btn {
   background-color: #007bff;
   color: white;
@@ -170,28 +170,28 @@ h2 {
 .post-nav {
   display: flex;
   gap: 10px; /* 버튼 간격 줄임 */
-  justify-content: center; /* ✅ 가운데 정렬 */
-  align-items: center; /* ✅ 수직 정렬 */
-  margin-bottom: 10px; /* ✅ 아래 여백 조정 */
-  border-bottom: 1px solid #ddd; /* ✅ 구분선 유지 */
-  padding-bottom: 8px; /* ✅ 여백 조정 */
+  justify-content: center; /* 가운데 정렬 */
+  align-items: center; /* 수직 정렬 */
+  margin-bottom: 10px; /* 아래 여백 조정 */
+  border-bottom: 1px solid #ddd; /* 구분선 유지 */
+  padding-bottom: 8px; /* 여백 조정 */
 }
 
 .post-nav button {
   background: none;
   border: none;
-  font-size: 14px; /* ✅ ProjectNav보다 작게 조정 */
-  font-weight: normal; /* ✅ 가독성 유지 */
-  color: #777; /* ✅ 글씨 연하게 변경 */
+  font-size: 14px; /* ProjectNav보다 작게 조정 */
+  font-weight: normal; /* 가독성 유지 */
+  color: #777; /* 글씨 연하게 변경 */
   cursor: pointer;
-  padding: 6px 10px; /* ✅ 버튼 크기 줄이기 */
+  padding: 6px 10px; /* 버튼 크기 줄이기 */
   display: flex;
   align-items: center;
   gap: 5px;
 }
 
 .post-nav button:hover {
-  color: #6a5acd; /* ✅ 호버 시 기존 색상 유지 */
+  color: #6a5acd; /* 호버 시 기존 색상 유지 */
   font-weight: bold;
 }
 
@@ -257,7 +257,7 @@ h2 {
   position: relative;
 }
 
-/* ✅ ⋮(점 3개) 버튼 크기 조정 */
+/* ⋮(점 3개) 버튼 크기 조정 */
 .project-dropdown-button {
   color: #777;
   background: none;
@@ -271,7 +271,7 @@ h2 {
 }
 
 
-/* ✅ 프로젝트 제목과 설명 사이 간격 줄이기 */
+/* 프로젝트 제목과 설명 사이 간격 줄이기 */
 .project-title-container {
   display: flex;
   align-items: center; /* 🔹 세로 중앙 정렬 */
@@ -280,14 +280,14 @@ h2 {
   gap: 10px; /* 🔹 버튼과 제목 간격 조정 */
 }
 
-/* ✅ 프로젝트 제목 스타일 */
+/* 프로젝트 제목 스타일 */
 .project-title-container h1 {
   font-size: 24px; /* 제목 크기 유지 */
   margin: 0; /* 🔹 여백 제거 */
   line-height: 50px; /* 🔹 컨테이너 높이와 동일하게 설정 (수직 정렬 효과) */
 }
 
-/* ✅ ⋮(점 3개) 버튼 스타일 */
+/* ⋮(점 3개) 버튼 스타일 */
 .project-dropdown-container {
   display: flex;
   align-items: center; /* 🔹 세로 중앙 정렬 */

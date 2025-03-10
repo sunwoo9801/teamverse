@@ -16,7 +16,7 @@
 .navbar-menu {
   display: flex;
   align-items: center;
-  gap: 25px; /* ✅ 메뉴 간격 동일하게 조정 */
+  gap: 25px; /* 메뉴 간격 동일하게 조정 */
 }
 
 .login-btn {
@@ -111,7 +111,7 @@
 }
 
 /* 다혜 추가 */
-/* ✅ 프로필 아이콘 스타일 */
+/* 프로필 아이콘 스타일 */
 .profile-container {
   display: flex;
   align-items: center;
@@ -140,26 +140,26 @@
   font-weight: 500;
 }
 
-/* ✅ 프로필 드롭다운 */
+/* 프로필 드롭다운 */
 .profile-link {
   position: relative;
 }
 
-/* ✅ 드롭다운 메뉴 스타일 */
+/* 드롭다운 메뉴 스타일 */
 .profile-dropdown {
   position: absolute;
   right: 0;
-  top: 60px; /* ✅ 기존 50px에서 약간 아래로 이동 */
-  width: 200px; /* ✅ 드롭다운 너비 확장 */
+  top: 60px; /* 기존 50px에서 약간 아래로 이동 */
+  width: 200px; /* 드롭다운 너비 확장 */
   background: white;
   border: 1px solid #ddd;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
   border-radius: 8px;
   z-index: 1000;
-  padding: 5px 0; /* ✅ 내부 아이템 간격 조정 */
+  padding: 5px 0; /* 내부 아이템 간격 조정 */
 }
 
-/* ✅ 드롭다운 상단: 프로필 사진과 유저네임 정렬 */
+/* 드롭다운 상단: 프로필 사진과 유저네임 정렬 */
 .dropdown-header {
   display: flex;
   align-items: center;
@@ -181,11 +181,11 @@
   color: #333;
 }
 
-/* ✅ 드롭다운 내부 아이템 스타일 */
+/* 드롭다운 내부 아이템 스타일 */
 .dropdown-item {
   display: flex;
   align-items: center;
-  gap: 10px; /* ✅ 아이콘과 텍스트 간격 */
+  gap: 10px; /* 아이콘과 텍스트 간격 */
   padding: 12px;
   text-decoration: none;
   color: #333 !important;
@@ -196,13 +196,13 @@
   background: #f1f1f1;
 }
 
-/* ✅ 아이콘 스타일 */
+/* 아이콘 스타일 */
 .icon {
   font-size: 18px;
   color: #555;
 }
 
-/* ✅ 로그아웃 버튼 스타일 */
+/* 로그아웃 버튼 스타일 */
 .logout-btn {
   width: 100%;
   background: none;

@@ -34,56 +34,6 @@ const EditProfileModal = ({ isOpen, onClose, user, onUpdate }) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  //   const handleSave = async (retry = false) => {
-  //     try {
-  //       let token = getAccessToken();
-
-  //       if (!token) {
-  //         alert("❌ 인증 토큰이 없습니다. 다시 로그인해주세요.");
-  //         navigate("/login");
-  //         return;
-  //       }
-
-  //       let requestData = { ...formData };
-
-  //       const response = await axios.put("http://localhost:8082/api/auth/api/user", formData, {
-  //         headers: { Authorization: `Bearer ${token}` },
-  //         withCredentials: true
-  //       });
-
-  //       alert("✅ 정보가 성공적으로 수정되었습니다!");
-  //       onUpdate(formData);
-  //       onClose();
-  //     } catch (error) {
-  //       console.error("❌ 사용자 정보 수정 실패:", error);
-  //  // ✅ 백엔드 응답 데이터 확인
-  //  console.log("🔍 서버 응답 데이터:", error.response?.data);
-
-  //  if (error.response?.status === 400) {
-  //      const errorMessage = error.response?.data?.message || error.response?.data;
-
-  //      if (errorMessage === "Email already in use") {
-  //          alert("❌ 중복된 이메일입니다. 다른 이메일을 사용해주세요."); // ✅ 중복된 이메일 메시지 표시
-  //      } else {
-  //          alert(`❌ 오류: ${errorMessage}`);
-  //      }
-  //  } else if (error.response?.status === 401 && !retry) {
-  //      console.warn("🔄 토큰 갱신 시도 중...");
-  //      const newAccessToken = await refreshAccessToken();
-  //      if (newAccessToken) {
-  //          console.log("✅ 새 토큰으로 다시 요청");
-  //          handleSave(true); // ✅ 새 토큰으로 다시 요청
-  //          return;
-  //      } else {
-  //          alert("❌ 세션이 만료되었습니다. 다시 로그인해주세요.");
-  //          navigate("/login");
-  //      }
-  //  } else {
-  //      alert("❌ 정보 수정 중 오류가 발생했습니다.");
-  //  }
-  // }
-  // };
-
   const handleSave = async (retry = false) => {
     try {
       let token = getAccessToken();
@@ -96,9 +46,8 @@ const EditProfileModal = ({ isOpen, onClose, user, onUpdate }) => {
 
       let requestData = { ...formData };
 
-      // ✅ 이메일이 변경되지 않았다면, 이메일 필드를 요청 데이터에서 제거
+      // 이메일이 변경되지 않았다면, 이메일 필드를 요청 데이터에서 제거
       if (formData.email === user.email) {
-        console.log("✅ 이메일 변경 없음 → 이메일 필드 제외하고 전송");
         delete requestData.email; // 이메일 필드 삭제
       }
 
@@ -107,13 +56,11 @@ const EditProfileModal = ({ isOpen, onClose, user, onUpdate }) => {
         withCredentials: true
       });
 
-      alert("✅ 정보가 성공적으로 수정되었습니다!");
+      alert("정보가 성공적으로 수정되었습니다!");
       onUpdate(formData);
       onClose();
     } catch (error) {
-      console.error("❌ 사용자 정보 수정 실패:", error);
-      console.log("🔍 서버 응답 데이터:", error.response?.data);
-
+ 
       if (error.response?.status === 400) {
         const errorMessage = error.response?.data?.message || error.response?.data;
 
@@ -123,10 +70,8 @@ const EditProfileModal = ({ isOpen, onClose, user, onUpdate }) => {
           alert(`❌ 오류: ${errorMessage}`);
         }
       } else if (error.response?.status === 401 && !retry) {
-        console.warn("🔄 토큰 갱신 시도 중...");
         const newAccessToken = await refreshAccessToken();
         if (newAccessToken) {
-          console.log("✅ 새 토큰으로 다시 요청");
           handleSave(true);
           return;
         } else {
@@ -147,7 +92,7 @@ const EditProfileModal = ({ isOpen, onClose, user, onUpdate }) => {
       <div className="edit-modal-content">
         <button className="close-btn" onClick={onClose}>✖</button>
 
-        {/* ✅ 왼쪽 프로필 영역 */}
+        {/* 왼쪽 프로필 영역 */}
         <div className="edit-modal-sidebar">
           <img
             src={user.profileImage || defaultProfileImage}
@@ -164,7 +109,7 @@ const EditProfileModal = ({ isOpen, onClose, user, onUpdate }) => {
           </ul>
         </div>
 
-        {/* ✅ 오른쪽 정보 수정 영역 */}
+        {/* 오른쪽 정보 수정 영역 */}
         <div className="edit-modal-main">
           <h2 className="edit-modal-title">환경설정</h2>
 
@@ -173,7 +118,7 @@ const EditProfileModal = ({ isOpen, onClose, user, onUpdate }) => {
             <input type="text" name="username" value={formData.username} onChange={handleChange} />
           </div>
           <div className="edit-form-group">
-            <label>이메일</label> {/* ✅ 이메일 필드 추가 */}
+            <label>이메일</label> {/* 이메일 필드 추가 */}
             <input type="email" name="email" value={formData.email} onChange={handleChange} />
           </div>
           <div className="edit-form-group">

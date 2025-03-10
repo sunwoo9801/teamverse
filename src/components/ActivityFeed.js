@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from "react";
-import parse from "html-react-parser"; // ✅ HTML을 변환하는 라이브러리
-import ReactMarkdown from "react-markdown"; // ✅ Markdown 지원 추가
-import remarkGfm from "remark-gfm"; // ✅ 테이블, 링크, 줄바꿈 지원 추가
+import parse from "html-react-parser"; // HTML을 변환하는 라이브러리
+import ReactMarkdown from "react-markdown"; // Markdown 지원 추가
+import remarkGfm from "remark-gfm"; // 테이블, 링크, 줄바꿈 지원 추가
 import axios from "axios";
 import { getAccessToken } from "../utils/authUtils";
-import { getStompClient } from "../api/websocket"; // ✅ WebSocket 클라이언트 가져오기
+import { getStompClient } from "../api/websocket"; // WebSocket 클라이언트 가져오기
 import defaultProfileImage from "../assets/images/basicprofile.jpg"; // 기본 프로필 이미지 import
 import "../styles/ActivityFeed.css";
 
 
 
-// ✅ 감정 리액션 종류 정의
+// 감정 리액션 종류 정의
 const reactions = [
   { type: "LIKE", label: "좋아요", emoji: "😊" },
   { type: "REQUEST", label: "부탁해요", emoji: "🥺" },
@@ -19,17 +19,8 @@ const reactions = [
   { type: "THANKS", label: "감사해요", emoji: "😍" },
 ]
 
-// const ActivityContent = ({ content }) => {
-//   console.log("📌 렌더링할 content:", content); // ✅ 디버깅 추가
-
-//   if (!content) return <p>내용 없음</p>;
-
-//   // ✅ HTML 태그 포함 여부 확인
-//   return <div className="activity-content">{parse(content)}</div>;
-// };
-
 const ActivityContent = ({ content, task }) => {
-  console.log("📌 렌더링할 content:", content, task);
+  console.log("렌더링할 content:", content, task);
 
   if (!content) return <p>내용 없음</p>;
 
@@ -64,43 +55,15 @@ const ActivityFeed = ({ projectId }) => {
   const [activities, setActivities] = useState([]);
   const [user, setUser] = useState(null);
   const [tasks, setTasks] = useState([]);
-  const [userProfiles, setUserProfiles] = useState({}); // ✅ 사용자 프로필 캐싱
+  const [userProfiles, setUserProfiles] = useState({}); // 사용자 프로필 캐싱
   const [showReactionBox, setShowReactionBox] = useState(null);
   const [hoveredActivity, setHoveredActivity] = useState(null);
   const [hoveredTask, setHoveredTask] = useState(null);
-  const [expandedActivity, setExpandedActivity] = useState({}); // ✅ 활동 로그의 확장 상태 저장
-  const [expandedTask, setExpandedTask] = useState({}); // ✅ 작업(Task)의 확장 상태 저장
+  const [expandedActivity, setExpandedActivity] = useState({}); // 활동 로그의 확장 상태 저장
+  const [expandedTask, setExpandedTask] = useState({}); // 작업(Task)의 확장 상태 저장
   const MAX_LINES = 10;
   const MAX_CHARACTERS = 300;
 
-
-
-
-  // ✅ 현재 프로젝트의 Task 목록 가져오기
-  // const fetchTasks = async () => {
-  //   const token = getAccessToken();
-  //   if (!token) {
-  //     alert("로그인이 필요합니다.");
-  //     return;
-  //   }
-
-  //   try {
-  //     const response = await axios.get(`http://localhost:8082/api/user/projects/${projectId}/tasks`, {
-  //       headers: { Authorization: `Bearer ${token}` },
-  //       withCredentials: true,
-  //     });
-
-  //     console.log("📌 받아온 작업 목록:", response.data);
-  //     setTasks(response.data);
-
-  //     const uniqueUserIds = [...new Set(response.data.map(task => task.assignedTo?.id).filter(Boolean))] || [];
-  //     if (uniqueUserIds.length > 0) {
-  //       fetchUserProfiles(uniqueUserIds);
-  //     }
-  //   } catch (error) {
-  //     console.error("❌ 작업 목록 불러오기 실패:", error);
-  //   }
-  // };
   const fetchTasks = async () => {
     const token = getAccessToken();
     if (!token) {
@@ -117,7 +80,7 @@ const ActivityFeed = ({ projectId }) => {
       const updatedTasks = await Promise.all(
         response.data.map(async (task) => {
           try {
-            // ✅ 리액션 개수 가져오기
+            // 리액션 개수 가져오기
             const reactionCountResponse = await axios.get(`http://localhost:8082/api/likes/task/${task.id}/count`, {
               headers: { Authorization: `Bearer ${token}` },
               withCredentials: true,
@@ -127,11 +90,11 @@ const ActivityFeed = ({ projectId }) => {
               id: task.id,
               name: task.name,
               description: task.description || "설명이 없습니다.",
-              startDate: task.startDate || "미정", // ✅ 시작일 기본값 설정
-              dueDate: task.dueDate || "미정", // ✅ 마감일 기본값 설정
-              status: task.status || "TODO", // ✅ 상태 기본값 설정
-              assignedTo: task.assignedTo || { username: "없음" }, // ✅ 담당자 정보 추가
-              reactionCounts: reactionCountResponse.data, // ✅ 리액션 개수 포함
+              startDate: task.startDate || "미정", // 시작일 기본값 설정
+              dueDate: task.dueDate || "미정", // 마감일 기본값 설정
+              status: task.status || "TODO", // 상태 기본값 설정
+              assignedTo: task.assignedTo || { username: "없음" }, // 담당자 정보 추가
+              reactionCounts: reactionCountResponse.data, // 리액션 개수 포함
             };
           } catch (error) {
             console.error(`❌ Task ID ${task.id}의 리액션 개수 불러오기 실패:`, error);
@@ -152,7 +115,7 @@ const ActivityFeed = ({ projectId }) => {
 
 
 
-  // ✅ 활동 로그 가져오기
+  // 활동 로그 가져오기
   const fetchActivities = async () => {
     const token = getAccessToken();
     if (!token) {
@@ -166,7 +129,7 @@ const ActivityFeed = ({ projectId }) => {
         withCredentials: true,
       });
 
-      console.log("📌 받아온 피드 데이터:", response.data); // ✅ 디버깅 로그 추가
+      console.log("받아온 피드 데이터:", response.data); // 디버깅 로그 추가
       setActivities(response.data);
     } catch (error) {
       console.error("❌ 활동 피드 불러오기 실패:", error);
@@ -183,7 +146,7 @@ const ActivityFeed = ({ projectId }) => {
 
     const payload = isTask ? { taskId: id, type } : { activityId: id, type };
 
-    console.log("📌 전송할 데이터:", JSON.stringify(payload)); // ✅ 전송 데이터 확인
+    console.log("전송할 데이터:", JSON.stringify(payload)); // 전송 데이터 확인
 
     try {
       const response = await axios.post(
@@ -195,9 +158,9 @@ const ActivityFeed = ({ projectId }) => {
         }
       );
 
-      console.log("📌 리액션 성공:", response.data);
+      console.log("리액션 성공:", response.data);
 
-      // ✅ 추가: 리액션 수 업데이트
+      // 추가: 리액션 수 업데이트
       const reactionCountUrl = isTask
         ? `http://localhost:8082/api/likes/task/${id}/count`
         : `http://localhost:8082/api/likes/${id}/count`;
@@ -207,7 +170,7 @@ const ActivityFeed = ({ projectId }) => {
         withCredentials: true,
       });
 
-      console.log("📌 업데이트된 리액션 개수:", countResponse.data);
+      console.log("업데이트된 리액션 개수:", countResponse.data);
 
       if (isTask) {
         setTasks((prevTasks) =>
@@ -228,7 +191,7 @@ const ActivityFeed = ({ projectId }) => {
   };
 
 
-  // ✅ 현재 로그인한 사용자 정보 가져오기
+  // 현재 로그인한 사용자 정보 가져오기
   const fetchUserInfo = async () => {
     const token = getAccessToken();
     if (!token) {
@@ -242,9 +205,9 @@ const ActivityFeed = ({ projectId }) => {
         withCredentials: true,
       });
 
-      console.log("✅ 현재 로그인한 사용자 정보:", response.data);
+      console.log("현재 로그인한 사용자 정보:", response.data);
       setUser(response.data);
-      localStorage.setItem("userId", response.data.id); // ✅ userId 저장
+      localStorage.setItem("userId", response.data.id); // userId 저장
     } catch (error) {
       console.error("❌ 사용자 정보 불러오기 실패:", error);
     }
@@ -258,20 +221,20 @@ const ActivityFeed = ({ projectId }) => {
     }
 
     try {
-      // ✅ ActivityLog (Post) 가져오기
+      // ActivityLog (Post) 가져오기
       const activityResponse = await axios.get(`http://localhost:8082/api/activity/feed/${projectId}`, {
         headers: { Authorization: `Bearer ${token}` },
         withCredentials: true,
       });
 
-      // ✅ Task (업무) 가져오기
+      // Task (업무) 가져오기
       const taskResponse = await axios.get(`http://localhost:8082/api/user/projects/${projectId}/tasks`, {
         headers: { Authorization: `Bearer ${token}` },
         withCredentials: true,
       });
 
 
-      console.log("📌 받아온 업무 데이터:", taskResponse.data);
+      console.log("받아온 업무 데이터:", taskResponse.data);
 
       setActivities(activityResponse.data); // Post 데이터
       setTasks(taskResponse.data); // Task 데이터
@@ -290,7 +253,7 @@ const ActivityFeed = ({ projectId }) => {
     try {
       const response = await axios.post(
         `http://localhost:8082/api/likes/${id}/toggle`,
-        { type }, // ✅ 좋아요 요청 시 type 추가 (activity 또는 task)
+        { type }, // 좋아요 요청 시 type 추가 (activity 또는 task)
         {
           headers: { Authorization: `Bearer ${token}` },
           withCredentials: true,
@@ -320,7 +283,7 @@ const ActivityFeed = ({ projectId }) => {
 
 
 
-  // ✅ WebSocket을 통한 실시간 피드 & Task 업데이트
+  // WebSocket을 통한 실시간 피드 & Task 업데이트
   useEffect(() => {
     fetchFeed();
     fetchTasks();
@@ -329,23 +292,21 @@ const ActivityFeed = ({ projectId }) => {
 
 
     const onActivityReceived = (message) => {
-      console.log("📩 새 활동 로그 수신:", message.body); // ✅ 로그 추가
 
       const newActivity = JSON.parse(message.body);
-      // ✅ 중복 체크 (같은 ID가 있으면 추가하지 않음)
+      // 중복 체크 (같은 ID가 있으면 추가하지 않음)
       setActivities((prevActivities) => {
         const isDuplicate = prevActivities.some(activity => activity.id === newActivity.id);
         if (isDuplicate) return prevActivities; // 중복이면 기존 상태 유지
 
-        console.log("📝 피드 추가됨:", newActivity);
         return [newActivity, ...prevActivities];
       });
     };
 
-    // ✅ WebSocket을 통한 Task 업데이트
+    // WebSocket을 통한 Task 업데이트
     const onTaskReceived = (message) => {
       const newTask = JSON.parse(message.body);
-      console.log("📩 새 작업(Task) 수신:", newTask);
+      console.log(" 새 작업(Task) 수신:", newTask);
       setTasks((prevTasks) => [newTask, ...prevTasks]); // 🔹 새로운 Task를 기존 목록 앞에 추가
     };
 
@@ -356,7 +317,7 @@ const ActivityFeed = ({ projectId }) => {
     } else {
       console.warn("⚠️ WebSocket이 아직 연결되지 않음, 재연결 시도...");
       stompClient.onConnect = () => {
-        console.log(`✅ WebSocket 연결됨, 구독: /topic/feed/${projectId}`);
+        console.log(`WebSocket 연결됨, 구독: /topic/feed/${projectId}`);
         stompClient.subscribe(`/topic/feed/${projectId}`, onActivityReceived);
         stompClient.subscribe(`/topic/tasks/${projectId}`, onTaskReceived);
       };
@@ -375,7 +336,7 @@ const ActivityFeed = ({ projectId }) => {
   return (
     <div className="activity-feed">
       {activities.length === 0 && tasks.length === 0 ? (
-        <p className="empty-message">📌 아직 활동 내역이 없습니다.</p>
+        <p className="empty-message">아직 활동 내역이 없습니다.</p>
       ) : (
         <>
           {activities.map((activity) => (
@@ -449,7 +410,7 @@ const ActivityFeed = ({ projectId }) => {
 
 
 
-              {/* ✅ 리액션 UI */}
+              {/* 리액션 UI */}
               <div
                 className="reaction-container"
                 onMouseEnter={() => setHoveredActivity(activity.id)}
@@ -460,12 +421,12 @@ const ActivityFeed = ({ projectId }) => {
                     ? reactions.find((r) => r.type === activity.selectedReaction)?.emoji
                     : "🙂 좋아요"}
                 </button>
-
+{/* 
                 <button className="reaction-button">🔖 북마크</button>
                 <button className="reaction-button">⏰ 다시 알림</button>
+ */}
 
-
-                {/* ✅ 마우스 오버 시 리액션 박스 표시 */}
+                {/* 마우스 오버 시 리액션 박스 표시 */}
                 {hoveredActivity === activity.id && (
                   <div className="reaction-box">
                     {reactions.map(({ type, label, emoji }) => (
@@ -478,7 +439,7 @@ const ActivityFeed = ({ projectId }) => {
               </div>
 
 
-              {/* ✅ 현재 리액션 요약 */}
+              {/* 현재 리액션 요약 */}
               < div className="reaction-summary" >
                 {
                   activity.reactionCounts &&
@@ -498,7 +459,7 @@ const ActivityFeed = ({ projectId }) => {
           ))
           }
 
-          {/* ✅ Task 추가 피드 표시 */}
+          {/* Task 추가 피드 표시 */}
           {tasks.map((task) => (
             <div key={task.id} className="activity-card">
               <div className="activity-header">
@@ -526,7 +487,7 @@ const ActivityFeed = ({ projectId }) => {
                 </div>
               </div>
 
-              {/* ✅ Task 정보 + 파일 첨부 */}
+              {/* Task 정보 + 파일 첨부 */}
               <div
                 className={`activity-content ${expandedTask[task.id] ? "expanded" : ""} ${(task.description.split("\n").length > MAX_LINES || task.description.length > MAX_CHARACTERS ||
                   task.description.includes("<img") || task.files?.some(file => /\.(jpeg|jpg|png|gif|bmp|webp)$/i.test(file)))
@@ -537,7 +498,7 @@ const ActivityFeed = ({ projectId }) => {
                 <h3>📝 {task.name}</h3>
                 {parse(task.description || "설명이 없습니다.")}
 
-                {/* ✅ Task 상태, 일정, 담당자 정보 */}
+                {/* Task 상태, 일정, 담당자 정보 */}
                 <div className="task-info">
                   <span className={`task-status ${task.status.toLowerCase()}`}>{task.status}</span>
                   <p>📅 {task.startDate} ~ {task.dueDate}</p>
@@ -550,7 +511,7 @@ const ActivityFeed = ({ projectId }) => {
                   )}
                 </div>
 
-                {/* ✅ Task 업로드 파일 렌더링 */}
+                {/* Task 업로드 파일 렌더링 */}
                 <div className="file-list">
                   {task.files &&
                     task.files.length > 0 &&
@@ -575,7 +536,7 @@ const ActivityFeed = ({ projectId }) => {
                     )}
                 </div>
               </div>
-              {/* ✅ Task에서도 "⋯" 버튼으로 변경 & 스타일 개선 */}
+              {/* Task에서도 "⋯" 버튼으로 변경 & 스타일 개선 */}
               {(task.description.split("\n").length > MAX_LINES || task.description.length > MAX_CHARACTERS ||
                 task.description.includes("<img") || task.files?.some(file => /\.(jpeg|jpg|png|gif|bmp|webp)$/i.test(file))) && (
                   <button
@@ -588,7 +549,7 @@ const ActivityFeed = ({ projectId }) => {
 
 
 
-              {/* ✅ 리액션 UI */}
+              {/* 리액션 UI */}
               <div
                 className="reaction-container"
                 onMouseEnter={() => setHoveredTask(task.id)}
@@ -600,10 +561,10 @@ const ActivityFeed = ({ projectId }) => {
                     : "🙂 좋아요"}
                 </button>
 
-                <button className="reaction-button">🔖 북마크</button>
-                <button className="reaction-button">⏰ 다시 알림</button>
+                {/* <button className="reaction-button">🔖 북마크</button>
+                <button className="reaction-button">⏰ 다시 알림</button> */}
 
-                {/* ✅ 마우스 오버 시 리액션 박스 표시 */}
+                {/* 마우스 오버 시 리액션 박스 표시 */}
                 {hoveredTask === task.id && (
                   <div className="reaction-box">
                     {reactions.map(({ type, label, emoji }) => (
@@ -616,7 +577,7 @@ const ActivityFeed = ({ projectId }) => {
               </div>
 
 
-              {/* ✅ 현재 Task 리액션 요약 */}
+              {/* 현재 Task 리액션 요약 */}
               <div className="reaction-summary">
                 {task.reactionCounts &&
                   Object.entries(task.reactionCounts || {}).map(([type, count]) => (

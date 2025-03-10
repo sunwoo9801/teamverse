@@ -2,11 +2,11 @@ import React, { useState } from "react";
 import axios from "axios";
 import { getAccessToken } from "../utils/authUtils";
 import "../styles/PostTodoModal.css";
-import ModalNav from "./ModalNav"; // ✅ 네비게이션 추가
+import ModalNav from "./ModalNav"; // 네비게이션 추가
 
 const PostTodoModal = ({ onClose, refreshFeed }) => {
   const [activeTab, setActiveTab] = useState("post");
-  const [postContent, setPostContent] = useState(""); // ✅ 글 작성 데이터 추가
+  const [postContent, setPostContent] = useState(""); // 글 작성 데이터 추가
 
 
   const handlePostSubmit = async () => {
@@ -37,7 +37,7 @@ const PostTodoModal = ({ onClose, refreshFeed }) => {
           withCredentials: true,
         }
       );
-      alert("✅ 글이 등록되었습니다.");
+      alert("글이 등록되었습니다.");
       refreshFeed((prev) => [response.data, ...prev]); 
       onClose();
     } catch (error) {
@@ -51,7 +51,7 @@ const PostTodoModal = ({ onClose, refreshFeed }) => {
         <div className="modal-content">
           <ModalNav activeTab={activeTab} setActiveTab={setActiveTab} />
 
-          {/* ✅ 글 작성 UI */}
+          {/* 글 작성 UI */}
           {activeTab === "post" && (
             <>
               <h2>글 작성</h2>

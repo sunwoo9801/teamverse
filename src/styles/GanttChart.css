@@ -313,7 +313,7 @@ endar-day.empty-day {
 }
 
 .calendar {
-  position: relative; /* ✅ progress-bar의 위치 기준을 calendar로 설정 */
+  position: relative; /* progress-bar의 위치 기준을 calendar로 설정 */
 }
 
 .progress {
@@ -603,7 +603,7 @@ endar-day.empty-day {
 }
 
 .calendar {
-  position: relative; /* ✅ progress-bar의 위치 기준을 calendar로 설정 */
+  position: relative; /* progress-bar의 위치 기준을 calendar로 설정 */
 }
 
 .progress {

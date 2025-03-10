@@ -3,27 +3,37 @@ import axios from "axios";
 import { getAccessToken } from "../utils/authUtils";
 import "../styles/Sidebar.css";
 import defaultProfileImage from "../assets/images/basicprofile.jpg";
-import PrivateChatModal from "./PrivateChatModal";
 
 const Sidebar = ({ projectId }) => {
   const [teamMembers, setTeamMembers] = useState([]);
   const [search, setSearch] = useState("");
-  const [selectedUser, setSelectedUser] = useState(null);
 
-  // ✅ 현재 로그인한 유저 정보 가져오기 (JSON.parse 필요!)
+  // 현재 로그인한 유저 정보 가져오기
   const storedUser = localStorage.getItem("user");
   const user = storedUser ? JSON.parse(storedUser) : null;
   const userId = user ? user.id : null;
 
-  // ✅ userId 값이 정상적으로 있는지 콘솔로 확인
+    // 새 창(팝업)으로 채팅창 열기
+    const openChatWindow = (recipientId, recipientName) => {
+      const windowFeatures = "width=400,height=600,left=1000,top=100,resizable,scrollbars";
+      // recipientName과 함께 popup 쿼리 파라미터 추가
+      const chatUrl = `/chat/${recipientId}?recipientName=${encodeURIComponent(recipientName)}&popup=true`;
+      const chatWindow = window.open(chatUrl, "_blank", windowFeatures);
+      if (chatWindow) {
+        chatWindow.focus();
+      } else {
+        alert("팝업 차단을 해제해주세요!");
+      }
+    };
+
+  // userId 값이 정상적으로 있는지 콘솔로 확인
   useEffect(() => {
-    console.log(`🔎 현재 로그인한 userId: ${userId}`);
     if (!userId) {
       console.error("❌ localStorage에 userId가 존재하지 않습니다! 로그인 상태를 확인하세요.");
     }
   }, []);
 
-  // ✅ 팀원 목록 가져오기
+  //  팀원 목록 가져오기
   const fetchTeamMembers = async () => {
     if (!projectId) return;
 
@@ -33,7 +43,7 @@ const Sidebar = ({ projectId }) => {
         `http://localhost:8082/api/user/projects/${projectId}/team-members`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      // ✅ 멤버 데이터에서 profileImage가 없을 경우 기본 이미지 설정
+      // 멤버 데이터에서 profileImage가 없을 경우 기본 이미지 설정
       const updatedMembers = response.data.map(member => ({
         ...member,
         profileImage: member.profileImage && member.profileImage.trim() !== ""
@@ -70,25 +80,21 @@ const Sidebar = ({ projectId }) => {
           )
           .map((member) => (
             <li
-                key={member.id}
-                className="team-member"
-                data-id={member.id}
-                              onClick={() => {
-                                if (member.id === userId) {
-                                  alert("❌ 본인에게 메시지를 보낼 수 없습니다.");
-                                  return;
-                                }
-                                console.log("📌 클릭한 유저:", member.username, "ID:", member.id);
-                                setSelectedUser({ id: member.id, username: member.username });
-                              }}
-                >
-              {/* ✅ 프로필 이미지 표시 (등록된 이미지가 없으면 기본 이미지) */}
+              key={member.id}
+              className="team-member"
+              onClick={() => {
+                if (member.id === userId) {
+                  alert("본인에게 메시지를 보낼 수 없습니다.");
+                  return;
+                }
+                openChatWindow(member.id, member.username);
+              }}
+            >
               <img
                 src={member.profileImage || defaultProfileImage}
                 alt="Profile"
                 className="avatar"
                 onError={(e) => {
-                  console.error("❌ 프로필 이미지 로드 실패:", member.profileImage);
                   e.target.src = defaultProfileImage; // 기본 이미지로 변경
                 }}
               />
@@ -99,22 +105,10 @@ const Sidebar = ({ projectId }) => {
                   {member.role}
                 </span>
               </div>
-              <div className={`status ${member.online ? "online" : "offline"}`}>
-                {/* {member.online ? "🟢" : "⚪️"} */}
-              </div>
+              <div className={`status ${member.online ? "online" : "offline"}`}></div>
             </li>
           ))}
       </ul>
-
-      {/* ✅ 개인 메시지 모달 추가 */}
-      {selectedUser && userId && (
-        <PrivateChatModal
-          userId={userId} // ✅ 현재 로그인한 유저 ID 전달
-          recipientId={selectedUser.id} // ✅ 클릭한 팀원의 ID 전달
-          recipientName={selectedUser.username}
-          onClose={() => setSelectedUser(null)}
-        />
-      )}
     </div>
   );
 };

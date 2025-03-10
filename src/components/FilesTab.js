@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { getAccessToken } from "../utils/authUtils";
 import FilePreview from "./FilePreview"; // 미리보기 컴포넌트
-import { FaFileAlt, FaDownload } from "react-icons/fa"; // ✅ 세련된 아이콘 추가
+import { FaFileAlt, FaDownload } from "react-icons/fa"; // 세련된 아이콘 추가
 import "../styles/FilesTab.css";
 
 const FilesTab = ({ projectId }) => {
@@ -112,7 +112,7 @@ const FilesTab = ({ projectId }) => {
     <div className="files-tab">
       <h2>파일 목록</h2>
 
-      {/* ✅ 파일 목록을 테이블로 표시 */}
+      {/* 파일 목록을 테이블로 표시 */}
       <table className="file-table">
         <thead>
           <tr>
@@ -150,7 +150,7 @@ const FilesTab = ({ projectId }) => {
         </tbody>
       </table>
 
-      {/* ✅ 다운로드 버튼 */}
+      {/* 다운로드 버튼 */}
       <button onClick={downloadSelectedFiles} className="download-btn">
         <FaDownload /> 다운로드
       </button>

@@ -6,7 +6,7 @@ import "../styles/ProjectSidebar.css";
 const ProjectSidebar = ({ projectId }) => {
     const [teamMembers, setTeamMembers] = useState([]);
 
-    // ✅ 팀원 목록 가져오기
+    // 팀원 목록 가져오기
     useEffect(() => {
         if (!projectId) {
             console.log("🚨 projectId가 없습니다. API 호출 중단");

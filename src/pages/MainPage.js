@@ -8,29 +8,29 @@ import "../styles/MainPage.css";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import { getAccessToken } from "../utils/authUtils";
-import InviteList from "../components/InviteList"; // ✅ 초대 목록 컴포넌트 추가
-import { getStompClient } from "../api/websocket"; // ✅ getStompClient 사용
-import LeftSidebar from "../components/LeftSidebar"; // ✅ 왼쪽 사이드바 추가
+import InviteList from "../components/InviteList"; // 초대 목록 컴포넌트 추가
+import { getStompClient } from "../api/websocket"; // getStompClient 사용
+import LeftSidebar from "../components/LeftSidebar"; // 왼쪽 사이드바 추가
 import folderIcon from "../assets/images/free-icon-folder-4192685.png"; // 📂 일반 폴더 아이콘
 import emptyFolderIcon from "../assets/images/free-icon-open-folder-5082720.png"; // 📂 빈 폴더 아이콘
 
 
 const MainPage = () => {
-    const [projects, setProjects] = useState([]); // ✅ 프로젝트 목록 저장
-    const [selectedProject, setSelectedProject] = useState(null); // ✅ 선택한 프로젝트 저장
-    const [tasks, setTasks] = useState([]); // ✅ 선택한 프로젝트의 작업 목록
+    const [projects, setProjects] = useState([]); // 프로젝트 목록 저장
+    const [selectedProject, setSelectedProject] = useState(null); // 선택한 프로젝트 저장
+    const [tasks, setTasks] = useState([]); // 선택한 프로젝트의 작업 목록
     const [showModal, setShowModal] = useState(false);
     const [projectName, setProjectName] = useState("");
     const [user, setUser] = useState(null);
     const { userId } = useParams();
-    const navigate = useNavigate(); // ✅ 페이지 이동
-    const [projectDescription, setProjectDescription] = useState(""); // ✅ 설명 추가
-    const [invites, setInvites] = useState([]); // ✅ 초대 목록 상태 추가
+    const navigate = useNavigate(); // 페이지 이동
+    const [projectDescription, setProjectDescription] = useState(""); // 설명 추가
+    const [invites, setInvites] = useState([]); // 초대 목록 상태 추가
     const [showProjectList, setShowProjectList] = useState(false);
 
 
 
-    // ✅ 로그인한 사용자의 프로젝트 목록 불러오기
+    // 로그인한 사용자의 프로젝트 목록 불러오기
     const fetchProjects = async () => {
         const token = getAccessToken();
         if (!token) {
@@ -48,7 +48,7 @@ const MainPage = () => {
                 withCredentials: true,
             });
 
-            console.log("✅ 서버에서 가져온 프로젝트 목록:", response.data);
+            console.log("서버에서 가져온 프로젝트 목록:", response.data);
             if (response.data && response.data.length > 0) {
                 const uniqueProjects = response.data.reduce((acc, project) => {
                     if (!acc.some((p) => p.id === project.id)) {
@@ -83,8 +83,8 @@ const MainPage = () => {
             });
 
             localStorage.setItem("accessToken", response.data.accessToken);
-            sessionStorage.setItem("accessToken", response.data.accessToken); // ✅ 추가: sessionStorage에도 저장
-            console.log("✅ 새 Access Token 발급:", response.data.accessToken);
+            sessionStorage.setItem("accessToken", response.data.accessToken); // 추가: sessionStorage에도 저장
+            console.log("새 Access Token 발급:", response.data.accessToken);
             return response.data.accessToken;
         } catch (error) {
             console.error("🚨 토큰 갱신 실패, 다시 로그인 필요:", error);
@@ -92,7 +92,7 @@ const MainPage = () => {
         }
     };
 
-    // ✅ 새로운 프로젝트 생성
+    // 새로운 프로젝트 생성
     const handleCreateProject = async () => {
         const token = getAccessToken(); // sessionStorage에서도 accessToken을 가져올 수 있도록 변경
 
@@ -120,16 +120,11 @@ const MainPage = () => {
                 withCredentials: true,
             });
 
-            console.log("✅ 새 프로젝트 생성 응답:", response.data);
-            // ✅ 프로젝트 생성 후 Task 페이지로 이동
+            console.log("새 프로젝트 생성 응답:", response.data);
+            // 프로젝트 생성 후 Task 페이지로 이동
             navigate(`/task?projectId=${response.data.id}`);
 
-
-            // setProjects([...projects, response.data]);
-            // setSelectedProject(response.data);
-            // localStorage.setItem("selectedProjectId", response.data.id);
-            // setShowModal(false);
-            // ✅ 프로젝트 목록에 즉시 추가 (name이 올바르게 존재하는지 확인)
+            // 프로젝트 목록에 즉시 추가 (name이 올바르게 존재하는지 확인)
             if (!response.data || !response.data.id) {
                 throw new Error("프로젝트 생성 후 ID를 찾을 수 없습니다.");
             }
@@ -145,7 +140,7 @@ const MainPage = () => {
         }
     };
 
-    // ✅ 선택한 프로젝트의 작업(Task) 목록 불러오기
+    // 선택한 프로젝트의 작업(Task) 목록 불러오기
     const fetchTasks = async (projectId) => {
         const token = getAccessToken();
         if (!token) {
@@ -163,29 +158,29 @@ const MainPage = () => {
                 withCredentials: true,
             });
 
-            console.log(`✅ 프로젝트 ${projectId}의 작업 목록:`, response.data);
+            console.log(`프로젝트 ${projectId}의 작업 목록:`, response.data);
             setTasks(response.data);
         } catch (error) {
             console.error(`❌ 프로젝트 ${projectId}의 작업 목록 불러오기 실패:`, error);
         }
     };
 
-    // ✅ 프로젝트 선택 시 처리 함수
+    // 프로젝트 선택 시 처리 함수
     const handleProjectSelect = (project) => {
         setSelectedProject(project);
         fetchTasks(project.id);
         console.log("🔍 선택된 프로젝트:", project);
     };
 
-       // ✅ 프로젝트 상세 보기 페이지(TaskPage)로 이동
-       const handleProjectClick = (projectId) => {
+    // 프로젝트 상세 보기 페이지(TaskPage)로 이동
+    const handleProjectClick = (projectId) => {
         navigate(`/task?projectId=${projectId}`);
     };
 
     const handleShowProjectList = () => {
         setShowProjectList(true);
 
-        // ✅ 프로젝트 데이터를 함께 전달하여 이동
+        // 프로젝트 데이터를 함께 전달하여 이동
         navigate("/TaskBoard", { state: { projects } });
     };
 
@@ -193,15 +188,15 @@ const MainPage = () => {
     const fetchInvites = async () => {
         const token = getAccessToken();
         try {
-          const response = await axios.get("http://localhost:8082/api/team/invites", {
-            headers: { Authorization: `Bearer ${token}` },
-          });
-          console.log("📌 받은 초대 목록:", response.data);
-          setInvites(response.data);
+            const response = await axios.get("http://localhost:8082/api/team/invites", {
+                headers: { Authorization: `Bearer ${token}` },
+            });
+            console.log("📌 받은 초대 목록:", response.data);
+            setInvites(response.data);
         } catch (error) {
-          console.error("❌ 초대 목록 불러오기 실패:", error);
+            console.error("❌ 초대 목록 불러오기 실패:", error);
         }
-      };
+    };
 
     useEffect(() => {
         if (selectedProject) {
@@ -209,26 +204,26 @@ const MainPage = () => {
         }
     }, [selectedProject]);
 
-      useEffect(() => {
-        fetchProjects(); // ✅ 로그인 시 프로젝트 목록 조회
-        fetchInvites(); // ✅ 로그인 시 초대 목록 조회
+    useEffect(() => {
+        fetchProjects(); // 로그인 시 프로젝트 목록 조회
+        fetchInvites(); // 로그인 시 초대 목록 조회
 
-        const stompClient = getStompClient(); // ✅ WebSocket 가져오기
+        const stompClient = getStompClient(); // WebSocket 가져오기
 
-        if (!stompClient.connected) { // ✅ 기존 연결이 없을 때만 활성화
+        if (!stompClient.connected) { // 기존 연결이 없을 때만 활성화
             console.log("🟢 WebSocket 활성화 시도...");
             stompClient.activate();
         }
 
         const onWebSocketConnect = () => {
-            console.log("✅ WebSocket 연결 성공 & 구독 시작");
+            console.log("WebSocket 연결 성공 & 구독 시작");
             stompClient.subscribe("/topic/projects", (message) => {
                 console.log("📩 새 프로젝트 업데이트 수신:", message.body);
                 fetchProjects();
             });
         };
 
-        // ✅ 중복 등록 방지: 이미 등록된 경우 새로 추가하지 않음
+        // 중복 등록 방지: 이미 등록된 경우 새로 추가하지 않음
         if (!stompClient.onConnect) {
             stompClient.onConnect = onWebSocketConnect;
         }
@@ -246,13 +241,13 @@ const MainPage = () => {
 
     return (
         <div className="main-page">
-            {/* ✅ 왼쪽 사이드바 */}
-                    {/* ✅ LeftSidebar에 onCreateProject 함수 전달 */}
-                    <LeftSidebar onCreateProject={() => setShowModal(true)} onShowProjectList={handleShowProjectList} />
+            {/* 왼쪽 사이드바 */}
+            {/* LeftSidebar에 onCreateProject 함수 전달 */}
+            <LeftSidebar onCreateProject={() => setShowModal(true)} onShowProjectList={handleShowProjectList} />
 
             <div className="content">
 
-                {/* ✅ 프로젝트 목록 표시 */}
+                {/* 프로젝트 목록 표시 */}
                 <div className="project-list">
                     <h2>내 프로젝트</h2>
                     {projects.length === 0 ? (
@@ -260,18 +255,18 @@ const MainPage = () => {
                     ) : (
                         <ul className="project-list-container">
                             {projects.map((project) => (
-                                    <li key={project.id} className="project-item"> {/* ✅ 기본 리스트 스타일 제거 */}
+                                <li key={project.id} className="project-item"> {/* 기본 리스트 스타일 제거 */}
                                     <button
                                         className={`project-btn ${selectedProject?.id === project.id ? "active" : ""}`}
                                         onClick={() => handleProjectSelect(project)}
                                     >
-                                        {/* ✅ 프로젝트 아이콘 */}
+                                        {/* 프로젝트 아이콘 */}
                                         <img
                                             src={selectedProject?.id === project.id ? emptyFolderIcon : folderIcon}
                                             alt="프로젝트 아이콘"
                                             className="project-icon"
                                         />
-                                        {/* ✅ 프로젝트 이름 (아이콘 아래) */}
+                                        {/* 프로젝트 이름 (아이콘 아래) */}
                                         <span className="project-name">
                                             {project?.name || "🚨 이름 없음"}
                                         </span>
@@ -287,15 +282,15 @@ const MainPage = () => {
 
                 </div>
 
-                {/* ✅ 선택한 프로젝트의 간트 차트 표시 */}
+                {/* 선택한 프로젝트의 간트 차트 표시 */}
                 {selectedProject ? (
                     <div className="project-details">
-                         {/* ✅ 클릭 시 TaskPage로 이동 */}
-                         <h2
+                        {/* 클릭 시 TaskPage로 이동 */}
+                        <h2
                             className="header-title"
                             onClick={() => handleProjectClick(selectedProject.id)}
                         >
-                             {selectedProject.name} - 간트차트
+                            {selectedProject.name} - 간트차트
                         </h2>
                         <GanttChart project={selectedProject} tasks={tasks} />
                     </div>
@@ -304,13 +299,13 @@ const MainPage = () => {
                 )}
             </div>
             <div className="chatbox-container">
-            <Sidebar projectId={selectedProject?.id} />
-            <Chatbox projectId={selectedProject ? selectedProject.id : null} />
-            <InviteList refreshProjects={fetchProjects} />
+                <Sidebar projectId={selectedProject?.id} />
+                <Chatbox projectId={selectedProject ? selectedProject.id : null} />
+                <InviteList refreshProjects={fetchProjects} />
 
             </div>
 
-    {/* 🔹 프로젝트 생성 모달 */}
+            {/* 🔹 프로젝트 생성 모달 */}
             {showModal && (
                 <div className="modal">
                     <div className="modal-content">
@@ -321,10 +316,10 @@ const MainPage = () => {
                             value={projectName}
                             onChange={(e) => setProjectName(e.target.value)}
                         />
-                         <input 
-                            type="text" 
-                            placeholder="프로젝트 설명 (선택 사항)" 
-                            value={projectDescription} 
+                        <input
+                            type="text"
+                            placeholder="프로젝트 설명 (선택 사항)"
+                            value={projectDescription}
                             onChange={(e) => setProjectDescription(e.target.value)}
                         />
                         <button onClick={handleCreateProject}>생성</button>

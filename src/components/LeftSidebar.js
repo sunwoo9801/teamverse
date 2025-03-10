@@ -9,7 +9,7 @@ const LeftSidebar = ({ onCreateProject, onShowProjectList }) => {
     const navigate = useNavigate();
     const [userId, setUserId] = useState(null);
 
-    // ✅ 현재 로그인한 사용자 ID 불러오기
+    // 현재 로그인한 사용자 ID 불러오기
     useEffect(() => {
         const fetchUserId = async () => {
             const token = getAccessToken();
@@ -20,7 +20,7 @@ const LeftSidebar = ({ onCreateProject, onShowProjectList }) => {
                     headers: { Authorization: `Bearer ${token}` },
                     withCredentials: true,
                 });
-                setUserId(response.data.id); // ✅ 사용자 ID 저장
+                setUserId(response.data.id); // 사용자 ID 저장
             } catch (error) {
                 console.error("❌ 사용자 정보 가져오기 실패:", error);
             }
@@ -29,7 +29,7 @@ const LeftSidebar = ({ onCreateProject, onShowProjectList }) => {
         fetchUserId();
     }, []);
 
-    // ✅ "대시보드" 버튼 클릭 시 `/dashboard/{userId}`로 이동
+    // "대시보드" 버튼 클릭 시 `/dashboard/{userId}`로 이동
     const handleDashboardClick = () => {
         if (userId) {
             navigate(`/dashboard/${userId}`);
@@ -44,14 +44,14 @@ const LeftSidebar = ({ onCreateProject, onShowProjectList }) => {
                 <img src={logo} alt="Flow Team Logo" className="logo" />
             </div>
 
-            {/* ✅ 새 프로젝트 추가 버튼 */}
+            {/* 새 프로젝트 추가 버튼 */}
             <button className="new-project-btn" onClick={onCreateProject}>
                 <i className="far fa-folder-open"></i> 새 프로젝트 추가
             </button>
 
             <nav className="nav-menu">
                 <ul>
-                    <li onClick={handleDashboardClick}> {/* ✅ 클릭하면 사용자 대시보드 이동 */}
+                    <li onClick={handleDashboardClick}> {/* 클릭하면 사용자 대시보드 이동 */}
                         <i className="fas fa-home"></i> 대시보드
                     </li>
                     <li onClick={onShowProjectList}>

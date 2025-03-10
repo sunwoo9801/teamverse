@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { handleLogout } from "../utils/authUtils"; // ✅ 로그아웃 함수 사용
+import { handleLogout } from "../utils/authUtils"; // 로그아웃 함수 사용
 
 const SessionTimeout = () => {
     const navigate = useNavigate();

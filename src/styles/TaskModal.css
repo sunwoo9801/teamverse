@@ -1,4 +1,4 @@
-/* ✅ TaskModal (업무 추가 모달)의 기본 스타일 */
+/* TaskModal (업무 추가 모달)의 기본 스타일 */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -11,7 +11,7 @@
   align-items: center;
 }
 
-/* ✅ 부모 요소 크기 제한 해제 */
+/* 부모 요소 크기 제한 해제 */
 .modal-container {
   width: 100%;
   max-width: 98vw;
@@ -31,7 +31,7 @@
   text-align: center;
 }
 
-/* ✅ 입력 필드 및 버튼 크기 조정 */
+/* 입력 필드 및 버튼 크기 조정 */
 .modal-content label {
   display: block;
   font-weight: bold;
@@ -86,7 +86,7 @@
   background: #e0e0e0;
 }
 
-/* ✅ 장소 검색창 스타일 */
+/* 장소 검색창 스타일 */
 .place-search-modal {
   position: absolute;
   top: -60px;
@@ -100,7 +100,7 @@
   z-index: 1000;
 }
 
-/* ✅ 검색창 스타일 */
+/* 검색창 스타일 */
 .place-search-input {
   width: 100%;
   padding: 8px;
@@ -109,7 +109,7 @@
   font-size: 14px;
 }
 
-/* ✅ 검색 결과 목록 (스크롤 가능) */
+/* 검색 결과 목록 (스크롤 가능) */
 .place-search-list {
   list-style: none;
   padding: 0;
@@ -123,7 +123,7 @@
   background: white;
 }
 
-/* ✅ Markdown 미리보기 스타일 */
+/* Markdown 미리보기 스타일 */
 .markdown-preview {
   text-align: left;
   border: 1px solid #ccc;
@@ -135,14 +135,14 @@
   border-radius: 6px;
 }
 
-/* ✅ 장소 아이콘 스타일 */
+/* 장소 아이콘 스타일 */
 .place-icon {
   color: #ff4d4f;
   font-size: 16px;
   margin-right: 8px;
 }
 
-/* ✅ Markdown 미리보기 스타일 */
+/* Markdown 미리보기 스타일 */
 .markdown-preview {
   text-align: left;
   border: 1px solid #ccc;
@@ -155,7 +155,7 @@
 }
 
 
-/* ✅ 개별 검색 결과 스타일 (아이콘 포함) */
+/* 개별 검색 결과 스타일 (아이콘 포함) */
 .place-search-item {
   padding: 12px;
   border-bottom: 1px solid #eee;
@@ -181,7 +181,7 @@
 }
 
 
-/* ✅ Markdown 미리보기 스타일 */
+/* Markdown 미리보기 스타일 */
 .markdown-preview {
   text-align: left;
   border: 1px solid #ccc;
@@ -192,7 +192,7 @@
   overflow-y: auto;
 }
 
-/* ✅ 장소 카드를 작업 내용에 맞게 정렬 */
+/* 장소 카드를 작업 내용에 맞게 정렬 */
 .selected-places {
   margin-top: 10px;
 }
@@ -219,7 +219,7 @@
 }
 
 
-/* ✅ 지도 썸네일 스타일 */
+/* 지도 썸네일 스타일 */
 .place-map-thumbnail {
   width: 100px;
   height: 100px;
@@ -227,7 +227,7 @@
   object-fit: cover;
 }
 
-/* ✅ 장소 정보 정렬 */
+/* 장소 정보 정렬 */
 .place-info {
   flex-grow: 1;
 }
@@ -244,7 +244,7 @@
   color: #666;
 }
 
-/* ✅ 삭제 버튼 위치 조정 */
+/* 삭제 버튼 위치 조정 */
 .delete-place-btn {
   background: none;
   border: none;

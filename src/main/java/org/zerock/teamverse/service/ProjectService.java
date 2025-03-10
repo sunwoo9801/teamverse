@@ -32,7 +32,4 @@ public interface ProjectService {
     
     boolean leaveProject(Long projectId, User user); // ✅ 프로젝트 나가기 메서드 추가
 
-    
-
-
 }

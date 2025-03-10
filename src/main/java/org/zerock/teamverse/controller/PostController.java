@@ -31,7 +31,7 @@ public class PostController {
         this.fileInfoRepository = fileInfoRepository;
     }
 
-    // ✅ 새로운 게시글 추가
+    // 새로운 게시글 추가
     @PostMapping
     public ResponseEntity<Post> createPost(@RequestParam String title, @RequestParam String content,
             @RequestParam Long projectId, @RequestParam Long userId,
@@ -52,12 +52,12 @@ public class PostController {
             files.forEach(file -> file.setPost(post));
         }
 
-        // ✅ post 저장 (오류 해결!)
+        // post 저장 (오류 해결!)
         Post savedPost = postService.save(post);
         return ResponseEntity.ok(savedPost);
     }
 
-    // ✅ 프로젝트별 게시글 목록 조회
+    // 프로젝트별 게시글 목록 조회
     @GetMapping("/{projectId}")
     public ResponseEntity<List<PostDTO>> getPostsByProject(@PathVariable Long projectId) {
         return ResponseEntity.ok(postService.getPostsByProject(projectId));

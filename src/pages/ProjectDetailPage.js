@@ -1,17 +1,18 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
+import LeftSidebar from "../components/LeftSidebar"; // 왼쪽 사이드바 추가
 import axios from "axios";
 import { FaEllipsisV, FaPencilAlt, FaSignOutAlt, FaEdit, FaTasks, FaCalendarAlt, FaThumbtack, FaCheckCircle, FaExclamationTriangle, FaHourglassHalf, FaPaperclip } from "react-icons/fa";
 import { getAccessToken } from "../utils/authUtils";
 import TaskModal from "../components/TaskModal"; //  작업 추가 모달
-import TaskDetailModal from "../components/TaskDetailModal"; // ✅ Task 상세보기 모달 추가
+import TaskDetailModal from "../components/TaskDetailModal"; // Task 상세보기 모달 추가
 import GanttChart from "../components/GanttChart"; //  간트 차트 임포트
 import ProjectNav from "../components/ProjectNav"; // 프로젝트 내부 네비게이션 추가
 import PostTodoModal from "../components/PostTodoModal";
-import ActivityFeed from "../components/ActivityFeed"; // ✅ 피드 컴포넌트 추가
+import ActivityFeed from "../components/ActivityFeed"; // 피드 컴포넌트 추가
 import FilesTab from "../components/FilesTab";
-import ProjectEditModal from "../components/ProjectEditModal"; // ✅ 수정 모달 추가
+import ProjectEditModal from "../components/ProjectEditModal"; // 수정 모달 추가
 
 
 import "../styles/ProjectDetailPage.css";
@@ -24,12 +25,12 @@ const ProjectDetailPage = () => {
     const [isTaskModalOpen, setIsTaskModalOpen] = useState(false); //  작업 추가 모달 상태
     const [editTask, setEditTask] = useState(null); // 수정할 Task 상태
     const [activeTab, setActiveTab] = useState("feed"); // 현재 선택된 탭 (피드 기본값)
-    const [isPostTodoModalOpen, setIsPostTodoModalOpen] = useState(false); // ✅ 글/할 일 모달 상태
+    const [isPostTodoModalOpen, setIsPostTodoModalOpen] = useState(false); // 글/할 일 모달 상태
     const [feed, setFeed] = useState([]);
-    const [postTodoModalTab, setPostTodoModalTab] = useState("post"); // ✅ 기본값을 "post"로 설정
-    const [isEditModalOpen, setIsEditModalOpen] = useState(false); // ✅ 수정 모달 상태
-    const [isDropdownOpen, setIsDropdownOpen] = useState(false); // ✅ 드롭다운 상태 추가
-    const dropdownRef = useRef(null); // ✅ dropdownRef 정의
+    const [postTodoModalTab, setPostTodoModalTab] = useState("post"); // 기본값을 "post"로 설정
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false); // 수정 모달 상태
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false); // 드롭다운 상태 추가
+    const dropdownRef = useRef(null); // dropdownRef 정의
 
 
 
@@ -38,7 +39,7 @@ const ProjectDetailPage = () => {
         fetchProject();
     }, [projectId]);
 
-    // ✅ 다른 곳을 클릭하면 드롭다운을 닫도록 하는 useEffect 추가
+    // 다른 곳을 클릭하면 드롭다운을 닫도록 하는 useEffect 추가
     useEffect(() => {
         function handleClickOutside(event) {
             if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -85,7 +86,7 @@ const ProjectDetailPage = () => {
         }
     };
 
-    // ✅ 피드 목록 불러오기
+    // 피드 목록 불러오기
     const fetchFeed = async () => {
         if (!projectId) return;
 
@@ -112,7 +113,7 @@ const ProjectDetailPage = () => {
         }
     };
 
-    // ✅ 프로젝트의 업무 목록 불러오기
+    // 프로젝트의 업무 목록 불러오기
     const fetchTasks = async () => {
         if (!projectId) return;
 
@@ -131,15 +132,15 @@ const ProjectDetailPage = () => {
                 withCredentials: true,
             });
 
-            console.log("📌 받아온 작업 목록:", response.data); // ✅ 디버깅용 콘솔 추가
-            setTasks(response.data); // ✅ 상태 업데이트
+            console.log("📌 받아온 작업 목록:", response.data); // 디버깅용 콘솔 추가
+            setTasks(response.data); // 상태 업데이트
         } catch (error) {
             console.error("❌ 작업 목록 불러오기 실패:", error);
         }
     };
 
 
-    // ✅ 피드 갱신 함수
+    // 피드 갱신 함수
     const refreshFeed = () => {
         console.log("📌 피드 갱신 중...");
         fetchTasks();
@@ -151,7 +152,7 @@ const ProjectDetailPage = () => {
         if (projectId) {
             fetchProject();
             fetchTasks();
-            fetchFeed(); // ✅ 피드도 자동으로 가져오기
+            fetchFeed(); // 피드도 자동으로 가져오기
         }
     }, [projectId]);
 
@@ -177,7 +178,7 @@ const ProjectDetailPage = () => {
                 withCredentials: true,
             });
 
-            alert("✅ 작업이 삭제되었습니다.");
+            alert("작업이 삭제되었습니다.");
             setTasks((prevTasks) => prevTasks.filter((task) => task.id !== taskId));
         } catch (error) {
             console.error("❌ 작업 삭제 실패:", error);
@@ -205,8 +206,8 @@ const ProjectDetailPage = () => {
                 }
             );
 
-            alert("✅ 프로젝트가 수정되었습니다.");
-            setProject(response.data); // ✅ UI 업데이트
+            alert("프로젝트가 수정되었습니다.");
+            setProject(response.data); // UI 업데이트
             setIsEditModalOpen(false); // 모달 닫기
         } catch (error) {
             console.error("❌ 프로젝트 수정 실패:", error);
@@ -267,7 +268,7 @@ const ProjectDetailPage = () => {
                 withCredentials: true,
             });
 
-            alert("✅ 프로젝트에서 성공적으로 나갔습니다.");
+            alert("프로젝트에서 성공적으로 나갔습니다.");
             navigate("/dashboard/:userId"); // 🚀 대시보드로 이동
         } catch (error) {
             console.error("❌ 프로젝트 나가기 실패:", error);
@@ -281,16 +282,17 @@ const ProjectDetailPage = () => {
     return (
         <div className="project-detail-page">
             <div className="project-layout">
+                <LeftSidebar />
                 <div className="project-content">
                     <div className="project-title-container">
 
-                        {/* ✅ 드롭다운 버튼 + 메뉴 감싸는 div */}
+                        {/* 드롭다운 버튼 + 메뉴 감싸는 div */}
                         <div className="project-dropdown-container" ref={dropdownRef}>
-                            {/* ✅ ⋮ 버튼 (세로 점 3개) */}
+                            {/* ⋮ 버튼 (세로 점 3개) */}
                             <button className="project-dropdown-button" onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
                                 <FaEllipsisV />
                             </button>
-                            {/* ✅ 드롭다운 메뉴 */}
+                            {/* 드롭다운 메뉴 */}
                             {isDropdownOpen && (
                                 <div className="project-dropdown-menu">
                                     <button className="project-dropdown-item" onClick={() => setIsEditModalOpen(true)}>
@@ -312,7 +314,7 @@ const ProjectDetailPage = () => {
                     <p>⏳ 마감일: {project?.endDate || "미정"}</p>
 
 
-                    {/* ✅ 내부 네비게이션 추가 */}
+                    {/* 내부 네비게이션 추가 */}
                     <ProjectNav activeTab={activeTab} setActiveTab={setActiveTab} />
 
                     {activeTab === "feed" && (
@@ -353,7 +355,7 @@ const ProjectDetailPage = () => {
 
 
 
-                    {/* ✅ 작업 목록 */}
+                    {/* 작업 목록 */}
                     {activeTab === "tasks" && (
                         <div className="task-section">
                             <h2><FaTasks /> 작업 목록</h2>
@@ -382,13 +384,13 @@ const ProjectDetailPage = () => {
                         </div>
                     )}
 
-                    {/* ✅ Gantt Chart 탭 */}
+                    {/* Gantt Chart 탭 */}
                     {activeTab === "gantt" && (
                         <div className="task-page">
 
                             <div className="task-page-header">
                                 <h2 className="project-title">{project?.name || "로딩 중..."}</h2>
-                                {/* ✅ 업무 추가 버튼 */}
+                                {/* 업무 추가 버튼 */}
                                 <button
                                     className="task-add-btn"
                                     onClick={() => setIsTaskModalOpen(true)}
@@ -441,13 +443,13 @@ const ProjectDetailPage = () => {
 
 
 
-                {/* ✅ 🚀 **우측 사이드바 추가** */}
+                {/* 🚀 **우측 사이드바 추가** */}
                 <div className="sidebar-container">
                     <Sidebar projectId={projectId} />
                 </div>
             </div>
 
-            {/* ✅ Task 추가 & 수정 모달 (업무 추가) */}
+            {/* Task 추가 & 수정 모달 (업무 추가) */}
             {isTaskModalOpen && (
                 <TaskModal
                     onClose={() => setIsTaskModalOpen(false)}
@@ -458,7 +460,7 @@ const ProjectDetailPage = () => {
             )}
 
 
-            {/* ✅ 프로젝트 수정 모달 추가 */}
+            {/* 프로젝트 수정 모달 추가 */}
             {isEditModalOpen && (
                 <ProjectEditModal
                     project={project}

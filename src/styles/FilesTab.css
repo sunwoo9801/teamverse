@@ -28,7 +28,7 @@
   font-size: 16px;
 }
 
-/* ✅ file-section 내부에서 file-tab이 넘치지 않도록 설정 */
+/* file-section 내부에서 file-tab이 넘치지 않도록 설정 */
 .file-section {
   max-width: 100%;
   width: 100%;
@@ -36,7 +36,7 @@
   box-sizing: border-box;
 }
 
-/* ✅ files-tab이 부모 크기를 벗어나지 않도록 제한 */
+/* files-tab이 부모 크기를 벗어나지 않도록 제한 */
 .files-tab {
   width: 100%;
   max-width: inherit; /* 🔹 부모 요소(file-section) 크기에 맞춤 */

@@ -32,8 +32,8 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 			FilterChain filterChain) throws ServletException, IOException {
 
 		String token = resolveToken(request);
-		System.out.println("📌 요청된 경로: " + request.getRequestURI());
-		System.out.println("📌 Authorization 토큰: " + token);
+		System.out.println(" 요청된 경로: " + request.getRequestURI());
+		System.out.println(" Authorization 토큰: " + token);
 
 		if (token != null && jwtTokenProvider.validateToken(token)) {
 			Map<String, Object> claims = jwtTokenProvider.getClaims(token);
@@ -45,7 +45,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 				UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
 						email, null, authorities);
 				SecurityContextHolder.getContext().setAuthentication(authentication);
-				System.out.println("✅ 인증된 사용자: " + email);
+				System.out.println("인증된 사용자: " + email);
 			} else {
 				System.out.println("🚨 유효하지 않은 토큰 - 역할(role) 정보 없음");
 			}

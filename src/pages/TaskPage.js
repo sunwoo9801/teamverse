@@ -3,9 +3,9 @@ import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { getAccessToken } from "../utils/authUtils";
 import TaskModal from "../components/TaskModal";
-import TaskDetailModal from "../components/TaskDetailModal"; // Task 상세 보기 모달
-import GanttChart from "../components/GanttChart"; // 간트 차트 임포트
-import "../styles/TaskPage.css"; //새로운 CSS 스타일 적용
+import TaskDetailModal from "../components/TaskDetailModal"; 
+import GanttChart from "../components/GanttChart"; 
+import "../styles/TaskPage.css"; 
 
 const TaskPage = () => {
   const location = useLocation();
@@ -13,13 +13,13 @@ const TaskPage = () => {
   const queryParams = new URLSearchParams(location.search);
   const projectId = queryParams.get("projectId");
 
-  const [project, setProject] = useState(null); // ✅ 프로젝트 정보 상태 
+  const [project, setProject] = useState(null); // 프로젝트 정보 상태 
   const [tasks, setTasks] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editTask, setEditTask] = useState(null); // 수정할 Task 저장
   const [selectedTask, setSelectedTask] = useState(null); // Task 상세 보기용 상태
 
-  // ✅ 프로젝트 정보 불러오기
+  // 프로젝트 정보 불러오기
   const fetchProject = async () => {
     if (!projectId) return;
 
@@ -39,13 +39,13 @@ const TaskPage = () => {
         withCredentials: true,
       });
 
-      setProject(response.data); // ✅ 프로젝트 상태 업데이트
+      setProject(response.data); // 프로젝트 상태 업데이트
     } catch (error) {
       console.error("❌ 프로젝트 정보 불러오기 실패:", error);
     }
   };
 
-  // ✅ Task 목록 불러오기
+  // Task 목록 불러오기
   const fetchTasks = async () => {
     if (!projectId) return;
 
@@ -65,12 +65,12 @@ const TaskPage = () => {
         withCredentials: true,
       });
 
-      // ✅ formattedTasks 변환 (tasks 배열을 가공)
+      // formattedTasks 변환 (tasks 배열을 가공)
     const formattedTasks = response.data.map((task) => ({
       id: task.id,
       name: task.name,
-      start: task.startDate ? new Date(task.startDate + "T00:00:00") : null, // ✅ 날짜 변환
-      end: task.dueDate ? new Date(task.dueDate + "T23:59:59") : null, // ✅ 마감일 변환
+      start: task.startDate ? new Date(task.startDate + "T00:00:00") : null, // 날짜 변환
+      end: task.dueDate ? new Date(task.dueDate + "T23:59:59") : null, // 마감일 변환
       color: task.color || "#ff99a5",
     }));
     setTasks(response.data);
@@ -80,12 +80,12 @@ const TaskPage = () => {
     }
   };
 
-  // ✅ Task 추가 후 목록 갱신
+  // Task 추가 후 목록 갱신
   const refreshTasks = () => {
     fetchTasks();
   };
 
-  // ✅ Task 삭제 함수 
+  // Task 삭제 함수 
   const handleDeleteTask = async (taskId) => {
     const token = getAccessToken();
     if (!token) {
@@ -105,29 +105,29 @@ const TaskPage = () => {
       });
 
       alert("업무가 성공적으로 삭제되었습니다.");
-      refreshTasks(); // ✅ 삭제 후 목록 새로고침
+      refreshTasks(); // 삭제 후 목록 새로고침
     } catch (error) {
       console.error("❌ Task 삭제 실패:", error);
       alert("업무 삭제에 실패했습니다.");
     }
   };
 
-  // ✅ 프로젝트 및 Task 목록 불러오기
+  // 프로젝트 및 Task 목록 불러오기
   useEffect(() => {
     if (projectId) {
-      fetchProject(); // ✅ 프로젝트 정보 가져오기
-      fetchTasks(); // ✅ Task 목록 가져오기
+      fetchProject(); // 프로젝트 정보 가져오기
+      fetchTasks(); // Task 목록 가져오기
     }
   }, [projectId]);
 
 return (
-  <div className="task-page"> {/* ✅ 수정: 전체 페이지 스타일 적용 */}
-    {/* ✅ 프로젝트 이름 + 구분선 */}
+  <div className="task-page"> {/* 수정: 전체 페이지 스타일 적용 */}
+    {/* 프로젝트 이름 + 구분선 */}
     <h2 className="project-title">{project ? project.name : "로딩 중..."}</h2>
     <hr className="title-divider" />
 
-    <div className="task-container"> {/* ✅ 수정: 업무 목록과 간트 차트를 나란히 배치 */}
-      {/* ✅ 왼쪽: 업무 목록 */}
+    <div className="task-container"> {/* 수정: 업무 목록과 간트 차트를 나란히 배치 */}
+      {/* 왼쪽: 업무 목록 */}
       <div className="task-list">
         <button onClick={() => { setEditTask(null); setIsModalOpen(true); }}>
           + 업무 추가
@@ -170,13 +170,13 @@ return (
         </table>
       </div>
 
-      {/* ✅ 오른쪽: 간트 차트 */}
+      {/* 오른쪽: 간트 차트 */}
       <div className="gantt-chart-container">
       <GanttChart tasks={tasks} />
       </div>
     </div>
 
-    {/* ✅ Task 추가 & 수정 모달 */}
+    {/* Task 추가 & 수정 모달 */}
     {isModalOpen && (
       <TaskModal
         onClose={() => setIsModalOpen(false)}
@@ -186,7 +186,7 @@ return (
       />
     )}
 
-    {/* ✅ Task 상세 보기 모달 */}
+    {/* Task 상세 보기 모달 */}
     {selectedTask && (
       <TaskDetailModal task={selectedTask} onClose={() => setSelectedTask(null)} />
     )}

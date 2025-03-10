@@ -33,7 +33,7 @@ public class FileInfo {
     @JoinColumn(name = "task_id", nullable = true)
     private Task task; // 업무와 연결 (업무에 첨부된 경우)
 
-    // ✅ 프로젝트와의 관계 추가
+    // 프로젝트와의 관계 추가
     @ManyToOne
     @JoinColumn(name = "project_id", referencedColumnName = "id", nullable = true)
     private Project project;

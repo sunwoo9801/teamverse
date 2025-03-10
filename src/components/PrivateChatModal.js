@@ -9,7 +9,7 @@ const PrivateChatModal = ({ userId, recipientId, recipientName, onClose }) => {
   const messageEndRef = useRef(null);
   const stompClientRef = useRef(null);
 
-  // ✅ 기존 채팅 내역 불러오기
+  // 기존 채팅 내역 불러오기
   const fetchChatHistory = async () => {
     if (!userId || !recipientId) return;
     const token = getAccessToken();
@@ -33,7 +33,7 @@ const PrivateChatModal = ({ userId, recipientId, recipientName, onClose }) => {
     }
   };
 
-  // ✅ 메시지 전송
+  // 메시지 전송
   const sendMessage = () => {
     if (!newMessage.trim() || !userId || !recipientId) return;
     if (!stompClientRef.current || !stompClientRef.current.connected) {
@@ -55,14 +55,14 @@ const PrivateChatModal = ({ userId, recipientId, recipientName, onClose }) => {
       body: JSON.stringify(messageData),
     });
 
-    // ✅ UI에 즉시 반영
+    // UI에 즉시 반영
     setMessages((prevMessages) => [...prevMessages, messageData]);
     setNewMessage("");
 
     
   };
 
-  // ✅ WebSocket 연결 설정
+  // WebSocket 연결 설정
   useEffect(() => {
     if (!userId || !recipientId) return;
   
@@ -74,7 +74,7 @@ const PrivateChatModal = ({ userId, recipientId, recipientName, onClose }) => {
         stompClientRef.current = stompClient;
   
         stompClient.onConnect = () => {
-            console.log(`✅ WebSocket 연결 성공! ${recipientId}와의 1:1 채팅 구독 중...`);
+            console.log(`WebSocket 연결 성공! ${recipientId}와의 1:1 채팅 구독 중...`);
   
             stompClient.subscribe(`/topic/chat/private/${userId}`, (message) => {
                 const receivedMessage = JSON.parse(message.body);
@@ -86,7 +86,7 @@ const PrivateChatModal = ({ userId, recipientId, recipientName, onClose }) => {
   
         stompClient.activate();
     } else {
-        // ✅ 기존 WebSocket이 있다면, 추가 구독만 실행
+        // 기존 WebSocket이 있다면, 추가 구독만 실행
         stompClientRef.current.subscribe(`/topic/chat/private/${userId}`, (message) => {
             const receivedMessage = JSON.parse(message.body);
             setMessages((prevMessages) => [...prevMessages, receivedMessage]);
@@ -99,7 +99,7 @@ const PrivateChatModal = ({ userId, recipientId, recipientName, onClose }) => {
   }, [userId, recipientId]);
   
 
-  // ✅ messages 변경 시 최신 메시지로 스크롤
+  // messages 변경 시 최신 메시지로 스크롤
   useEffect(() => {
     setTimeout(() => {
       messageEndRef.current?.scrollIntoView({ behavior: "smooth" });

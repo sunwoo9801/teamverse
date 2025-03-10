@@ -68,6 +68,11 @@ const ActivityFeed = ({ projectId }) => {
   const [showReactionBox, setShowReactionBox] = useState(null);
   const [hoveredActivity, setHoveredActivity] = useState(null);
   const [hoveredTask, setHoveredTask] = useState(null);
+  const [expandedActivity, setExpandedActivity] = useState({}); // ✅ 활동 로그의 확장 상태 저장
+  const [expandedTask, setExpandedTask] = useState({}); // ✅ 작업(Task)의 확장 상태 저장
+  const MAX_LINES = 10;
+  const MAX_CHARACTERS = 300;
+
 
 
 
@@ -109,21 +114,35 @@ const ActivityFeed = ({ projectId }) => {
         withCredentials: true,
       });
 
-      console.log("📌 받아온 작업 목록:", response.data);
+      const updatedTasks = await Promise.all(
+        response.data.map(async (task) => {
+          try {
+            // ✅ 리액션 개수 가져오기
+            const reactionCountResponse = await axios.get(`http://localhost:8082/api/likes/task/${task.id}/count`, {
+              headers: { Authorization: `Bearer ${token}` },
+              withCredentials: true,
+            });
 
-      // ✅ 각 Task의 리액션 개수 가져오기
-      const updatedTasks = await Promise.all(response.data.map(async (task) => {
-        try {
-          const reactionCountResponse = await axios.get(`http://localhost:8082/api/likes/task/${task.id}/count`, {
-            headers: { Authorization: `Bearer ${token}` },
-            withCredentials: true,
-          });
-          return { ...task, reactionCounts: reactionCountResponse.data };
-        } catch (error) {
-          console.error(`❌ Task ID ${task.id}의 리액션 개수 불러오기 실패:`, error);
-          return { ...task, reactionCounts: {} }; // 오류 발생 시 기본값 설정
-        }
-      }));
+            return {
+              id: task.id,
+              name: task.name,
+              description: task.description || "설명이 없습니다.",
+              startDate: task.startDate || "미정", // ✅ 시작일 기본값 설정
+              dueDate: task.dueDate || "미정", // ✅ 마감일 기본값 설정
+              status: task.status || "TODO", // ✅ 상태 기본값 설정
+              assignedTo: task.assignedTo || { username: "없음" }, // ✅ 담당자 정보 추가
+              reactionCounts: reactionCountResponse.data, // ✅ 리액션 개수 포함
+            };
+          } catch (error) {
+            console.error(`❌ Task ID ${task.id}의 리액션 개수 불러오기 실패:`, error);
+            return {
+              ...task,
+              reactionCounts: {}, // 오류 발생 시 기본값 설정
+              assignedTo: task.assignedTo || { username: "없음" },
+            };
+          }
+        })
+      );
 
       setTasks(updatedTasks);
     } catch (error) {
@@ -308,6 +327,7 @@ const ActivityFeed = ({ projectId }) => {
 
     const stompClient = getStompClient();
 
+
     const onActivityReceived = (message) => {
       console.log("📩 새 활동 로그 수신:", message.body); // ✅ 로그 추가
 
@@ -374,16 +394,15 @@ const ActivityFeed = ({ projectId }) => {
                 </div>
               </div>
 
-              {/* <div className="activity-content">
-                <h3>{activity.title || "제목 없음"}</h3> */}
-              {/* 이건 주석처리였음<ReactMarkdown remarkPlugins={[remarkGfm]}>{activity.content || "내용 없음"}</ReactMarkdown> */}
-              {/* <ActivityContent content={activity.content} /> */}
-              <div className="activity-content">
+              <div
+                className={`activity-content ${expandedActivity[activity.id] ? "expanded" : ""} ${(activity.content.split("\n").length > MAX_LINES || activity.content.length > MAX_CHARACTERS ||
+                  activity.content.includes("<img") || activity.files?.some(file => /\.(jpeg|jpg|png|gif|bmp|webp)$/i.test(file)))
+                  ? "truncated"
+                  : ""
+                  }`}
+              >
                 <h3>{activity.title || "제목 없음"}</h3>
                 <p>{parse(activity.content || "내용 없음")}</p>
-
-
-
 
                 <div className="file-list">
                   {activity.files &&
@@ -397,8 +416,12 @@ const ActivityFeed = ({ projectId }) => {
                           return (
                             <div key={index} className="file-container">
                               {/\.(jpeg|jpg|png|gif|bmp|webp)$/i.test(file) ? (
-                                <img src={fileUrl} alt="업로드 이미지" className="uploaded-image" />
-                              ) : (
+                                <img
+                                  src={fileUrl}
+                                  alt="업로드 이미지"
+                                  className="uploaded-image"
+                                  style={{ maxWidth: "100%", height: "auto", objectFit: "contain" }}
+                                />) : (
                                 <a href={fileUrl} download={fileName} className="file-download-btn">
                                   📄 {fileName}
                                 </a>
@@ -412,6 +435,19 @@ const ActivityFeed = ({ projectId }) => {
 
 
               </div>
+
+
+              {(activity.content.split("\n").length > MAX_LINES || activity.content.length > MAX_CHARACTERS ||
+                activity.content.includes("<img") || activity.files?.some(file => /\.(jpeg|jpg|png|gif|bmp|webp)$/i.test(file))) && (
+                  <button
+                    className="toggle-expand-button"
+                    onClick={() => setExpandedActivity((prev) => ({ ...prev, [activity.id]: !prev[activity.id] }))}
+                  >
+                    {expandedActivity[activity.id] ? "▲" : "⋯"}
+                  </button>
+                )}
+
+
 
               {/* ✅ 리액션 UI */}
               <div
@@ -491,7 +527,13 @@ const ActivityFeed = ({ projectId }) => {
               </div>
 
               {/* ✅ Task 정보 + 파일 첨부 */}
-              <div className="activity-content">
+              <div
+                className={`activity-content ${expandedTask[task.id] ? "expanded" : ""} ${(task.description.split("\n").length > MAX_LINES || task.description.length > MAX_CHARACTERS ||
+                  task.description.includes("<img") || task.files?.some(file => /\.(jpeg|jpg|png|gif|bmp|webp)$/i.test(file)))
+                  ? "truncated"
+                  : ""
+                  }`}
+              >
                 <h3>📝 {task.name}</h3>
                 {parse(task.description || "설명이 없습니다.")}
 
@@ -517,8 +559,12 @@ const ActivityFeed = ({ projectId }) => {
                         {task.files.map((file, index) => (
                           <div key={index} className="file-container">
                             {/\.(jpeg|jpg|png|gif|bmp|webp)$/i.test(file) ? (
-                              <img src={`http://localhost:8082${file}`} alt="업로드 이미지" className="uploaded-image" />
-                            ) : (
+                              <img
+                                src={`http://localhost:8082${file}`}
+                                alt="업로드 이미지"
+                                className="uploaded-image"
+                                style={{ maxWidth: "100%", height: "auto", objectFit: "contain" }}
+                              />) : (
                               <a href={`http://localhost:8082${file}`} target="_blank" className="file-name">
                                 📄 {file.split("/").pop()}
                               </a>
@@ -529,6 +575,17 @@ const ActivityFeed = ({ projectId }) => {
                     )}
                 </div>
               </div>
+              {/* ✅ Task에서도 "⋯" 버튼으로 변경 & 스타일 개선 */}
+              {(task.description.split("\n").length > MAX_LINES || task.description.length > MAX_CHARACTERS ||
+                task.description.includes("<img") || task.files?.some(file => /\.(jpeg|jpg|png|gif|bmp|webp)$/i.test(file))) && (
+                  <button
+                    className="toggle-expand-button"
+                    onClick={() => setExpandedTask((prev) => ({ ...prev, [task.id]: !prev[task.id] }))}
+                  >
+                    {expandedTask[task.id] ? "▲" : "⋯"}
+                  </button>
+                )}
+
 
 
               {/* ✅ 리액션 UI */}
@@ -574,6 +631,8 @@ const ActivityFeed = ({ projectId }) => {
                 <button>✏️</button>
               </div>
             </div>
+
+
           ))
           }
         </>

@@ -17,8 +17,7 @@ public interface ProjectService {
 
     List<Project> getAllProjects();
 
-    Project updateProject(Long id, Project projectDetails);
-
+    public Project updateProject(Long id, Project projectDetails);
     void deleteProject(Long id);
 
     // ✅ 초대 기능 추가
@@ -31,4 +30,9 @@ public interface ProjectService {
 
     boolean isProjectMember(Long projectId, Long userId);
     
+    boolean leaveProject(Long projectId, User user); // ✅ 프로젝트 나가기 메서드 추가
+
+    
+
+
 }

@@ -1,5 +1,6 @@
 package org.zerock.teamverse.service;
 
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.zerock.teamverse.entity.Project;
@@ -19,13 +20,16 @@ public class ProjectServiceImpl implements ProjectService { // ✅ 기존 기능
     private final ProjectRepository projectRepository;
     private final UserRepository userRepository;
     private final TeamMemberRepository teamMemberRepository;
+    private final SimpMessagingTemplate messagingTemplate; // ✅ WebSocket 메시지 전송 객체
 
     public ProjectServiceImpl(ProjectRepository projectRepository,
             UserRepository userRepository,
-            TeamMemberRepository teamMemberRepository) {
+            TeamMemberRepository teamMemberRepository, SimpMessagingTemplate messagingTemplate) {
         this.projectRepository = projectRepository;
         this.userRepository = userRepository;
         this.teamMemberRepository = teamMemberRepository;
+        this.messagingTemplate = messagingTemplate;
+
     }
 
     public Optional<User> findById(Long id) {
@@ -73,8 +77,9 @@ public class ProjectServiceImpl implements ProjectService { // ✅ 기존 기능
     @Transactional
     public Project updateProject(Long id, Project projectDetails) {
         Project project = projectRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Project not found"));
+                .orElseThrow(() -> new RuntimeException("프로젝트를 찾을 수 없습니다."));
 
+        // ✅ 프로젝트 정보 업데이트
         project.setName(projectDetails.getName());
         project.setDescription(projectDetails.getDescription());
         project.setStartDate(projectDetails.getStartDate());
@@ -83,6 +88,7 @@ public class ProjectServiceImpl implements ProjectService { // ✅ 기존 기능
 
         return projectRepository.save(project);
     }
+
 
     @Override
     @Transactional
@@ -117,11 +123,47 @@ public class ProjectServiceImpl implements ProjectService { // ✅ 기존 기능
         List<TeamMember> teamMembers = teamMemberRepository.findByProject_Id(projectId);
         return teamMembers.stream().map(TeamMember::getUser).toList();
     }
+
     @Override
     public boolean isProjectMember(Long projectId, Long userId) {
         boolean exists = teamMemberRepository.existsByProject_IdAndUser_Id(projectId, userId);
         System.out.println("📌 팀원 여부 확인 - 프로젝트 ID: " + projectId + ", 사용자 ID: " + userId + " → " + exists);
         return exists;
     }
-    
+
+    @Transactional
+    public boolean leaveProject(Long projectId, User user) {
+        Project project = projectRepository.findById(projectId)
+                .orElseThrow(() -> new RuntimeException("프로젝트를 찾을 수 없습니다."));
+
+        // 1️⃣ 사용자가 프로젝트 팀원인지 확인
+        boolean isMember = teamMemberRepository.existsByProjectAndUser(project, user);
+        if (!isMember) {
+            throw new RuntimeException("🚨 해당 프로젝트에 속해있지 않습니다.");
+        }
+
+        // 2️⃣ 프로젝트에서 팀원 제거
+        teamMemberRepository.deleteByProjectAndUser(project, user);
+        System.out.println("✅ 사용자 " + user.getEmail() + "가 프로젝트 [" + project.getName() + "]에서 나갔습니다.");
+
+        // 3️⃣ 만약 프로젝트 소유자(Owner)가 나간다면? → 새로운 소유자 지정 필요
+        if (project.getOwner().equals(user)) {
+            List<TeamMember> remainingMembers = teamMemberRepository.findByProject_Id(projectId);
+
+            if (!remainingMembers.isEmpty()) {
+                TeamMember newOwner = remainingMembers.get(0);
+                project.setOwner(newOwner.getUser());
+                projectRepository.save(project);
+                System.out.println("🔄 새로운 프로젝트 소유자로 " + newOwner.getUser().getEmail() + "가 설정되었습니다.");
+            } else {
+                // 프로젝트에 아무도 남아있지 않으면 삭제
+                projectRepository.delete(project);
+                System.out.println("🚨 모든 사용자가 나갔으므로 프로젝트가 삭제되었습니다.");
+            }
+        }
+
+        return true;
+    }
+
+  
 }

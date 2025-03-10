@@ -1,68 +1,65 @@
-.files-tab {
-  padding: 20px;
-}
-
-.file-list {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.file-item {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.download-btn {
-  margin-top: 15px;
-  padding: 10px 15px;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  cursor: pointer;
-}
-
-.download-btn:hover {
-  background-color: #0056b3;
-}
-
 .file-table {
   width: 100%;
   border-collapse: collapse;
   margin-top: 10px;
 }
 
-.file-table th, .file-table td {
-  border: 1px solid #ddd;
-  padding: 8px;
+.file-table th,
+.file-table td {
+  padding: 10px;
   text-align: left;
+  border-bottom: 1px solid #ddd;
 }
 
-.file-table th {
-  background-color: #f4f4f4;
-}
-
-.file-name {
-  color: blue;
+.file-item {
+  display: flex;
+  align-items: center;
+  gap: 3px;
   cursor: pointer;
+  color: #333;
+}
+
+.file-item:hover {
   text-decoration: underline;
 }
 
-.file-name:hover {
-  color: darkblue;
+.file-icon {
+  color: #555;
+  font-size: 16px;
 }
 
+/* ✅ file-section 내부에서 file-tab이 넘치지 않도록 설정 */
+.file-section {
+  max-width: 100%;
+  width: 100%;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+/* ✅ files-tab이 부모 크기를 벗어나지 않도록 제한 */
+.files-tab {
+  width: 100%;
+  max-width: inherit; /* 🔹 부모 요소(file-section) 크기에 맞춤 */
+  padding: 15px;
+  box-sizing: border-box;
+}
+
+
 .download-btn {
-  margin-top: 10px;
-  padding: 8px 12px;
-  background-color: #6200ea;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background-color: #2C3E50;
   color: white;
   border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  font-size: 14px;
   cursor: pointer;
-  border-radius: 4px;
+  transition: 0.2s;
+  margin-top: 10px;
 }
 
 .download-btn:hover {
-  background-color: #3700b3;
+  background-color: #0056b3;
 }

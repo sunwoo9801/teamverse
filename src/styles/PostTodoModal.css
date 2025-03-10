@@ -221,3 +221,17 @@ textarea {
 .modal-container .delete-file-btn {
   display: flex; /* 🔥 display를 flex로 변경하여 아이콘이 정렬되도록 */
 }
+.modal-actions-left {
+  position: relative; /* 🔹 부모 요소 기준으로 위치 조정 */
+  display: flex;
+  align-items: center; /* 🔹 버튼들을 같은 줄에 정렬 */
+  gap: 8px; /* 🔹 버튼 간격 추가 */
+}
+
+.file-upload-container {
+  margin-top: 16px; /* 🔹 '파일 추가' 버튼과 파일 업로드 UI 사이 간격 추가 */
+  position: absolute;
+  left: 0;
+  width: 100%;
+  z-index: 10;
+}

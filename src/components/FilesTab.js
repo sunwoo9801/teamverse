@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { getAccessToken } from "../utils/authUtils";
 import FilePreview from "./FilePreview"; // 미리보기 컴포넌트
+import { FaFileAlt, FaDownload } from "react-icons/fa"; // ✅ 세련된 아이콘 추가
 import "../styles/FilesTab.css";
 
 const FilesTab = ({ projectId }) => {
@@ -107,85 +108,56 @@ const FilesTab = ({ projectId }) => {
     setPreviewFile(file);
   };
 
+  return (
+    <div className="files-tab">
+      <h2>파일 목록</h2>
 
-//   return (
-//     <div className="files-tab">
-//       <h2>📁 파일 목록</h2>
-//       <div className="file-list">
-//         {files.length === 0 ? (
-//           <p>프로젝트에 등록된 파일이 없습니다.</p>
-//         ) : (
-//           files.map((file, index) => (
-//             <div key={index} className="file-item">
-//               <input
-//                 type="checkbox"
-//                // checked={selectedFiles.includes(file.fileUrl)}
-//                checked={selectedFiles.some(f => f.fileUrl === file.fileUrl)}
-//                 onChange={() => handleFileSelect(file)}
-//               />
-//               <span onClick={() => handlePreview(file)} className="file-name">
-//                 {file.fileName} {/* fileName을 직접 사용 */}
-//               </span>
-//             </div>
-//           ))
-//         )}
-//       </div>
-//       <button onClick={downloadSelectedFiles} className="download-btn">📥 선택 파일 다운로드</button>
-//       {previewFile && <FilePreview file={previewFile} onClose={() => setPreviewFile(null)} />}
-//     </div>
-
-//   );
-// };
-
-return (
-  <div className="files-tab">
-    <h2>📁 파일 목록</h2>
-
-    {/* ✅ 파일 목록을 테이블로 표시 */}
-    <table className="file-table">
-      <thead>
-        <tr>
-          <th>  </th>
-          <th>파일명</th>
-          {/* <th>파일 크기</th>
-          <th>등록자</th>
-          <th>등록일</th> */}
-        </tr>
-      </thead>
-      <tbody>
-        {files.length === 0 ? (
+      {/* ✅ 파일 목록을 테이블로 표시 */}
+      <table className="file-table">
+        <thead>
           <tr>
-            <td colSpan="5">📌 프로젝트에 등록된 파일이 없습니다.</td>
+            <th> <FaFileAlt className="file-icon" />
+            </th>
+            <th>파일명</th>
           </tr>
-        ) : (
-          files.map((file, index) => (
-            <tr key={index}>
-              <td>
-                <input
-                  type="checkbox"
-                  checked={selectedFiles.some(f => f.fileUrl === file.fileUrl)}
-                  onChange={() => handleFileSelect(file)}
-                />
-              </td>
-              <td>
-                <span onClick={() => handlePreview(file)} className="file-name">
-                  {file.fileName}
-                </span>
-              </td>
-              {/* <td>{file.fileSize}</td>
+        </thead>
+        <tbody>
+          {files.length === 0 ? (
+            <tr>
+              <td colSpan="5">📌 프로젝트에 등록된 파일이 없습니다.</td>
+            </tr>
+          ) : (
+            files.map((file, index) => (
+              <tr key={index}>
+                <td>
+                  <input
+                    type="checkbox"
+                    checked={selectedFiles.some(f => f.fileUrl === file.fileUrl)}
+                    onChange={() => handleFileSelect(file)}
+                  />
+                </td>
+                <td className="file-item">
+                  <span onClick={() => handlePreview(file)} className="file-name">
+                    {file.fileName}
+                  </span>
+                </td>
+                {/* <td>{file.fileSize}</td>
               <td>{file.uploader}</td>
               <td>{file.uploadDate}</td> */}
-            </tr>
-          ))
-        )}
-      </tbody>
-    </table>
+              </tr>
+            ))
+          )}
+        </tbody>
+      </table>
 
-    <button onClick={downloadSelectedFiles} className="download-btn">📥 선택 파일 다운로드</button>
-
-    {previewFile && <FilePreview file={previewFile} onClose={() => setPreviewFile(null)} />}
-  </div>
-);
+      {/* ✅ 다운로드 버튼 */}
+      <button onClick={downloadSelectedFiles} className="download-btn">
+        <FaDownload /> 다운로드
+      </button>
+      
+      {previewFile && <FilePreview file={previewFile} onClose={() => setPreviewFile(null)} />}
+    </div>
+  );
 };
 
 

@@ -1,0 +1,93 @@
+/* ✅ 모달 기본 스타일 */
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  width: 400px;
+  padding: 20px;
+  z-index: 1000;
+}
+
+/* ✅ 모달 상단 (제목 + 닫기 버튼) */
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.modal-header h2 {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.close-button {
+  display: block !important; /* 🔹 무조건 보이게 설정 */
+  visibility: visible !important;
+  font-size: 24px;
+  color: #333 !important;
+}
+
+
+.close-button:hover {
+  color: #ccc; /* 🔹 호버 시 연한 회색 */
+}
+
+
+/* ✅ 입력 필드 스타일 */
+.modal-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 5px;
+  display: block;
+}
+
+.modal-input, .modal-textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+.modal-textarea {
+  height: 80px;
+  resize: none;
+}
+
+/* ✅ 날짜 입력 그룹 */
+.modal-date-group {
+  display: flex;
+  gap: 10px;
+}
+
+.modal-date-group div {
+  flex: 1;
+}
+
+/* ✅ 버튼 스타일 */
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 10px;
+}
+
+.save-button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.save-button:hover {
+  background-color: #0056b3;
+}

@@ -271,7 +271,7 @@ const PostTodoModal = ({ onClose, initialTab = "post", refreshFeed, projectId })
         alert("게시글이 성공적으로 등록되었습니다!");
       } else if (activeTab === "task") {
         // ✅ 업무(Task) 등록 시 contentRef의 내용을 description으로 저장
-       const response =  await axios.post(
+        const response = await axios.post(
           "http://localhost:8082/api/user/tasks",
           {
             ...taskData,
@@ -284,7 +284,7 @@ const PostTodoModal = ({ onClose, initialTab = "post", refreshFeed, projectId })
           }
         );
 
-        alert("업무가 성공적으로 등록되었습니다!");      
+        alert("업무가 성공적으로 등록되었습니다!");
       }
       refreshFeed();
       onClose();
@@ -382,8 +382,13 @@ const PostTodoModal = ({ onClose, initialTab = "post", refreshFeed, projectId })
               <button className="icon-btn" onClick={() => setShowFileUpload(!showFileUpload)}>
                 <FaPaperclip /> 파일 추가
               </button>
-              {showFileUpload && <FileUpload projectId={projectId} onFileUploaded={handleFileUploaded} />}
 
+              {/* 🔹 파일 추가 버튼 아래에서 FileUpload가 보이게 함 */}
+              {showFileUpload && (
+                <div className="file-upload-wrapper">
+                  <FileUpload projectId={projectId} onFileUploaded={handleFileUploaded} />
+                </div>
+              )}
               <button className="icon-btn">
                 <FaMapMarkerAlt /> 장소 추가
               </button>

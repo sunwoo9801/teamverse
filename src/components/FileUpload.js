@@ -11,42 +11,97 @@ const FileUpload = ({ onFileUploaded, projectId, fetchFiles }) => { // fetchFile
   const [previewMetadata, setPreviewMetadata] = useState({ name: "", size: 0 });
   const fileInputRef = useRef(null);
 
-  const handleFileChange = (event) => {
-    const files = Array.from(event.target.files);
-    setSelectedFiles(files);
-  };
-  
-  const handleUpload = async () => {
-    console.log("현재 프로젝트 ID (버튼 클릭 시):", projectId); // 디버깅 로그
 
-    if (selectedFiles.length === 0) {
-      alert("업로드할 파일을 선택하세요!");
+  // 🔹 파일 선택 시 자동 업로드 실행
+  const handleFileChange = async (event) => {
+    const files = Array.from(event.target.files);
+    if (files.length === 0) return;
+
+    await handleUpload(files);
+  };
+
+  // const handleUpload = async () => {
+  //   console.log("현재 프로젝트 ID (버튼 클릭 시):", projectId); // 디버깅 로그
+
+  //   if (selectedFiles.length === 0) {
+  //     alert("업로드할 파일을 선택하세요!");
+  //     return;
+  //   }
+
+  //   setUploading(true);
+  //   const formData = new FormData();
+  //   selectedFiles.forEach((file) => formData.append("file", file));
+
+  //   if (!projectId) {  // currentProjectId 대신 projectId 사용
+  //     alert("프로젝트 ID를 찾을 수 없습니다. 올바른 프로젝트를 선택해주세요.");
+  //     setUploading(false);
+  //     return;
+  //   }
+
+  //   formData.append("projectId", projectId);  // projectId를 동적으로
+
+  //   try {
+  //     const token = getAccessToken();
+  //     if (!token) {
+  //       alert("로그인이 필요합니다.");
+  //       setUploading(false);
+  //       return;
+  //     }
+
+  //     console.log("파일 업로드 요청: Authorization 헤더 확인", token);
+  //     console.log("현재 프로젝트 ID:", projectId); // 디버깅용 로그
+
+  //     const response = await axios.post("http://localhost:8082/api/files/upload", formData, {
+  //       headers: {
+  //         Authorization: `Bearer ${token}`,
+  //         "Content-Type": "multipart/form-data",
+  //       },
+  //       withCredentials: true,
+  //     });
+
+  //     const uploadedFileUrl = response.data.fileUrl;
+  //     console.log("업로드된 파일 URL:", uploadedFileUrl);
+
+  //     if (onFileUploaded && uploadedFileUrl) {
+  //       onFileUploaded(uploadedFileUrl);
+  //     }
+
+  //     alert("파일이 성공적으로 업로드되었습니다!");
+  //     setSelectedFiles([]);
+
+  //     // 파일 업로드 후 목록 자동 갱신
+  //     if (fetchFiles) fetchFiles();
+  //   } catch (error) {
+  //     console.error("파일 업로드 실패:", error);
+  //     alert("파일 업로드 중 오류가 발생했습니다.");
+  //   } finally {
+  //     setUploading(false);
+  //   }
+  // };
+
+
+  // 🔹 파일 업로드 로직
+  const handleUpload = async (selectedFiles) => {
+    console.log("현재 프로젝트 ID:", projectId);
+
+    if (!projectId) {
+      alert("프로젝트 ID를 찾을 수 없습니다. 올바른 프로젝트를 선택해주세요.");
       return;
     }
 
     setUploading(true);
     const formData = new FormData();
     selectedFiles.forEach((file) => formData.append("file", file));
-
-    if (!projectId) {  // currentProjectId 대신 projectId 사용
-      alert("프로젝트 ID를 찾을 수 없습니다. 올바른 프로젝트를 선택해주세요.");
-      setUploading(false);
-      return;
-    }
-
-    formData.append("projectId", projectId);  // projectId를 동적으로
+    formData.append("projectId", projectId);
 
     try {
       const token = getAccessToken();
       if (!token) {
         alert("로그인이 필요합니다.");
-        setUploading(false);
         return;
       }
 
       console.log("파일 업로드 요청: Authorization 헤더 확인", token);
-      console.log("현재 프로젝트 ID:", projectId); // 디버깅용 로그
-
       const response = await axios.post("http://localhost:8082/api/files/upload", formData, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -55,17 +110,14 @@ const FileUpload = ({ onFileUploaded, projectId, fetchFiles }) => { // fetchFile
         withCredentials: true,
       });
 
-      const uploadedFileUrl = response.data.fileUrl;
-      console.log("업로드된 파일 URL:", uploadedFileUrl);
+      console.log("업로드된 파일 URL:", response.data.fileUrl);
+      alert("파일이 성공적으로 업로드되었습니다!");
 
-      if (onFileUploaded && uploadedFileUrl) {
-        onFileUploaded(uploadedFileUrl);
+      if (onFileUploaded) {
+        onFileUploaded(response.data.fileUrl);
       }
 
-      alert("파일이 성공적으로 업로드되었습니다!");
-      setSelectedFiles([]);
-
-      // 파일 업로드 후 목록 자동 갱신
+      // 파일 업로드 후 목록 갱신
       if (fetchFiles) fetchFiles();
     } catch (error) {
       console.error("파일 업로드 실패:", error);
@@ -74,6 +126,7 @@ const FileUpload = ({ onFileUploaded, projectId, fetchFiles }) => { // fetchFile
       setUploading(false);
     }
   };
+
 
   const handlePreview = (file) => {
     const fileURL = URL.createObjectURL(file);
@@ -92,23 +145,17 @@ const FileUpload = ({ onFileUploaded, projectId, fetchFiles }) => { // fetchFile
 
   return (
     <div className="file-upload-container">
-      <button className="file-attach-button" onClick={triggerFileInput}>📎 파일 첨부</button>
-      <input type="file" multiple onChange={handleFileChange} hidden ref={fileInputRef} />
-      <button onClick={handleUpload} disabled={uploading}>
-        {uploading ? "업로드 중..." : "파일 업로드"}
+      {/* 🔹 파일 추가 버튼 클릭 시 파일 선택창 열기 */}
+      <button className="file-attach-button" onClick={triggerFileInput}>
+        📎 파일 업로드
       </button>
-      <div className="file-list-container">
-        <h3>📂 업로드된 파일 목록</h3>
-        <div className="file-list">
-          {selectedFiles.length > 0 ? (
-            selectedFiles.map((file, index) => (
-              <FileItem key={index} file={file} onPreview={handlePreview} />
-            ))
-          ) : (
-            <p className="no-files">업로드된 파일이 없습니다.</p>
-          )}
-        </div>
-      </div>
+      <input
+        type="file"
+        multiple
+        onChange={handleFileChange}
+        ref={fileInputRef}
+        style={{ display: "none" }}
+      />
       {previewFile && (
         <div className="file-preview-modal">
           <div className="file-preview-content">

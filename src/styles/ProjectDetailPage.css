@@ -13,7 +13,7 @@
 .project-content {
   flex: 1;
   padding: 20px;
-  background-color: #f9f9f9;
+  background-color: #f3f4f6;
   overflow-y: auto;
 }
 
@@ -35,7 +35,7 @@
 }
 
 h2 {
-  margin-bottom: 10px;
+  /* margin-bottom: 10px; */
 }
 
 .task-table {
@@ -173,8 +173,8 @@ h2 {
   justify-content: center; /* 가운데 정렬 */
   align-items: center; /* 수직 정렬 */
   margin-bottom: 10px; /* 아래 여백 조정 */
-  border-bottom: 1px solid #ddd; /* 구분선 유지 */
   padding-bottom: 8px; /* 여백 조정 */
+  
 }
 
 .post-nav button {
@@ -274,10 +274,10 @@ h2 {
 /* 프로젝트 제목과 설명 사이 간격 줄이기 */
 .project-title-container {
   display: flex;
-  align-items: center; /* 🔹 세로 중앙 정렬 */
-  justify-content: flex-start; /* 🔹 왼쪽 정렬 유지 */
+  flex-direction: column; /* 🔹 세로 정렬 */
+  align-items: flex-start; /* 🔹 왼쪽 정렬 유지 */
+  justify-content: center; /* 🔹 수직 정렬 */
   height: 50px; /* 🔹 높이 조정 */
-  gap: 10px; /* 🔹 버튼과 제목 간격 조정 */
 }
 
 /* 프로젝트 제목 스타일 */
@@ -332,3 +332,47 @@ h2 {
   font-size: 16px;
   color: #666;
 }
+
+/* 프로젝트 상세 페이지 전체 배경 */
+.project-content {
+  flex: 1;
+  padding: 20px;
+  background-color: #f3f4f6;
+  overflow-y: auto;
+}
+
+/* 프로젝트 헤더 컨테이너 (제목 + 설명 + 네비게이션) */
+.project-header {
+  background-color: #f3f4f6;
+  padding: 20px;
+}
+
+/* 프로젝트 제목 */
+.project-header h1 {
+  font-size: 22px;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+/* 프로젝트 설명 */
+.project-header p {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 10px;
+}
+/* 프로젝트 설명 스타일 */
+.project-description {
+  font-size: 14px;
+  color: #666;
+  margin-top: 5px; /* 🔹 상단 여백 조정 */
+  margin-bottom: 10px; /* 🔹 하단 여백 최소화 */
+}
+/* 내부 네비게이션 (ProjectNav)와 프로젝트 헤더 간격 없애기 */
+.project-nav {
+  background-color: #f3f4f6;
+  border-bottom: none; /* 불필요한 구분선 제거 */
+  margin-bottom: 0;
+  padding-top: 0;
+
+}
+

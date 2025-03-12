@@ -281,9 +281,9 @@ const TaskModal = ({ onClose, projectId, refreshTasks, editTask }) => {
   };
 
   return (
-    <div className="modal-overlay">
-      <div className="modal-container">
-        <div className="modal-content">
+    <div className="task-modal-overlay">
+      <div className="task-modal-container">
+        <div className="task-modal-content">
           <h2>{isEditMode ? "업무 수정" : "업무 추가"}</h2>
 
           <label>업무 제목:</label>

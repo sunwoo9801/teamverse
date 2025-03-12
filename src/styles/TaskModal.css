@@ -1,5 +1,5 @@
 /* TaskModal (업무 추가 모달)의 기본 스타일 */
-.modal-overlay {
+.task-modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -12,13 +12,13 @@
 }
 
 /* 부모 요소 크기 제한 해제 */
-.modal-container {
+.task-modal-container {
   width: 100%;
   max-width: 98vw;
   overflow: visible !important;
 }
 
-.modal-content {
+.task-modal-content {
   background: white;
   padding: 50px;
   border-radius: 12px;
@@ -32,7 +32,7 @@
 }
 
 /* 입력 필드 및 버튼 크기 조정 */
-.modal-content label {
+.task-modal-content label {
   display: block;
   font-weight: bold;
   margin-top: 20px;
@@ -40,9 +40,9 @@
   font-size: 18px;
 }
 
-.modal-content input,
-.modal-content select,
-.modal-content textarea {
+.task-modal-content input,
+.task-modal-content select,
+.task-modal-content textarea {
   width: 100%;
   padding: 14px;
   margin-top: 10px;

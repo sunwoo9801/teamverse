@@ -1,13 +1,17 @@
 import React, { useState, useEffect } from "react";
 import "../styles/LeftSidebar.css";
-import logo from "../assets/images/logo.png";
-import { useNavigate } from "react-router-dom";
+import logo from "../assets/images/image.png";
 import axios from "axios";
 import { getAccessToken } from "../utils/authUtils";
+import Chatbox from "../components/Chatbox"; // Chatbox 컴포넌트 import
+import { useNavigate, useLocation } from "react-router-dom"; // ✅ useLocation 추가
 
-const LeftSidebar = ({ onCreateProject, onShowProjectList }) => {
+
+const LeftSidebar = ({ onCreateProject, onShowProjectList, projectId  }) => {
     const navigate = useNavigate();
     const [userId, setUserId] = useState(null);
+    const location = useLocation(); // ✅ 현재 경로 확인
+
 
     // 현재 로그인한 사용자 ID 불러오기
     useEffect(() => {
@@ -57,16 +61,14 @@ const LeftSidebar = ({ onCreateProject, onShowProjectList }) => {
                     <li onClick={onShowProjectList}>
                         <i className="fas fa-folder"></i> 내 프로젝트
                     </li>
-                    <li><i className="fas fa-search"></i> 회사 공개 프로젝트</li>
-                    <li><i className="fas fa-ellipsis-h"></i> 더보기</li>
                 </ul>
             </nav>
-
-            <div className="section">
-                <p>모아보기</p>
-            </div>
-            <div className="section">
-                <p>최근 업데이트</p>
+            {/* ✅ TaskBoard 페이지에서는 Chatbox 숨기기 */}
+            {/* ✅ Chatbox의 가로 크기를 유지하면서 숨김 */}
+            <div 
+                className={`chatbox-wrapper ${location.pathname === "/TaskBoard" ? "hidden-chatbox" : ""}`}
+            >
+                <Chatbox projectId={projectId} />
             </div>
         </div>
     );

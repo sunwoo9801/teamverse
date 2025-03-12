@@ -2,11 +2,14 @@
   display: flex;
   justify-content: space-around;
   background: #ffffff;
-  padding: 10px 0;
-  border-bottom: 2px solid #ddd;
+
+  
 }
 
 .project-nav button {
+  display: flex;
+  align-items: center;
+  gap: 8px; /* 아이콘과 텍스트 사이의 간격 (선택 사항) */
   border: none;
   background: none;
   padding: 10px 20px;
@@ -19,4 +22,5 @@
   border-bottom: 3px solid #007bff;
   font-weight: bold;
   color: #007bff;
+  
 }

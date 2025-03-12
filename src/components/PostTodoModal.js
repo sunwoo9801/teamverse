@@ -161,78 +161,6 @@ const PostTodoModal = ({ onClose, initialTab = "post", refreshFeed, projectId })
   }, [postContent]);
 
 
-  // handleSubmit에서 contentEditable 내용을 postContent에 반영
-  // const handleSubmit = async () => {
-  //   const token = getAccessToken();
-  //   if (!token) {
-  //     alert("로그인이 필요합니다.");
-  //     return;
-  //   }
-
-  //   // contentEditable div의 내용을 가져와서 postContent에 반영
-  //   const content = contentRef.current ? contentRef.current.innerHTML.trim() : "";
-
-  //   try {
-  //     if (activeTab === "post") {
-  //       if (!title.trim() || (!content && uploadedFiles.length === 0)) {
-  //         alert("제목과 내용을 입력하세요.");
-  //         return;
-  //       }
-
-  //       const response = await axios.post(
-  //         "http://localhost:8082/api/activity/post",
-  //         {
-  //           title: title,
-  //           content: content, // postContent 대신 content 사용
-  //           projectId: projectId,
-  //           files: uploadedFiles.map(file => file.url),
-  //         },
-  //         {
-  //           headers: {
-  //             Authorization: `Bearer ${token}`,
-  //             "Content-Type": "application/json",
-  //           },
-  //           withCredentials: true,
-  //         }
-  //       );
-
-  //       console.log("🆕 서버에서 받은 새 피드:", response.data);
-
-  //       // 중복 방지: 기존 목록에 동일한 ID가 있으면 추가하지 않음
-  //       refreshFeed((prevActivities) => {
-  //         const isDuplicate = prevActivities.some(activity => activity.id === response.data.id);
-  //         if (isDuplicate) return prevActivities;
-  //         return [response.data, ...prevActivities];
-  //       });
-
-  //     } else {
-  //       await axios.post(
-  //         "http://localhost:8082/api/user/tasks",
-  //         {
-  //           ...taskData,
-  //           projectId: projectId
-  //         },
-  //         {
-  //           headers: { Authorization: `Bearer ${token}` },
-  //           withCredentials: true,
-  //         }
-  //       );
-  //     }
-
-  //     alert("등록이 완료되었습니다!");
-  //     refreshFeed();
-  //     onClose();
-  //   } catch (error) {
-  //     console.error("❌ 등록 실패:", error);
-  //     if (error.response) {
-  //       console.error("📌 서버 응답 상태 코드:", error.response.status);
-  //       console.error("📌 서버 응답 데이터:", error.response.data);
-  //     }
-  //     alert("등록에 실패했습니다.");
-  //   }
-  // };
-
-
   // handleSubmit에서 업무(Task)도 description을 contentEditable에서 가져오도록 수정
   const handleSubmit = async () => {
     const token = getAccessToken();
@@ -296,9 +224,9 @@ const PostTodoModal = ({ onClose, initialTab = "post", refreshFeed, projectId })
 
 
   return (
-    <div className="modal-overlay">
-      <div className="modal-container">
-        <div className="modal-content">
+    <div className="post-todo-modal-overlay">
+      <div className="post-todo-modal-container">
+        <div className="post-todo-modal-content">
           {/* 네비게이션 추가 */}
           <ModalNav activeTab={activeTab} setActiveTab={setActiveTab} />
 
@@ -312,7 +240,7 @@ const PostTodoModal = ({ onClose, initialTab = "post", refreshFeed, projectId })
               <div
                 ref={contentRef}
                 contentEditable
-                className="editable-content"
+                className="post-todo-editable-content"
                 placeholder="게시글 내용을 입력하세요."
               ></div>
             </>
@@ -352,7 +280,7 @@ const PostTodoModal = ({ onClose, initialTab = "post", refreshFeed, projectId })
               <div
                 ref={contentRef}
                 contentEditable
-                className="editable-content"
+                className="post-todo-editable-content"
                 placeholder="작업 내용을 입력하세요."
                 onInput={() => {
                   setTaskData((prev) => ({
@@ -396,7 +324,7 @@ const PostTodoModal = ({ onClose, initialTab = "post", refreshFeed, projectId })
 
 
 
-            <div className="modal-actions-right">
+            <div className="task-modal-actions-right">
               <button onClick={onClose}>취소</button>
               <button onClick={handleSubmit}>등록</button>
             </div>

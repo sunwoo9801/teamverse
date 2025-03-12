@@ -6,6 +6,7 @@ import ProfileModal from "./ProfileModal"; // 모달 컴포넌트 가져오기
 import "../styles/Navbar.css";
 import defaultProfileImage from "../assets/images/basicprofile.jpg"; // 기본 프로필 이미지 추가
 import { FaUserCircle, FaCogs, FaSignOutAlt } from "react-icons/fa"; // 아이콘 추가
+import helpimage from "../assets/images/help.png"; // 기본 프로필 이미지 추가
 
 
 const Navbar = () => {
@@ -116,7 +117,11 @@ const Navbar = () => {
 
   return (
     <nav className="navbar">
-      <div className="navbar-logo">TeamVerse</div>
+      <div className="info">
+            <img src={helpimage} alt="help Logo" className="help" />
+
+      <div className="info_help"> 도움말 </div>
+      </div>
       {/* <Link to="/dashboard/:userId" className="navbar-logo">
         TeamVerse
       </Link> */}

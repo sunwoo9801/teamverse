@@ -1,9 +1,8 @@
 .left-sidebar {
-    width: 200px;
-    background: white;
-    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+    background-color: #f3f4f6;
+
     padding: 20px;
-    border-radius: 8px;
+    /* border-radius: 8px; */
     display: flex;
     flex-direction: column;
     gap: 15px;
@@ -12,17 +11,16 @@
   .logo-container {
     display: flex;
     justify-content: center;
-    margin-bottom: 10px;
   }
   
   .logo {
-    height: 20px;
-    
+    height: 30px;
+    width: 140px;
   }
   
   .new-project-btn {
     width: 100%;
-    background-color: #2F80ED;
+    background-color: #434a54;
     color: white;
     font-weight: bold;
     padding: 10px;
@@ -60,4 +58,15 @@
     font-weight: bold;
     color: #6b7280;
   }
-  
+  .chatbox-wrapper {
+    width: 100%; /* 사이드바 전체 너비 유지 */
+    transition: opacity 0.3s ease-in-out, height 0.3s ease-in-out;
+}
+
+/* TaskBoard 페이지에서 Chatbox 숨김 */
+.hidden-chatbox {
+    visibility: hidden;
+    opacity: 0;
+    height: 0;
+    overflow: hidden;
+}

@@ -29,7 +29,7 @@ const TaskBoard = () => {
             <LeftSidebar /> {/* 왼쪽 사이드바 추가 */}
 
             <div className="task-board">
-                <h2>📌 프로젝트 목록</h2>
+                <h2>최근 프로젝트</h2>
                 {projects.length > 0 ? (
                     <div className="task-board-grid">
                         {projects.map((project) => (

@@ -15,9 +15,11 @@
   flex-direction: column;
   background: #ffffff;
   border: 0.5px solid rgb(0, 0, 0);
-  border-radius: 3%;
+  border-radius: 8px;
   padding: 10px;
   margin-top: 15px;
+  overflow: hidden
+  
 }
 
 /* 메시지 공통 스타일 */
@@ -91,18 +93,23 @@
   padding: 10px;
   background: #ffffff;
   border-top: 1px solid #ddd;
+  overflow: hidden; /* 버튼이 튀어나가지 않도록 */
+  flex-wrap: nowrap; /* 내부 요소가 한 줄 유지 */
 }
 
 /* 입력 칸 */
 .inputtext {
+  min-width: 0; /* flex 아이템이 부모 크기에 맞춰 줄어들도록 설정 */
   flex-grow: 1;
   padding: 12px 15px;
   border: 1px solid #ccc;
   border-radius: 25px;
-  font-size: 14px;
+  font-size: 12px;
   background: #f4f7fc;
   outline: none;
   transition: 0.2s ease-in-out;
+  flex-grow: 0.85; /* 입력 필드가 너무 확장되지 않도록 조정 */
+
 }
 
 .inputtext:focus {
@@ -117,7 +124,7 @@
   color: white;
   border: none;
   padding: 12px 18px;
-  font-size: 12px;
+  font-size: 10px;
   font-weight: bold;
   cursor: pointer;
   border-radius: 25px;

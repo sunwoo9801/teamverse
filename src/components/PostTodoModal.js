@@ -371,9 +371,9 @@ const PostTodoModal = ({ onClose, initialTab = "post", refreshFeed, projectId })
 
 
   return (
-    <div className="modal-overlay">
-      <div className="modal-container">
-        <div className="modal-content">
+    <div className="post-todo-modal-overlay">
+      <div className="post-todo-modal-container">
+        <div className="post-todo-modal-content">
           {/* 네비게이션 추가 */}
           <ModalNav activeTab={activeTab} setActiveTab={setActiveTab} />
 
@@ -387,7 +387,7 @@ const PostTodoModal = ({ onClose, initialTab = "post", refreshFeed, projectId })
               <div
                 ref={contentRef}
                 contentEditable
-                className="editable-content"
+                className="post-todo-editable-content"
                 placeholder="게시글 내용을 입력하세요."
               ></div>
             </>
@@ -429,7 +429,7 @@ const PostTodoModal = ({ onClose, initialTab = "post", refreshFeed, projectId })
               <div
                 ref={contentRef}
                 contentEditable
-                className="editable-content"
+                className="post-todo-editable-content"
                 placeholder="작업 내용을 입력하세요."
                 onInput={() => {
                   setTaskData((prev) => ({
@@ -497,7 +497,7 @@ const PostTodoModal = ({ onClose, initialTab = "post", refreshFeed, projectId })
 
 
 
-            <div className="modal-actions-right">
+            <div className="task-modal-actions-right">
               <button onClick={onClose}>취소</button>
               <button onClick={handleSubmit}>등록</button>
             </div>

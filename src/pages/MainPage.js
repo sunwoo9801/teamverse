@@ -236,20 +236,21 @@ const MainPage = () => {
         };
     }, []);
 
-
-
-
     return (
         <div className="main-page">
+            <div className="sidebar-container">
             {/* 왼쪽 사이드바 */}
             {/* LeftSidebar에 onCreateProject 함수 전달 */}
-            <LeftSidebar onCreateProject={() => setShowModal(true)} onShowProjectList={handleShowProjectList} />
-
+            <LeftSidebar onCreateProject={() => setShowModal(true)}
+            onShowProjectList={handleShowProjectList}
+            projectId={selectedProject ? selectedProject.id : null}
+            />
+            </div>
             <div className="content">
-
+                <div className="top-row">
                 {/* 프로젝트 목록 표시 */}
-                <div className="project-list">
-                    <h2>내 프로젝트</h2>
+                    <div className="project-list">
+                    <h2>  내 프로젝트</h2>
                     {projects.length === 0 ? (
                         <p>현재 프로젝트가 없습니다.</p>
                     ) : (
@@ -280,30 +281,35 @@ const MainPage = () => {
                         새로운 프로젝트 생성
                     </button> */}
 
+                    </div>
+
+                <div className="sidebar">
+                    <Sidebar
+                    projectId={selectedProject?.id} />
+
                 </div>
 
-                {/* 선택한 프로젝트의 간트 차트 표시 */}
-                {selectedProject ? (
-                    <div className="project-details">
-                        {/* 클릭 시 TaskPage로 이동 */}
-                        <h2
-                            className="header-title"
-                            onClick={() => handleProjectClick(selectedProject.id)}
-                        >
-                            {selectedProject.name} - 간트차트
-                        </h2>
-                        <GanttChart project={selectedProject} tasks={tasks} />
                     </div>
-                ) : (
-                    <p className="no-project-selected">📌 프로젝트를 선택해주세요.</p>
-                )}
-            </div>
-            <div className="chatbox-container">
-                <Sidebar projectId={selectedProject?.id} />
-                <Chatbox projectId={selectedProject ? selectedProject.id : null} />
-                <InviteList refreshProjects={fetchProjects} />
+                    <div className="">
+                        {selectedProject ? (
+                        <div className="project-details">
+                            <h2 className="header-title" onClick={() => handleProjectClick(selectedProject.id)}>
+                            {selectedProject.name} - 간트차트
+                            </h2>
+                            {/* gantt-chart가 늘어나면 content도 함께 확장됨 */}
+                            <GanttChart project={selectedProject} tasks={tasks} />
 
-            </div>
+                        </div>
+                        ) : (
+                        <p className="no-project-selected">📌 프로젝트를 선택해주세요.</p>
+                        )}
+                    </div>
+                </div>
+            {/* <div className="chatbox-container"> */}
+                {/* <Sidebar projectId={selectedProject?.id} /> */}
+                {/* <Chatbox projectId={selectedProject ? selectedProject.id : null} /> */}
+            {/* </div> */}
+            <InviteList refreshProjects={fetchProjects} />
 
             {/* 🔹 프로젝트 생성 모달 */}
             {showModal && (

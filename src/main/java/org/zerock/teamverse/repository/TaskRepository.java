@@ -15,5 +15,4 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
 
     boolean existsByNameAndProject(String name, Project project);
 
-    
 }

@@ -1,5 +1,5 @@
 /* PostTodoModal.css */
-.modal-overlay {
+.post-todo-modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -12,7 +12,7 @@
   z-index: 1000;
 }
 
-.modal-container {
+.post-todo-modal-container {
   background: white;
   width: 500px;
   border-radius: 8px;
@@ -22,7 +22,7 @@
   flex-direction: column;
 }
 
-.modal-content {
+.post-todo-modal-content {
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -234,4 +234,52 @@ textarea {
   left: 0;
   width: 100%;
   z-index: 10;
+}
+
+
+/* 오른쪽 버튼 영역 스타일 */
+.task-modal-actions-right {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+/* 버튼 기본 스타일 */
+.task-modal-actions-right button {
+  padding: 12px 22px;
+  font-size: 14px;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+/* 취소 버튼 (회색) */
+.task-modal-actions-right button:first-child {
+  background: #e2e2e2;
+  color: #333;
+}
+
+.task-modal-actions-right button:first-child:hover {
+  background: #b3b3b3;
+}
+
+/* 등록 버튼 */
+.task-modal-actions-right button:last-child {
+  background: #6A5ACD; /* iOS 스타일 블루 */
+  color: #ffffff;
+  box-shadow: 0px 4px 6px rgba(0, 122, 255, 0.2);
+}
+
+.task-modal-actions-right button:last-child:hover {
+  background: #6A5ACD; /* 더 진한 블루 */
+  box-shadow: 0px 6px 12px rgba(0, 94, 194, 0.3);
+  transform: scale(1.05);
+}
+
+.task-modal-actions-right button:last-child:active {
+  background: #004799;
+  transform: scale(1);
 }

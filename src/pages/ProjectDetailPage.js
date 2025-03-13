@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
-import LeftSidebar from "../components/LeftSidebar"; // 왼쪽 사이드바 추가
 import axios from "axios";
 import { FaEllipsisV, FaPencilAlt, FaSignOutAlt, FaTrashAlt, FaEdit, FaTasks, FaCalendarAlt, FaThumbtack, FaCheckCircle, FaExclamationTriangle, FaHourglassHalf, FaPaperclip } from "react-icons/fa";
 import { getAccessToken } from "../utils/authUtils";
@@ -13,6 +12,9 @@ import PostTodoModal from "../components/PostTodoModal";
 import ActivityFeed from "../components/ActivityFeed"; // 피드 컴포넌트 추가
 import FilesTab from "../components/FilesTab";
 import ProjectEditModal from "../components/ProjectEditModal"; // 수정 모달 추가
+import LeftSidebar from "../components/LeftSidebar"; // 왼쪽 사이드바 추가
+import Toolbar from "../components/Toolbar";
+
 import "../styles/ProjectDetailPage.css";
 
 const ProjectDetailPage = () => {
@@ -340,10 +342,11 @@ const ProjectDetailPage = () => {
     return (
         <div className="project-detail-page">
             <div className="project-layout">
-                <LeftSidebar onCreateProject={() => setShowModal(true)}
-                // onShowProjectList={handleShowProjectList} 
-                />
+                <LeftSidebar onCreateProject={() => setShowModal(true)} />
+                 {/* onShowProjectList={handleShowProjectList} */}
+
                 <div className="project-content">
+
                     <div className="project-title-container">
 
                         {/* 드롭다운 버튼 + 메뉴 감싸는 div */}
@@ -369,18 +372,20 @@ const ProjectDetailPage = () => {
 
                         </div>
                         <h1>{project?.name || "프로젝트 로딩 중..."}</h1>
+
+                        <p className="project-description">{project?.description || ""}</p>
                     </div>
 
-                    <p className="project-description">{project?.description || ""}</p>
-
-                    <p className="project-date">📅 시작일: {project?.startDate}</p>
-                    <p className="project-date">⏳ 마감일: {project?.endDate || "미정"}</p>
+                    <div className="project-dates">
+                        <p className="project-date">📅 시작일: {project?.startDate}</p>
+                        <p className="project-date">⏳ 마감일: {project?.endDate || "미정"}</p>
+                    </div>
 
 
                     {/* 내부 네비게이션 추가 */}
                     <ProjectNav activeTab={activeTab} setActiveTab={setActiveTab} />
 
-                    {activeTab === "feed" && (
+                    {/*  {activeTab === "feed" && (
                         <div className="post-nav">
                             <button onClick={() => { setPostTodoModalTab("post"); setIsPostTodoModalOpen(true); }}>
                                 <FaEdit /> 글 업로드
@@ -392,7 +397,27 @@ const ProjectDetailPage = () => {
                                 <FaCalendarAlt /> 할 일 업로드
                             </button>
                         </div>
-                    )}
+                    )}*/}
+                    <div className="p-4">
+                        <Toolbar
+                            onPostClick={() => {
+                                setPostTodoModalTab("post");
+                                setIsPostTodoModalOpen(true);
+                            }}
+                            onTaskClick={() => {
+                                setPostTodoModalTab("task");
+                                setIsPostTodoModalOpen(true);
+                            }}
+                            onCalendarClick={() => {
+                                setPostTodoModalTab("calendar");
+                                setIsPostTodoModalOpen(true);
+                            }}
+                            onTodoClick={() => {
+                                setPostTodoModalTab("todo");
+                                setIsPostTodoModalOpen(true);
+                            }}
+                        />
+                    </div>
                     {isPostTodoModalOpen && (
                         <PostTodoModal
                             onClose={() => setIsPostTodoModalOpen(false)}
@@ -410,7 +435,7 @@ const ProjectDetailPage = () => {
                     )}
 
                     {/* 작업 목록 */}
-                    {activeTab === "tasks" && (
+                    {/* {activeTab === "tasks" && (
                         <div className="task-tab-container">
                             <div className="task-tab-header">
                                 <h2 className="task-tab-title">
@@ -445,16 +470,41 @@ const ProjectDetailPage = () => {
                                 </table>
                             </div>
                         </div>
+                    )} */}
+                    {activeTab === "tasks" && (
+                        <div className="task-section">
+                            <h2>📝 작업 목록</h2>
+                            <table className="task-table">
+                                <thead>
+                                    <tr>
+                                        <th>작업명</th>
+                                        <th>담당자</th>
+                                        <th>상태</th>
+                                        <th>시작일</th>
+                                        <th>마감일</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {tasks.map((task) => (
+                                        <tr key={task.id}>
+                                            <td>{task.name}</td>
+                                            <td>{task.assignedTo?.username || "미정"}</td>
+                                            <td>{task.status}</td>
+                                            <td>{task.startDate}</td>
+                                            <td>{task.dueDate}</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
                     )}
 
 
                     {/* Gantt Chart 탭 */}
-                    {activeTab === "gantt" && (
+                    {/* {activeTab === "gantt" && (
                         <div className="task-page">
-
                             <div className="task-page-header">
                                 <h2 className="project-title">{project?.name || "로딩 중..."}</h2>
-                                {/* 업무 추가 버튼 */}
                                 <button
                                     className="task-add-btn"
                                     onClick={() => setIsTaskModalOpen(true)}
@@ -491,7 +541,40 @@ const ProjectDetailPage = () => {
                                 </div>
                             </div>
                         </div>
-                    )}
+                    )} */}
+                     {activeTab === "gantt" && (
+                                            <div className="task-page">
+                                                <h2 className="project-title">{project?.name || "로딩 중..."}</h2>
+                                                <hr className="title-divider" />
+                                                <div className="task-container">
+                                                    <div className="task-list">
+                                                        <table>
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>업무명</th>
+                                                                    <th>상태</th>
+                                                                    <th>시작일</th>
+                                                                    <th>마감일</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                {tasks.map((task) => (
+                                                                    <tr key={task.id}>
+                                                                        <td>{task.name}</td>
+                                                                        <td>{task.status}</td>
+                                                                        <td>{task.startDate}</td>
+                                                                        <td>{task.dueDate}</td>
+                                                                    </tr>
+                                                                ))}
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                    <div className="gantt-chart-container">
+                                                        <GanttChart tasks={tasks} />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        )}
 
                     {/* {activeTab === "files" && <FilesTab projectId={projectId} />} */}
                     {activeTab === "files" && (

@@ -42,6 +42,11 @@ public class WebConfig implements WebMvcConfigurer  {
 				.allowedHeaders("*") // 모든 요청 헤더 허용
 				.exposedHeaders("Content-Disposition") // 파일 다운로드를 위한 응답 헤더 허용
 				.allowCredentials(true); // 쿠키 인증 허용
+
+				// ✅ `uploads` 디렉토리의 이미지도 CORS 허용
+				registry.addMapping("/uploads/**")
+					.allowedOrigins("http://localhost:3000") // ✅ React에서 접근 가능하도록 설정
+					.allowedMethods("GET"); // ✅ GET 요청만 허용 (보안 목적)
 			}
 		};
 	}

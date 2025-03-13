@@ -64,7 +64,7 @@ const Sidebar = ({ projectId }) => {
   }, [projectId]);
 
   return (
-    <div className="sidebar">
+    <div className="sidebar_2">
       <h3>👥 팀 멤버</h3>
       <input
         type="text"

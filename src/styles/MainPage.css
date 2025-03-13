@@ -1,24 +1,64 @@
-.main-page {
-  display: grid;
-  grid-template-columns: 1.5fr 6fr 1.5fr; /* 왼쪽 사이드바 추가 */
-  grid-template-rows: auto;
+html, body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  width: 100vw;
   height: 100vh;
-  gap: 10px;
-  background-color: #f4f4f9;
+  min-height: 100vh; /* 최소 높이를 100vh로 설정하여 늘어날 수 있도록 함 */
+
+
 }
 
+.main-page {
+  display: flex;
+  gap: 10px;
+  background-color: #f3f4f6;
+  overflow: hidden;
+  height: calc(100vh - 57px); /* 원하는 계산 높이 유지 */
+  align-items: stretch;
+  width: 100%;  /* 가로폭을 100%로 지정 */
+  min-height: 100vh; /* 최소 높이를 설정하여 내용에 따라 늘어나도록 함 */
+  overflow-y: auto; /* 세로 스크롤 가능 */
+  width: 100%;  /* 가로폭을 100%로 지정 */
+  overflow: visible; /* Allows content to grow */
+  height: auto !important; /* Ensures dynamic growth */
+}
+
+
 .sidebar-container {
-  background: #ecf0f3;
+  width: 300px;
+  flex-shrink: 0; /* Prevents it from shrinking further */
   border-radius: 12px;
   padding: 10px;
+
 }
 
 .content {
   display: flex;
-  flex-direction: column;
-  background-color: #F4F7FC;
+  flex-direction: column; /* Ensures children are stacked vertically */
+  flex-grow: 1; /* Allows it to take available space */
+  background-color: #c0d5efb0;
+  gap: 20px;
+  padding: 80px 80px 0px 80px;
+  min-height: 100vh; /* Ensures it expands at least to the full viewport height */
+  height: auto !important; /* Allows it to grow dynamically */
+  overflow: visible; /* Ensures content can expand */
 }
 
+.top-row {
+  display: flex;
+  flex-direction: row; /* .project-list와 .sidebar를 가로로 배치 */
+  gap: 20px; /* 두 요소 사이 간격 */
+}
+
+/* 필요에 따라 각 요소의 너비를 조정 */
+.project-list, .sidebar {
+  flex: 1; /* 같은 비율로 배분 */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  min-height: fit-content; /* 자식 요소에 따라 높이가 변하도록 설정 */
+
+
+}
 .filter-and-search {
   margin-bottom: 10px;
   background: #ffffff;
@@ -30,7 +70,7 @@
 .chatbox-container {
   display: flex;
   flex-direction: column;
-  background: #F4F7FC;
+  background-color: #f3f4f6;
   border-radius: 12px;
   padding: 10px;
 }
@@ -120,6 +160,7 @@
   display: flex;
   align-items: center;
   transition: color 0.3s ease; /* 부드러운 색상 전환 효과 */
+  justify-content: center;
 }
 
 .header-title:hover {
@@ -207,6 +248,21 @@
   text-align: center;
   font-style: italic;
   color: gray;
+
+}
+
+.project-list {
+  background-color: #ffffff; /* 흰색 배경 */
+  border-radius: 8px;        /* 둥근 테두리 */
+  padding: 10px;             /* 내부 여백 추가 (옵션) */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 약간의 그림자 효과 (옵션) */
+}
+
+
+.project-details {
+  flex-grow: 1; /* 자식 요소가 늘어나면 부모도 늘어날 수 있도록 설정 */
+  min-height: 300px; /* 최소 높이 설정 */
+  overflow: visible; /* 내용이 많아지면 자동으로 확장 */
 
 }
 

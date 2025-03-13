@@ -11,6 +11,7 @@ import TaskPage from './pages/TaskPage';
 import ProjectDetailPage from "./pages/ProjectDetailPage"; // 프로젝트 상세 페이지 import
 import TaskBoard from './components/TaskBoard';
 import ChatPage from "./components/ChatPage";
+import Chatbox from "./components/Chatbox";  // ✅ Chatbox import 추가
 
 
 
@@ -34,6 +35,7 @@ function MainLayout() {
   const location = useLocation(); // 현재 경로 확인
   const hideNavbar = location.pathname === "/login"; // 로그인 페이지에서는 Navbar 숨김
   const isPopup = new URLSearchParams(location.search).get("popup") === "true";
+  const hideChatbox = location.pathname === "/TaskBoard"; // ✅ TaskBoard에서는 Chatbox 숨김
 
   return (
     <>

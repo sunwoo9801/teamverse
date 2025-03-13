@@ -13,7 +13,7 @@
 .project-content {
   flex: 1;
   padding: 20px;
-  background-color: #f9f9f9;
+  background-color: #f3f4f6;
   overflow-y: auto;
 }
 
@@ -25,12 +25,12 @@
 }
 
 /* 프로젝트 설명 (p) 스타일 */
+/* 프로젝트 설명 스타일 */
 .project-description {
-  font-size: 14px; /* 글씨 크기 */
-  font-weight: bold; /* 🔹 굵은 글씨 */
-  color: #555; /* 🔹 회색 계열 */
-  margin-top: 0px; /* 위쪽 여백 제거 */
-  margin-bottom: 10px; /* 아래쪽 여백 최소화 */
+  font-size: 14px;
+  color: #666;
+  margin-top: 5px; /* 🔹 상단 여백 조정 */
+  margin-bottom: 10px; /* 🔹 하단 여백 최소화 */
 }
 
 /* 프로젝트 날짜 관련 스타일 */
@@ -50,6 +50,15 @@
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   margin-bottom: 20px;
 } */
+.task-section,
+.gantt-chart-section,
+.activity-feed-section {
+  background: white;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+}
 
 /* 작업 목록과 간트차트가 담긴 컨테이너 */
 .gantt-chart-tab-task-container {
@@ -265,7 +274,8 @@ h2 {
   justify-content: center; /* 가운데 정렬 */
   align-items: center; /* 수직 정렬 */
   margin-bottom: 10px; /* 아래 여백 조정 */
-  border-bottom: 1px solid #ddd; /* 구분선 유지 */
+   /* 구분선 유지 */
+   /* border-bottom: 1px solid #ddd; */
   padding-bottom: 8px; /* 여백 조정 */
 }
 
@@ -343,10 +353,19 @@ h2 {
 
 /* 📌 프로젝트 제목과 드롭다운 버튼을 감싸는 컨테이너 */
 .project-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  position: relative;
+  background-color: #f3f4f6;
+  padding: 20px;
+}
+
+.project-header h1 {
+  font-size: 22px;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+.project-header p {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 10px;
 }
 
 /* ⋮(점 3개) 버튼 크기 조정 */
@@ -366,10 +385,12 @@ h2 {
 /* 프로젝트 제목과 설명 사이 간격 줄이기 */
 .project-title-container {
   display: flex;
-  align-items: center; /* 🔹 세로 중앙 정렬 */
-  justify-content: flex-start; /* 🔹 왼쪽 정렬 유지 */
+  flex-direction: column; /* 🔹 세로 정렬 */
+  align-items: flex-start; /* 🔹 왼쪽 정렬 유지 */
+  justify-content: center; /* 🔹 수직 정렬 */
   height: 50px; /* 🔹 높이 조정 */
-  gap: 10px; /* 🔹 버튼과 제목 간격 조정 */
+   /* gap: 10px;*/
+   /* 🔹 버튼과 제목 간격 조정 */
 }
 
 /* 프로젝트 제목 스타일 */
@@ -491,7 +512,13 @@ h2 {
   font-size: 14px;
   color: #666666;
 }
-
+/* 내부 네비게이션 (ProjectNav)와 프로젝트 헤더 간격 없애기 */
+.project-nav {
+  background-color: #f3f4f6;
+  border-bottom: none; /* 불필요한 구분선 제거 */
+  margin-bottom: 0;
+  padding-top: 0;
+}
 .task-tab-table tr:nth-child(even) {
   background-color: #fafafa;
 }

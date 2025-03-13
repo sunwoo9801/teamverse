@@ -15,8 +15,13 @@
   max-height: 100%; /* 🔹 최대 높이 설정 */
   overflow-y: auto; /* 🔹 내부 스크롤 가능 */
   transition: height 0.3s ease-in-out; /* 🔹 부드러운 애니메이션 효과 */
-}
 
+}
+.gantt-chart-container {
+  width: 100%;
+  height: 100%; /* gantt-chart 크기에 맞춤 */
+  overflow: hidden; /* 추가 div가 크기를 벗어나지 않도록 설정 */
+}
 .week-nav,
 .month-nav,
 .year-nav {
@@ -46,6 +51,7 @@
   align-items: center;  /* 세로 중앙 정렬 */
   justify-content: center; /* 중앙 정렬 */
   gap: 15px; /* 좌우 버튼과 날짜 사이 여백 */
+  padding: 10px;
 }
 
 
@@ -111,6 +117,8 @@
   flex-direction: column; /* 헤더와 그리드를 세로로 정렬 */
   align-items: center; /* year-grid를 가로로 중앙 정렬 */
   width: 100%; /* 부모 컨테이너 너비 */
+  flex-grow: 1; /* 🔹 부모 컨테이너의 남은 공간을 채우도록 설정 */
+
 
 }
 
@@ -120,8 +128,8 @@
   align-items: center;
   width: 100%; /* 헤더가 컨테이너 전체 너비를 차지 */
   max-width: 500px; /* 헤더의 최대 너비 제한 */
-  margin-bottom: 20px; /* 헤더와 그리드 사이 간격 */
-  margin-top: 20px;
+  /*margin-bottom: 20px;  헤더와 그리드 사이 간격 */
+  /* margin-top: 20px; */
 }
 
 .year-title {
@@ -167,6 +175,8 @@
   display: grid;
   grid-template-columns: repeat(7, 1fr); /* 7일 열 */
   gap: 5px;
+  width: 100%; /* 부모 컨테이너 전체 너비 사용 */
+
   grid-auto-rows: minmax(40px, auto); /* 최소 높이는 40px, 콘텐츠에 따라 늘어남 */
 }
 
@@ -338,7 +348,6 @@ endar-day.empty-day {
   display: flex;
   justify-content: center;
   gap: 10px;
-  margin-bottom: 20px;
 }
 
 .navigation-buttons {
@@ -404,6 +413,7 @@ endar-day.empty-day {
   align-items: center; /* year-grid를 가로로 중앙 정렬 */
   width: 100%; /* 부모 컨테이너 너비 */
 
+
 }
 
 .year-header {
@@ -412,8 +422,8 @@ endar-day.empty-day {
   align-items: center;
   width: 100%; /* 헤더가 컨테이너 전체 너비를 차지 */
   max-width: 500px; /* 헤더의 최대 너비 제한 */
-  margin-bottom: 20px; /* 헤더와 그리드 사이 간격 */
-  margin-top: 20px;
+  /* margin-bottom: 20px; 헤더와 그리드 사이 간격 */
+  /* margin-top: 20px; */
 }
 
 .year-title {
@@ -628,7 +638,7 @@ endar-day.empty-day {
   display: flex;
   justify-content: center; /* 중앙 정렬 */
   gap: 10px; /* 버튼 간격 */
-  margin-top: 30px; /* 상단 여백 */
+  /* margin-top: 30px; 상단 여백 */
   position: relative; /* task-container 아래에 배치 */
 }
 

@@ -260,9 +260,9 @@ const TaskModal = ({ onClose, projectId, refreshTasks, editTask }) => {
   };
 
   return (
-    <div className="modal-overlay">
-      <div className="modal-container">
-        <div className="modal-content">
+    <div className="task-modal-overlay">
+      <div className="task-modal-container">
+        <div className="task-modal-content">
           <h2>{isEditMode ? "업무 수정" : "업무 추가"}</h2>
 
           <label>업무 제목:</label>
@@ -326,10 +326,6 @@ const TaskModal = ({ onClose, projectId, refreshTasks, editTask }) => {
               ))}
             </div>
           )}
-          {/* 색상 선택 기능 */}
-          <label>색상 선택</label>
-          <input type="color" name="color" value={taskData.color} onChange={handleColorChange} />
-
 
           <div className="modal-footer">
             <div className="modal-actions-left">
@@ -364,6 +360,8 @@ const TaskModal = ({ onClose, projectId, refreshTasks, editTask }) => {
                   )}
                 </div>
               )}
+
+
             </div>
             <div className="modal-actions-right">
               <button onClick={onClose}>취소</button>

@@ -131,6 +131,10 @@ const GanttChart = ({ tasks }) => {
     setSelectedTask(null); // 모달 닫기
   };
 
+    useEffect(() => {
+    }, [viewMode, currentWeekStart, tasks]);
+
+
   useEffect(() => {
     if (tasks.length > 6) {
       setChartHeight(`${400 + (tasks.length - 6) * 60}px`);
@@ -150,12 +154,12 @@ const GanttChart = ({ tasks }) => {
       {viewMode === 'week' && (
         <>
           <div className="week-navigation">
-            <button className="week-nav" onClick={handlePreviousWeek}>{'<'}</button>
+            <button className="week-nav" onClick={handlePreviousWeek}>&lt;</button>
             <span>
               {currentWeekStart.toLocaleDateString('en-US', { month: 'long', day: 'numeric' })} ~{" "}
               {new Date(currentWeekStart.getTime() + 6 * 24 * 60 * 60 * 1000).toLocaleDateString('en-US', { month: 'long', day: 'numeric' })}
             </span>
-            <button className="week-nav" onClick={handleNextWeek}>{'>'}</button>
+            <button className="week-nav" onClick={handleNextWeek}>&gt;</button>
           </div>
 
           <div className="calendar">
@@ -185,9 +189,9 @@ const GanttChart = ({ tasks }) => {
       {viewMode === 'month' && (
         <div className="month-calendar">
           <div className="month-header">
-            <button className="month-nav" onClick={handlePreviousMonth}>{'<'}</button>
+            <button className="month-nav" onClick={handlePreviousMonth}>&lt;</button>
             <div className="month-title">{currentMonth.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}</div>
-            <button className="month-nav" onClick={handleNextMonth}>{'>'}</button>
+            <button className="month-nav" onClick={handleNextMonth}>&gt;</button>
           </div>
 
           <div className="calendar-grid">
@@ -219,9 +223,9 @@ const GanttChart = ({ tasks }) => {
       {viewMode === 'year' && (
         <div className="year-calendar">
           <div className="year-header">
-            <button className="year-nav" onClick={handlePreviousYear}>{'<'}</button>
+            <button className="year-nav" onClick={handlePreviousYear}>&lt;</button>
             <div className="year-title">{currentYear}</div>
-            <button className="year-nav" onClick={handleNextYear}>{'>'}</button>
+            <button className="year-nav" onClick={handleNextYear}>&gt;</button>
           </div>
 
           <div className="year-grid">

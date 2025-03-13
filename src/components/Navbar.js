@@ -6,6 +6,7 @@ import ProfileModal from "./ProfileModal"; // 모달 컴포넌트 가져오기
 import "../styles/Navbar.css";
 import defaultProfileImage from "../assets/images/basicprofile.jpg"; // 기본 프로필 이미지 추가
 import { FaUserCircle, FaCogs, FaSignOutAlt } from "react-icons/fa"; // 아이콘 추가
+import helpimage from "../assets/images/help.png"; // 기본 프로필 이미지 추가
 
 
 const Navbar = () => {
@@ -80,18 +81,18 @@ const Navbar = () => {
       const token = getAccessToken(); // 수정: sessionStorage에서도 가져올 수 있도록 변경
       if (!token) {
         console.error("🚨 JWT 토큰이 없습니다! 로그아웃 요청을 할 수 없습니다.");
-        return; 
+        return;
       }
 
       await axios.post("http://localhost:8082/api/auth/logout", {}, {
-        headers: { Authorization: `Bearer ${token}` }, 
+        headers: { Authorization: `Bearer ${token}` },
         withCredentials: true
       });
 
       // 쿠키 삭제 (브라우저에서 강제 삭제)
       document.cookie = "accessToken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
       document.cookie = "refreshToken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
-      
+
       // 로컬스토리지 및 세션스토리지 삭제
       localStorage.removeItem("accessToken");
       localStorage.removeItem("refreshToken");
@@ -112,11 +113,15 @@ const Navbar = () => {
     fetchUserInfo();
   }, []);
 
-  
+
 
   return (
     <nav className="navbar">
-      <div className="navbar-logo">TeamVerse</div>
+      <div className="info">
+            <img src={helpimage} alt="help Logo" className="help" />
+
+      <div className="info_help"> 도움말 </div>
+      </div>
       {/* <Link to="/dashboard/:userId" className="navbar-logo">
         TeamVerse
       </Link> */}

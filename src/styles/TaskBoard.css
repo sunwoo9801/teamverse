@@ -2,19 +2,9 @@
 .task-board-container {
   display: flex; /* ✅ LeftSidebar와 TaskBoard를 나란히 배치 */
   height: 100vh;
-  background: #f4f7fb; /* 💡 배경색 추가 */
+  background: #f3f4f6; /* 💡 배경색 추가 */
 }
 
-.left-sidebar {
-  width: 200px;
-  background: white;
-  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
-  padding: 20px;
-  border-radius: 8px;
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-}
 
 /* 🔹 TaskBoard 스타일 */
 .task-board {
@@ -85,4 +75,12 @@
 }
 
 
-
+/* 🔹 제목 스타일 (왼쪽 정렬 + 두꺼운 글씨) */
+.task-board h2 {
+  text-align: left; /* 💡 왼쪽 정렬 */
+  font-weight: bold; /* 💡 글씨 두껍게 */
+  font-size: 24px; /* 💡 폰트 크기 조정 (선택 사항) */
+  margin-bottom: 20px; /* 💡 하단 여백 추가 */
+  padding-left: 30px; /* 💡 왼쪽 여백 추가 (선택 사항) */
+  color: #333; /* 💡 글자 색상 (선택 사항) */
+}

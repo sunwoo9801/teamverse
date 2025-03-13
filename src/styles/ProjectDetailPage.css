@@ -24,7 +24,24 @@
   margin-bottom: 10px; /* 🔹 아래쪽 여백 최소화 */
 }
 
-.task-section,
+/* 프로젝트 설명 (p) 스타일 */
+.project-description {
+  font-size: 14px; /* 글씨 크기 */
+  font-weight: bold; /* 🔹 굵은 글씨 */
+  color: #555; /* 🔹 회색 계열 */
+  margin-top: 0px; /* 위쪽 여백 제거 */
+  margin-bottom: 10px; /* 아래쪽 여백 최소화 */
+}
+
+/* 프로젝트 날짜 관련 스타일 */
+.project-date {
+  font-size: 14px;
+  color: #666; /* 🔹 약간 연한 회색 */
+  font-weight: normal; /* 🔹 기본 글씨 굵기 유지 */
+}
+
+
+/* .task-section,
 .gantt-chart-section,
 .activity-feed-section {
   background: white;
@@ -32,6 +49,81 @@
   border-radius: 8px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   margin-bottom: 20px;
+} */
+
+/* 작업 목록과 간트차트가 담긴 컨테이너 */
+.gantt-chart-tab-task-container {
+  display: flex;
+  flex-wrap: wrap;      /* 공간 부족 시 항목들이 다음 줄로 내려가도록 */
+  gap: 20px;
+}
+
+/* 간트차트 탭 작업 목록 컨테이너 */
+.gantt-chart-tab-task-list {
+  background: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+}
+
+/* 테이블 전체 */
+.gantt-chart-tab-task-list table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+/* 테이블 헤더와 셀 기본 스타일 */
+.gantt-chart-tab-task-list th,
+.gantt-chart-tab-task-list td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid #e0e0e0;
+  font-size: 14px;
+}
+
+/* 테이블 헤더 스타일 */
+.gantt-chart-tab-task-list th {
+  background-color: #f5f5f5;
+  font-weight: 600;
+  color: #555;
+}
+
+/* 테이블 셀 스타일 */
+.gantt-chart-tab-task-list td {
+  color: #666;
+}
+
+/* 마지막 행의 하단 경계선 제거 */
+.gantt-chart-tab-task-list tr:last-child td {
+  border-bottom: none;
+}
+
+/* 짝수 행 배경색 */
+.gantt-chart-tab-task-list tr:nth-child(even) {
+  background-color: #fafafa;
+}
+
+/* 행 호버 효과 */
+.gantt-chart-tab-task-list tr:hover {
+  background-color: #f0f8ff;
+}
+
+
+/* 간트차트 컨테이너 */
+.gantt-chart-tab-container {
+  flex: 2;              /* 작업 목록보다 더 넓게 배분 */
+  min-width: 300px;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;   /* 수평 스크롤 제거 */
+}
+
+/* 작은 화면에서는 작업 목록과 간트차트가 세로로 쌓이도록 */
+@media (max-width: 768px) {
+  .gantt-chart-tab-task-container {
+    flex-direction: column;
+  }
 }
 
 h2 {
@@ -331,4 +423,79 @@ h2 {
 .project-dropdown-icon {
   font-size: 16px;
   color: #666;
+}
+
+.task-tab-container {
+  background-color: #ffffff;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin: 20px 0;
+}
+
+.task-tab-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.task-tab-title {
+  font-size: 22px;
+  font-weight: 600;
+  color: #333333;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.task-tab-add-btn {
+  background-color: #007bff;
+  color: #ffffff;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.task-tab-add-btn:hover {
+  background-color: #0056b3;
+}
+
+.task-tab-table-wrapper {
+  overflow-x: auto;
+}
+
+.task-tab-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.task-tab-table th,
+.task-tab-table td {
+  border: 1px solid #e0e0e0;
+  padding: 12px 15px;
+  text-align: left;
+}
+
+.task-tab-table th {
+  background-color: #f5f5f5;
+  font-weight: 600;
+  font-size: 14px;
+  color: #555555;
+}
+
+.task-tab-table td {
+  font-size: 14px;
+  color: #666666;
+}
+
+.task-tab-table tr:nth-child(even) {
+  background-color: #fafafa;
+}
+
+.task-tab-table tr:hover {
+  background-color: #f0f8ff;
 }

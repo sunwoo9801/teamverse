@@ -11,8 +11,8 @@
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   padding: 20px;
   border: 1px solid #e0e0e0;
+  position: relative; /* 드롭다운 위치를 위한 상대 위치 */
 }
-
 
 .activity-header {
   display: flex;
@@ -20,25 +20,88 @@
   align-items: center;
 }
 
+.task-feed-more-menu {
+  position: relative;
+}
+
+.task-feed-more-button {
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: #555;
+  cursor: pointer;
+  padding: 0;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s ease-in-out;
+}
+
+.task-feed-more-button:hover {
+  color: #000;
+}
+
+.task-feed-dropdown-menu {
+  position: absolute;
+  top: 30px;
+  right: 0;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border: 1px solid #e0e0e0;
+  z-index: 10;
+  overflow: hidden;
+  min-width: 100px;
+}
+
+.task-feed-dropdown-item {
+  background: none;
+  border: none;
+  padding: 8px 16px;
+  font-size: 14px;
+  color: #333;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.2s ease-in-out;
+}
+
+.task-feed-dropdown-item:hover {
+  background: #f5f5f5;
+}
+
+.task-feed-dropdown-item.delete-item {
+  color: #e74c3c; /* 삭제 버튼은 빨간색으로 강조 */
+}
+
+.task-feed-dropdown-item.delete-item:hover {
+  background: #ffe6e6;
+}
+
 /* 프로필 사진과 사용자 정보 사이 간격 조정 */
 .profile-img {
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  margin-right: 5px; /* 🔹 사용자 이름과의 간격을 5px로 설정 */
+  margin-right: 5px;
+  /* 🔹 사용자 이름과의 간격을 5px로 설정 */
 }
 
 .user-info {
   display: flex;
   flex-direction: column;
-  gap: 2px; /* 🔹 이름과 타임스탬프 사이 간격 줄임 */
+  gap: 2px;
+  /* 🔹 이름과 타임스탬프 사이 간격 줄임 */
 }
 
 /* 프로필 이미지와 사용자 이름을 자연스럽게 정렬 */
 .user-container {
   display: flex;
   align-items: center;
-  gap: 8px; /* 🔹 프로필 이미지와 이름 사이 간격 설정 */
+  gap: 8px;
+  /* 🔹 프로필 이미지와 이름 사이 간격 설정 */
 }
 
 .username {
@@ -57,7 +120,8 @@
 }
 
 .activity-content {
-  max-height: 200px; /* 10줄 정도의 높이 */
+  max-height: 200px;
+  /* 10줄 정도의 높이 */
   overflow: hidden;
   position: relative;
   transition: max-height 0.3s ease-in-out;
@@ -65,7 +129,8 @@
 
 
 .activity-content.expanded {
-  max-height: none; /* 펼쳤을 때 전체 보이도록 */
+  max-height: none;
+  /* 펼쳤을 때 전체 보이도록 */
 }
 
 .activity-content.expanded::after {
@@ -79,8 +144,9 @@
   left: 0;
   width: 100%;
   height: 50px;
-  background: linear-gradient(to bottom, rgba(255, 255, 255, 0), #fff);
-  display: none; /* 기본적으로 안 보이게 설정 */
+  background: rgba(255, 255, 255, 0);
+  display: none;
+  /* 기본적으로 안 보이게 설정 */
 }
 
 .activity-content.truncated::after {
@@ -90,17 +156,18 @@
   left: 0;
   width: 100%;
   height: 50px;
-  background: linear-gradient(to bottom, rgba(255, 255, 255, 0), white);
+  background: rgba(255, 255, 255, 0);
   display: block;
 }
 
 
 .activity-content.has-image {
-  max-height: none; /* 이미지가 포함된 경우 제한 없음 */
+  max-height: none;
+  /* 이미지가 포함된 경우 제한 없음 */
 }
 
 .uploaded-image {
-  max-width: 100%; 
+  max-width: 100%;
   height: auto;
   object-fit: contain;
   display: block;
@@ -108,7 +175,8 @@
 
 /* 깔끔한 "전체 보기" 버튼 스타일 */
 .toggle-expand-button {
-  display: flex !important;  /* 🔹 항상 보이도록 강제 */
+  display: flex !important;
+  /* 🔹 항상 보이도록 강제 */
   align-items: center;
   justify-content: center;
   width: 30px;
@@ -124,7 +192,8 @@
 }
 
 .toggle-expand-button:hover {
-  color: #000; /* 🔹 호버 시 색상 강조 */
+  color: #000;
+  /* 🔹 호버 시 색상 강조 */
   transform: scale(1.1);
 }
 
@@ -214,9 +283,12 @@
 /* 리액션 버튼과 개수 정렬 */
 .reaction-summary {
   display: flex;
-  align-items: center; /* 🔹 세로 중앙 정렬 */
-  gap: 5px; /* 🔹 아이콘과 숫자 사이 간격 */
-  margin-top: 5px; /* 🔹 여백 추가 */
+  align-items: center;
+  /* 🔹 세로 중앙 정렬 */
+  gap: 5px;
+  /* 🔹 아이콘과 숫자 사이 간격 */
+  margin-top: 5px;
+  /* 🔹 여백 추가 */
 }
 
 /* 리액션 버튼 스타일 */
@@ -242,14 +314,17 @@
 /* 리액션 박스 */
 .reaction-box {
   position: absolute;
-  top: 35px; /* 🔹 좋아요 버튼 바로 아래 */
-  left: 0; /* 🔹 좋아요 버튼의 왼쪽과 정렬 */
+  top: 35px;
+  /* 🔹 좋아요 버튼 바로 아래 */
+  left: 0;
+  /* 🔹 좋아요 버튼의 왼쪽과 정렬 */
   background: #fff;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
   border-radius: 20px;
   padding: 10px 15px;
   display: flex;
-  flex-direction: row;  /* 🔹 가로 정렬 유지 */
+  flex-direction: row;
+  /* 🔹 가로 정렬 유지 */
   gap: 12px;
   align-items: center;
   justify-content: center;
@@ -257,14 +332,16 @@
   visibility: hidden;
   transition: opacity 0.2s, visibility 0.2s, top 0.2s;
   z-index: 20;
-  white-space: nowrap; /* 🔹 글자 줄바꿈 방지 */
+  white-space: nowrap;
+  /* 🔹 글자 줄바꿈 방지 */
 }
 
 /* 마우스 오버 시 리액션 박스 표시 */
 .reaction-container:hover .reaction-box {
   opacity: 1;
   visibility: visible;
-  top: 25px; /* 🔹 좋아요 버튼과 살짝 간격 조정 */
+  top: 25px;
+  /* 🔹 좋아요 버튼과 살짝 간격 조정 */
 }
 
 
@@ -276,10 +353,12 @@
   cursor: pointer;
   padding: 6px;
   display: flex;
-  flex-direction: column; /* 🔹 아이콘 + 텍스트 정렬 */
+  flex-direction: column;
+  /* 🔹 아이콘 + 텍스트 정렬 */
   align-items: center;
   justify-content: center;
-  gap: 4px; /* 🔹 아이콘과 텍스트 간격 */
+  gap: 4px;
+  /* 🔹 아이콘과 텍스트 간격 */
   transition: transform 0.2s ease-in-out;
 }
 
@@ -287,4 +366,37 @@
 .reaction-item:hover {
   transform: scale(1.2);
 }
+.load-more-container {
+  display: flex;
+  justify-content: center; /* 가로 중앙 정렬 */
+  align-items: center; /* 세로 중앙 정렬 */
+  width: 100%;
+  margin-top: 20px; /* 버튼과 위쪽 콘텐츠 간 여백 */
+}
 
+.load-more-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px; /* 버튼 크기 */
+  height: 50px;
+  border-radius: 50%; /* 동그란 버튼 */
+  font-size: 24px;
+  font-weight: bold;
+  color: #555;
+  background: rgba(240, 240, 240, 0.9); /* 살짝 투명한 배경 */
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 살짝 떠있는 느낌 */
+}
+
+.load-more-button:hover {
+  background: rgba(220, 220, 220, 1);
+  transform: scale(1.1); /* 살짝 커지는 효과 */
+}
+
+.load-more-button:active {
+  transform: scale(0.95); /* 클릭 시 자연스러운 눌림 효과 */
+  opacity: 0.8;
+}

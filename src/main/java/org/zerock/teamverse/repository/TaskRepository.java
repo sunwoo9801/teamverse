@@ -13,6 +13,7 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
 
     List<Task> findByAssignedTo_Id(Long userId); // 특정 사용자 작업 조회
 
-        boolean existsByNameAndProject(String name, Project project);
+    boolean existsByNameAndProject(String name, Project project);
 
+    
 }

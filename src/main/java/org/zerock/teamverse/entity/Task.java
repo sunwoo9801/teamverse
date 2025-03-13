@@ -34,6 +34,10 @@ public class Task {
     @JoinColumn(name = "assigned_to")
     private User assignedTo; // 작업 담당자
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "created_by", nullable = false) // 추가
+    private User createdBy; // Task를 생성한 사용자
+
     @Column(nullable = false)
     private String name; // 작업 이름
 
@@ -43,10 +47,10 @@ public class Task {
     @Column(nullable = false)
     private String color;
 
-    @Column(name = "start_date", nullable = false) // 작업 시작일 추가
+    @Column(name = "start_date", nullable = true) // 작업 시작일 추가
     private LocalDate startDate;
 
-    @Column(name = "due_date", nullable = false)
+    @Column(name = "due_date", nullable = true)
     private LocalDate dueDate; // 작업 마감일
 
     @Column(name = "description", columnDefinition = "TEXT") // 작업 내용 추가

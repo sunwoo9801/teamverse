@@ -14,7 +14,6 @@ import org.zerock.teamverse.repository.ProjectRepository;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,7 +26,6 @@ public class ActivityLogService {
     private final ProjectRepository projectRepository;
     private final LikeRepository likeRepository; // 리액션 개수 조회 추가
     private final SimpMessagingTemplate messagingTemplate;
-
     private static final ObjectMapper objectMapper = new ObjectMapper(); // 🔵 JSON 변환 객체
 
     public ActivityLogService(ActivityLogRepository activityLogRepository, ProjectRepository projectRepository,
@@ -68,20 +66,6 @@ public class ActivityLogService {
 
         return savedLog;
     }
-
-    // 업무(Task) 생성 시 피드에 기록
-    // public ActivityLog logTaskCreation(User user, Task task) {
-    // String description = user.getUsername() + "님이 새로운 업무를 등록했습니다: " +
-    // task.getName();
-
-    // ActivityLog activityLog = new ActivityLog();
-    // activityLog.setUser(user);
-    // activityLog.setProject(task.getProject()); // Task에서 Project 가져오기
-    // activityLog.setActivityType("TASK_CREATED");
-    // activityLog.setActivityDescription(description);
-
-    // return activityLogRepository.save(activityLog);
-    // }
 
     // Task 생성 시 로그 기록 (파일 포함)
     @Transactional
@@ -152,4 +136,60 @@ public class ActivityLogService {
 
         return activityLogDTO;
     }
+
+    // 게시글 수정 메서드
+    @Transactional
+    public ActivityLogDTO updatePost(Long activityId, User user, String title, String content, List<String> files) {
+        ActivityLog activityLog = activityLogRepository.findById(activityId)
+                .orElseThrow(() -> new RuntimeException("Activity not found"));
+
+        if (!activityLog.getUser().getId().equals(user.getId())) {
+            throw new RuntimeException("You can only edit your own posts.");
+        }
+
+        if (!"POST".equals(activityLog.getActivityType())) {
+            throw new RuntimeException("This activity is not a post.");
+        }
+
+        Map<String, String> descriptionMap = new HashMap<>();
+        descriptionMap.put("title", title);
+        descriptionMap.put("content", content);
+
+        try {
+            activityLog.setActivityDescription(objectMapper.writeValueAsString(descriptionMap));
+        } catch (Exception e) {
+            activityLog.setActivityDescription(title + "\n" + content);
+        }
+
+        ActivityLog updatedLog = activityLogRepository.save(activityLog);
+        Map<String, Integer> reactionCounts = likeRepository.getReactionCountsByActivity(updatedLog.getId());
+        ActivityLogDTO activityLogDTO = new ActivityLogDTO(updatedLog, reactionCounts);
+        activityLogDTO.setFiles(files);
+
+        // WebSocket으로 수정된 게시글 전송
+        messagingTemplate.convertAndSend("/topic/feed/" + updatedLog.getProject().getId(), activityLogDTO);
+
+        return activityLogDTO;
+    }
+
+    // 게시글 삭제 메서드
+    @Transactional
+    public void deletePost(Long activityId, User user) {
+        ActivityLog activityLog = activityLogRepository.findById(activityId)
+                .orElseThrow(() -> new RuntimeException("Activity not found"));
+
+        if (!activityLog.getUser().getId().equals(user.getId())) {
+            throw new RuntimeException("You can only delete your own posts.");
+        }
+
+        if (!"POST".equals(activityLog.getActivityType())) {
+            throw new RuntimeException("This activity is not a post.");
+        }
+
+        activityLogRepository.delete(activityLog);
+
+        // WebSocket으로 삭제 이벤트 전송
+        messagingTemplate.convertAndSend("/topic/activity/delete", activityId);
+    }
+
 }

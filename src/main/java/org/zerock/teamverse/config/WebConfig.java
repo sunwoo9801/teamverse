@@ -38,7 +38,7 @@ public class WebConfig implements WebMvcConfigurer  {
 
 				registry.addMapping("/api/**") // API 요청 경로만 CORS 허용
 				.allowedOrigins("http://localhost:3000") // 프론트엔드 주소 지정
-				.allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS") // 허용할 HTTP 메서드
+				.allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH") // 허용할 HTTP 메서드
 				.allowedHeaders("*") // 모든 요청 헤더 허용
 				.exposedHeaders("Content-Disposition") // 파일 다운로드를 위한 응답 헤더 허용
 				.allowCredentials(true); // 쿠키 인증 허용

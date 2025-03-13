@@ -5,9 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.Authentication; // Authentication import 추가
 import org.springframework.web.bind.annotation.*;
-import org.zerock.teamverse.dto.ActivityLogDTO;
 import org.zerock.teamverse.dto.TaskDTO;
-import org.zerock.teamverse.entity.FileInfo;
 import org.zerock.teamverse.entity.Project;
 import org.zerock.teamverse.entity.Task;
 import org.zerock.teamverse.entity.User;
@@ -17,7 +15,6 @@ import org.zerock.teamverse.service.ProjectService;
 import org.zerock.teamverse.service.TaskService;
 import org.zerock.teamverse.service.UserService;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -44,33 +41,40 @@ public class TaskController {
   }
 
   @PostMapping
-  public ResponseEntity<Task> createTask(@RequestBody TaskDTO taskDTO) {
-      Project project = projectService.getProjectById(taskDTO.getProjectId())
-          .orElseThrow(() -> new IllegalArgumentException("Invalid project ID"));
-  
-      User assignedUser = null;
-      if (taskDTO.getAssignedTo() != null) {
-          assignedUser = userService.findById(taskDTO.getAssignedTo())
-              .orElseThrow(() -> new IllegalArgumentException("Invalid assigned user ID"));
-      }
-  
-      // DTO → Task 엔티티 변환
-      Task task = new Task();
-      task.setName(taskDTO.getName());
-      task.setDescription(taskDTO.getDescription() != null ? taskDTO.getDescription() : "");
-      task.setStartDate(taskDTO.getStartDate());
-      task.setDueDate(taskDTO.getDueDate());
-      task.setStatus(Task.Status.valueOf(taskDTO.getStatus()));
-      task.setProject(project);
-      task.setAssignedTo(assignedUser);
-      task.setColor(taskDTO.getColor());
-  
-      // Task 저장 (activity_log에는 저장 X)
-      Task createdTask = taskService.createTask(task);
-  
-      return ResponseEntity.ok(createdTask);
+  public ResponseEntity<Task> createTask(@RequestBody TaskDTO taskDTO, Authentication authentication) {
+    Project project = projectService.getProjectById(taskDTO.getProjectId())
+        .orElseThrow(() -> new IllegalArgumentException("Invalid project ID"));
+
+    User assignedUser = null;
+    if (taskDTO.getAssignedTo() != null) {
+      assignedUser = userService.findById(taskDTO.getAssignedTo())
+          .orElseThrow(() -> new IllegalArgumentException("Invalid assigned user ID"));
+    }
+
+    // 현재 로그인한 사용자 가져오기 (email로 조회)
+    String email = authentication.getName();
+    User createdByUser = userService.findByEmail(email)
+        .orElseThrow(() -> new IllegalArgumentException("Logged-in user not found"));
+
+    // DTO → Task 엔티티 변환
+    Task task = new Task();
+    task.setName(taskDTO.getName());
+    task.setDescription(taskDTO.getDescription() != null ? taskDTO.getDescription() : "");
+    task.setStartDate(taskDTO.getStartDate());
+    task.setDueDate(taskDTO.getDueDate());
+    task.setStatus(Task.Status.valueOf(taskDTO.getStatus()));
+    task.setProject(project);
+    task.setAssignedTo(assignedUser);
+    task.setCreatedBy(createdByUser);
+    task.setColor(taskDTO.getColor());
+
+    Task createdTask = taskService.createTask(task);
+
+    messagingTemplate.convertAndSend("/topic/tasks/" + taskDTO.getProjectId(), new TaskDTO(createdTask));
+
+    return ResponseEntity.ok(createdTask);
   }
-    
+
   // 프로젝트 ID로 작업 조회 API
   @GetMapping
   public ResponseEntity<List<TaskDTO>> getTasksByProjectId(@RequestParam Long projectId) {
@@ -78,6 +82,10 @@ public class TaskController {
         .stream()
         .map(TaskDTO::new)
         .collect(Collectors.toList());
+
+    // ✅ createdBy 값이 포함되었는지 로그 확인
+    tasks.forEach(task -> System.out.println("📌 Task ID: " + task.getId() + " | createdBy: " + task.getCreatedBy()));
+
     return ResponseEntity.ok(tasks);
   }
 
@@ -111,7 +119,11 @@ public class TaskController {
   @DeleteMapping("/{id}")
   public ResponseEntity<Void> deleteTask(@PathVariable Long id) {
     taskService.deleteTask(id);
-    messagingTemplate.convertAndSend("/topic/tasks/delete", id); // 작업 삭제 이벤트 전송
+    try {
+      messagingTemplate.convertAndSend("/topic/tasks/delete", id);
+    } catch (Exception e) {
+      System.err.println("Messaging error: " + e.getMessage());
+    }
     return ResponseEntity.noContent().build();
   }
 

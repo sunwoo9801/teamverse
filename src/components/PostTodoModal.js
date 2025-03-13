@@ -3,8 +3,9 @@ import axios from "axios";
 import { getAccessToken } from "../utils/authUtils";
 import FileUpload from "./FileUpload";
 import "../styles/PostTodoModal.css";
-import ModalNav from "./ModalNav";
 import { FaPaperclip, FaMapMarkerAlt, FaTrashAlt, FaFileAlt } from "react-icons/fa"; // 파일 & 장소 아이콘 추가
+import { searchPlaces } from "../api/places"; // 장소 검색 API import
+import ModalNav from "./ModalNav";
 import parse from "html-react-parser";
 import { getStompClient } from "../api/websocket"; // WebSocket 클라이언트 가져오기
 
@@ -18,6 +19,70 @@ const PostTodoModal = ({ onClose, initialTab = "post", refreshFeed, projectId })
   const contentRef = useRef(null); // contentEditable div 참조
   const isModal = true;  // 모달에서만 삭제 버튼을 보이게 하는 변수 추가!
 
+  // 장소 추가
+  const [showPlaceSearch, setShowPlaceSearch] = useState(false);
+  const [places, setPlaces] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchCache, setSearchCache] = useState({});
+  const [googleMapsApiKey, setGoogleMapsApiKey] = useState("");
+
+  // Google Maps API 키 가져오기
+  useEffect(() => {
+    const fetchGoogleMapsApiKey = async () => {
+      const token = getAccessToken();
+      try {
+        const response = await axios.get("http://localhost:8082/api/places/google-maps-key", {
+          headers: { Authorization: `Bearer ${token}` },
+          withCredentials: true,
+        });
+        setGoogleMapsApiKey(response.data);
+      } catch (error) {
+        console.error("❌ Google Maps API 키 가져오기 실패:", error);
+      }
+    };
+
+    fetchGoogleMapsApiKey();
+  }, []);
+
+  // 장소 검색 useEffect
+  useEffect(() => {
+    if (searchQuery.trim()) {
+      if (searchCache[searchQuery]) {
+        setPlaces(searchCache[searchQuery]);
+      } else {
+        const delayDebounceFn = setTimeout(async () => {
+          try {
+            const results = await searchPlaces(searchQuery);
+            setPlaces(results);
+            setSearchCache(prevCache => ({ ...prevCache, [searchQuery]: results }));
+          } catch (error) {
+            console.error("❌ 장소 검색 실패:", error);
+          }
+        }, 300);
+        return () => clearTimeout(delayDebounceFn);
+      }
+    } else {
+      setPlaces([]);
+    }
+  }, [searchQuery, searchCache]);
+
+  const addPlaceToTask = (place) => {
+    const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(place.name)}`;
+    const staticMapUrl = `https://maps.googleapis.com/maps/api/staticmap?center=${encodeURIComponent(place.name)}&zoom=15&size=600x300&maptype=roadmap&markers=color:red|${encodeURIComponent(place.name)}&key=${googleMapsApiKey}`;
+    const placeAddress = place.formatted_address || place.vicinity || "주소 정보 없음";
+
+    // description에 장소 정보 추가 (기존 내용 뒤에 추가)
+    setTaskData(prev => ({
+      ...prev,
+      description: prev.description + `\n\n📍 ${place.name} (${placeAddress})`
+    }));
+
+    // contentEditable div에도 반영
+    if (contentRef.current) {
+      contentRef.current.innerHTML += `<p>📍 <a href="${googleMapsUrl}" target="_blank" rel="noopener noreferrer">${place.name}</a> (${placeAddress})</p>`;
+    }
+    setShowPlaceSearch(false);
+  };
 
   const [taskData, setTaskData] = useState({
     name: "",
@@ -246,8 +311,8 @@ const PostTodoModal = ({ onClose, initialTab = "post", refreshFeed, projectId })
 
     try {
       if (activeTab === "post") {
-        if (!title.trim() || (!content && uploadedFiles.length === 0)) {
-          alert("제목과 내용을 입력하세요.");
+        if (!title.trim()) {
+          alert("제목을 입력하세요.");
           return;
         }
 
@@ -270,22 +335,32 @@ const PostTodoModal = ({ onClose, initialTab = "post", refreshFeed, projectId })
 
         alert("게시글이 성공적으로 등록되었습니다!");
       } else if (activeTab === "task") {
-        // 업무(Task) 등록 시 contentRef의 내용을 description으로 저장
-        const response = await axios.post(
+        // 업무 제목만 입력되어도 등록할 수 있도록, 필수값에 기본값을 할당
+        if (!taskData.name.trim()) {
+          alert("업무 제목을 입력하세요.");
+          return;
+        }
+        // 기본값 할당 (예: 오늘 날짜로 설정)
+        const todayStr = new Date().toISOString().split("T")[0]; // "YYYY-MM-DD" 형식
+        const updatedTaskData = {
+          ...taskData,
+          description: content, // contentEditable의 내용, 없으면 빈 문자열
+          startDate: taskData.startDate || todayStr,
+          dueDate: taskData.dueDate || todayStr,
+          projectId,
+          files: uploadedFiles.map(file => file.url)
+        };
+        await axios.post(
           "http://localhost:8082/api/user/tasks",
-          {
-            ...taskData,
-            description: content, // `description`을 contentEditable에서 가져오기
-            projectId
-          },
+          updatedTaskData,
           {
             headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
             withCredentials: true,
           }
         );
-
         alert("업무가 성공적으로 등록되었습니다!");
       }
+
       refreshFeed();
       onClose();
     } catch (error) {
@@ -342,6 +417,8 @@ const PostTodoModal = ({ onClose, initialTab = "post", refreshFeed, projectId })
 
               <label>업무 상태:</label>
               <select name="status" value={taskData.status} onChange={handleChange}>
+                <option value="DRAFT">초안</option>
+                <option value="EDITING">수정 중</option>
                 <option value="TODO">할 일</option>
                 <option value="IN_PROGRESS">진행 중</option>
                 <option value="DONE">완료</option>
@@ -389,9 +466,33 @@ const PostTodoModal = ({ onClose, initialTab = "post", refreshFeed, projectId })
                   <FileUpload projectId={projectId} onFileUploaded={handleFileUploaded} />
                 </div>
               )}
-              <button className="icon-btn">
+              <button className="icon-btn" onClick={() => setShowPlaceSearch(true)}>
                 <FaMapMarkerAlt /> 장소 추가
               </button>
+              {showPlaceSearch && (
+                <div className="place-search-container">
+                  <input
+                    type="text"
+                    placeholder="장소 검색"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="place-search-input"
+                  />
+                  {places.length > 0 && (
+                    <ul className="place-search-list">
+                      {places.map((place) => (
+                        <li key={place.place_id} onClick={() => addPlaceToTask(place)} className="place-search-item">
+                          <div className="place-info">
+                            <FaMapMarkerAlt className="place-icon" />
+                            <span className="place-name">{place.name}</span>
+                            <span className="place-address">{place.formatted_address}</span>
+                          </div>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+              )}
             </div>
 
 

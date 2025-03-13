@@ -30,9 +30,14 @@ public class UserService {
         this.jwtTokenProvider = jwtTokenProvider;
     }
 
-    // ✅ ID로 사용자 조회
+    // ID로 사용자 조회
     public Optional<User> findById(Long id) {
         return userRepository.findById(id);
+    }
+
+    // Username으로 사용자 조회 (추가)
+    public Optional<User> findByUsername(String username) {
+        return userRepository.findByUsername(username);
     }
 
     // 사용자 등록 로직
@@ -55,7 +60,7 @@ public class UserService {
         newUser.setPassword(passwordEncoder.encode(userDTO.getPassword())); // 비밀번호 암호화
         newUser.setRole(User.Role.MEMBER); // 기본 역할 설정
 
-        // ✅ 선택 입력 필드 (값이 있으면 저장, 없으면 null 유지)
+        // 선택 입력 필드 (값이 있으면 저장, 없으면 null 유지)
         if (userDTO.getCompanyName() != null) {
             newUser.setCompanyName(userDTO.getCompanyName());
         }
@@ -125,16 +130,20 @@ public class UserService {
         userRepository.save(user);
     }
 
-     // ✅ 사용자 정보 업데이트 기능 추가
-     @Transactional
-     public void updateUser(User user, Map<String, String> updates) {
-         if (updates.containsKey("companyName")) user.setCompanyName(updates.get("companyName"));
-         if (updates.containsKey("department")) user.setDepartment(updates.get("department"));
-         if (updates.containsKey("position")) user.setPosition(updates.get("position"));
-         if (updates.containsKey("phoneNumber")) user.setPhoneNumber(updates.get("phoneNumber"));
- 
-         userRepository.save(user);
-     }
+    // 사용자 정보 업데이트 기능 추가
+    @Transactional
+    public void updateUser(User user, Map<String, String> updates) {
+        if (updates.containsKey("companyName"))
+            user.setCompanyName(updates.get("companyName"));
+        if (updates.containsKey("department"))
+            user.setDepartment(updates.get("department"));
+        if (updates.containsKey("position"))
+            user.setPosition(updates.get("position"));
+        if (updates.containsKey("phoneNumber"))
+            user.setPhoneNumber(updates.get("phoneNumber"));
+
+        userRepository.save(user);
+    }
 
     // 사용자 삭제
     @Transactional

@@ -51,8 +51,8 @@ public class SecurityConfig {
                         .requestMatchers("/api/places/search").authenticated()
                         .requestMatchers("/api/user").authenticated()
                         .requestMatchers("/api/auth").authenticated()
-                  .requestMatchers("/api/auth/**").permitAll() // 인증 없이 접근 가능
-                  .requestMatchers("/api/user/tasks/**").authenticated()
+                        .requestMatchers("/api/auth/**").permitAll() // 인증 없이 접근 가능
+                        .requestMatchers("/api/user/tasks/**").authenticated()
                         .requestMatchers("/api/likes/**").authenticated()
                         .requestMatchers("/api/likes/toggle").authenticated() // 인증 필요
                         .requestMatchers("/api/files/**").authenticated()
@@ -61,11 +61,14 @@ public class SecurityConfig {
                         .requestMatchers("/api/files/upload").authenticated() // 파일 업로드는 인증 필요
                         .requestMatchers("/api/activity/feed/**").authenticated() // 피드 조회는 인증된 사용자만 가능
                         .requestMatchers("/api/activity/feed/{projectId}").authenticated() // 피드 조회는 인증된 사용자만 가능
-                  .requestMatchers(HttpMethod.POST, "/api/chat/private/send").hasAnyRole("USER", "MEMBER") // 사용자 역할 필요
-                  .requestMatchers("/api/chat/private/**").authenticated() // 개인 메시지 API 보호
+                        .requestMatchers("/api/comments/**").authenticated()  // 🔹 댓글 API는 인증된 사용자만 접근 가능
+                        .requestMatchers(HttpMethod.PATCH, "/api/comments/**").authenticated() // 🔹 PATCH 요청 허용
+                        .requestMatchers(HttpMethod.POST, "/api/chat/private/send").hasAnyRole("USER", "MEMBER") // 사용자
+                                                                                                                 // 역할
+                                                                                                                 // 필요
+                        .requestMatchers("/api/chat/private/**").authenticated() // 개인 메시지 API 보호
 
-
-                  .anyRequest().authenticated())
+                        .anyRequest().authenticated())
                 .exceptionHandling(exception -> exception
                         .authenticationEntryPoint((request, response, authException) -> {
                             System.out.println(" [SecurityConfig] 인증 실패: " + request.getRequestURI());
@@ -89,9 +92,9 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-//         configuration.setAllowedOriginPatterns(List.of("*")); // 모든 출처 허용
+        // configuration.setAllowedOriginPatterns(List.of("*")); // 모든 출처 허용
         configuration.setAllowedOrigins(List.of("http://localhost:3000")); // React 프론트엔드만 허용
-        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS")); // ✅ PATCH 추가
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setExposedHeaders(List.of("Authorization", "Content-Disposition")); // 클라이언트가 Authorization 헤더
         configuration.setAllowCredentials(true); // JWT 포함 요청 허용

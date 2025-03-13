@@ -3,7 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
 import LeftSidebar from "../components/LeftSidebar"; // 왼쪽 사이드바 추가
 import axios from "axios";
-import { FaEllipsisV, FaPencilAlt, FaSignOutAlt, FaEdit, FaTasks, FaCalendarAlt, FaThumbtack, FaCheckCircle, FaExclamationTriangle, FaHourglassHalf, FaPaperclip } from "react-icons/fa";
+import { FaEllipsisV, FaPencilAlt, FaSignOutAlt, FaTrashAlt, FaEdit, FaTasks, FaCalendarAlt, FaThumbtack, FaCheckCircle, FaExclamationTriangle, FaHourglassHalf, FaPaperclip } from "react-icons/fa";
 import { getAccessToken } from "../utils/authUtils";
 import TaskModal from "../components/TaskModal"; //  작업 추가 모달
 import TaskDetailModal from "../components/TaskDetailModal"; // Task 상세보기 모달 추가
@@ -13,8 +13,6 @@ import PostTodoModal from "../components/PostTodoModal";
 import ActivityFeed from "../components/ActivityFeed"; // 피드 컴포넌트 추가
 import FilesTab from "../components/FilesTab";
 import ProjectEditModal from "../components/ProjectEditModal"; // 수정 모달 추가
-
-
 import "../styles/ProjectDetailPage.css";
 
 const ProjectDetailPage = () => {
@@ -31,7 +29,9 @@ const ProjectDetailPage = () => {
     const [isEditModalOpen, setIsEditModalOpen] = useState(false); // 수정 모달 상태
     const [isDropdownOpen, setIsDropdownOpen] = useState(false); // 드롭다운 상태 추가
     const dropdownRef = useRef(null); // dropdownRef 정의
-
+    const [showModal, setShowModal] = useState(false);
+    const [projectName, setProjectName] = useState("");
+    const [projectDescription, setProjectDescription] = useState("");
 
 
 
@@ -53,8 +53,6 @@ const ProjectDetailPage = () => {
             document.removeEventListener("mousedown", handleClickOutside);
         };
     }, []);
-
-
 
     const fetchProject = async () => {
         if (!projectId) return;
@@ -83,6 +81,49 @@ const ProjectDetailPage = () => {
                 alert("🚨 이 프로젝트에 속한 팀원만 접근할 수 있습니다.");
                 navigate("/dashboard"); // 🚨 대시보드로 이동
             }
+        }
+    };
+
+    // ✅ 새로운 프로젝트 생성 함수 추가
+    const handleCreateProject = async () => {
+        const token = getAccessToken();
+        if (!token) {
+            alert("로그인이 필요합니다.");
+            navigate("/login");
+            return;
+        }
+
+        try {
+            const newProjectData = {
+                name: projectName.trim() !== "" ? projectName.trim() : null,
+                description: projectDescription.trim() !== "" ? projectDescription.trim() : null,
+                startDate: new Date().toISOString().split("T")[0],
+            };
+
+            const response = await axios.post(
+                "http://localhost:8082/api/user/projects",
+                newProjectData,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        "Content-Type": "application/json",
+                    },
+                    withCredentials: true,
+                }
+            );
+
+            console.log("✅ 새 프로젝트 생성 응답:", response.data);
+
+            // ✅ 프로젝트 생성 후 Task 페이지로 이동
+            navigate(`/task?projectId=${response.data.id}`);
+
+            // ✅ 상태 초기화
+            setProjectName("");
+            setProjectDescription("");
+            setShowModal(false);
+        } catch (error) {
+            console.error("❌ 프로젝트 생성 실패:", error);
+            alert("프로젝트 생성에 실패했습니다.");
         }
     };
 
@@ -139,7 +180,6 @@ const ProjectDetailPage = () => {
         }
     };
 
-
     // 피드 갱신 함수
     const refreshFeed = () => {
         console.log("📌 피드 갱신 중...");
@@ -155,9 +195,6 @@ const ProjectDetailPage = () => {
             fetchFeed(); // 피드도 자동으로 가져오기
         }
     }, [projectId]);
-
-
-
 
     //  Task 삭제 기능
     const handleDeleteTask = async (taskId) => {
@@ -214,6 +251,30 @@ const ProjectDetailPage = () => {
             alert("🚨 프로젝트를 수정할 수 없습니다.");
         }
     };
+
+    const handleDeleteProject = async () => {
+        const token = getAccessToken();
+        if (!token) {
+            alert("로그인이 필요합니다.");
+            return;
+        }
+        if (!window.confirm("정말로 이 프로젝트를 삭제하시겠습니까? 삭제하면 복구할 수 없습니다.")) return;
+        try {
+            await axios.delete(`http://localhost:8082/api/user/projects/${projectId}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    "Content-Type": "application/json", // DELETE의 경우 필요하지 않을 수 있으나 일관성을 위해 추가
+                },
+                withCredentials: true,
+            });
+            alert("프로젝트가 삭제되었습니다.");
+            navigate("/dashboard"); // 삭제 후 대시보드로 이동
+        } catch (error) {
+            console.error("❌ 프로젝트 삭제 실패:", error);
+            alert("프로젝트 삭제에 실패했습니다.");
+        }
+    };
+
 
 
     if (!project) {
@@ -276,13 +337,12 @@ const ProjectDetailPage = () => {
         }
     };
 
-
-
-
     return (
         <div className="project-detail-page">
             <div className="project-layout">
-                <LeftSidebar />
+                <LeftSidebar onCreateProject={() => setShowModal(true)}
+                // onShowProjectList={handleShowProjectList} 
+                />
                 <div className="project-content">
                     <div className="project-title-container">
 
@@ -301,6 +361,9 @@ const ProjectDetailPage = () => {
                                     <button className="project-dropdown-item" onClick={handleLeaveProject}>
                                         <FaSignOutAlt className="project-dropdown-icon" /> 프로젝트 나가기
                                     </button>
+                                    <button className="project-dropdown-item" onClick={handleDeleteProject}>
+                                        <FaTrashAlt className="project-dropdown-icon" /> 프로젝트 삭제
+                                    </button>
                                 </div>
                             )}
 
@@ -308,10 +371,10 @@ const ProjectDetailPage = () => {
                         <h1>{project?.name || "프로젝트 로딩 중..."}</h1>
                     </div>
 
-                    <p>{project?.description || ""}</p>
+                    <p className="project-description">{project?.description || ""}</p>
 
-                    <p>📅 시작일: {project?.startDate}</p>
-                    <p>⏳ 마감일: {project?.endDate || "미정"}</p>
+                    <p className="project-date">📅 시작일: {project?.startDate}</p>
+                    <p className="project-date">⏳ 마감일: {project?.endDate || "미정"}</p>
 
 
                     {/* 내부 네비게이션 추가 */}
@@ -339,11 +402,6 @@ const ProjectDetailPage = () => {
                         />
                     )}
 
-
-
-
-
-
                     {activeTab === "feed" && (
                         <div className="feed-section">
                             {/* <button onClick={() => setIsPostTodoModalOpen(true)}>📝 글 작성</button> */}
@@ -351,38 +409,44 @@ const ProjectDetailPage = () => {
                         </div>
                     )}
 
-
-
-
-
                     {/* 작업 목록 */}
                     {activeTab === "tasks" && (
-                        <div className="task-section">
-                            <h2><FaTasks /> 작업 목록</h2>
-                            <table className="task-table">
-                                <thead>
-                                    <tr>
-                                        <th>작업명</th>
-                                        <th>담당자</th>
-                                        <th>상태</th>
-                                        <th>시작일</th>
-                                        <th>마감일</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {tasks.map((task) => (
-                                        <tr key={task.id}>
-                                            <td>{task.name}</td>
-                                            <td>{task.assignedTo?.username || "미정"}</td>
-                                            <td>{task.status}</td>
-                                            <td>{task.startDate}</td>
-                                            <td>{task.dueDate}</td>
+                        <div className="task-tab-container">
+                            <div className="task-tab-header">
+                                <h2 className="task-tab-title">
+                                    <FaTasks /> 작업 목록
+                                </h2>
+                                <button className="task-tab-add-btn" onClick={() => setIsTaskModalOpen(true)}>
+                                    + 업무 추가
+                                </button>
+                            </div>
+                            <div className="task-tab-table-wrapper">
+                                <table className="task-tab-table">
+                                    <thead>
+                                        <tr>
+                                            <th className="task-tab-th">작업명</th>
+                                            <th className="task-tab-th">담당자</th>
+                                            <th className="task-tab-th">상태</th>
+                                            <th className="task-tab-th">시작일</th>
+                                            <th className="task-tab-th">마감일</th>
                                         </tr>
-                                    ))}
-                                </tbody>
-                            </table>
+                                    </thead>
+                                    <tbody>
+                                        {tasks.map((task) => (
+                                            <tr key={task.id}>
+                                                <td>{task.name}</td>
+                                                <td>{task.assignedTo?.username || "미정"}</td>
+                                                <td>{task.status}</td>
+                                                <td>{task.startDate}</td>
+                                                <td>{task.dueDate}</td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     )}
+
 
                     {/* Gantt Chart 탭 */}
                     {activeTab === "gantt" && (
@@ -399,8 +463,8 @@ const ProjectDetailPage = () => {
                                 </button>
                             </div>
                             <hr className="title-divider" />
-                            <div className="task-container">
-                                <div className="task-list">
+                            <div className="gantt-chart-tab-task-container">
+                                <div className="gantt-chart-tab-task-list">
                                     <table>
                                         <thead>
                                             <tr>
@@ -422,7 +486,7 @@ const ProjectDetailPage = () => {
                                         </tbody>
                                     </table>
                                 </div>
-                                <div className="gantt-chart-container">
+                                <div className="gantt-chart-tab-container">
                                     <GanttChart tasks={tasks} />
                                 </div>
                             </div>
@@ -436,13 +500,7 @@ const ProjectDetailPage = () => {
                         </div>
                     )}
 
-
                 </div>
-
-
-
-
-
                 {/* 🚀 **우측 사이드바 추가** */}
                 <div className="sidebar-container">
                     <Sidebar projectId={projectId} />
@@ -459,6 +517,28 @@ const ProjectDetailPage = () => {
                 />
             )}
 
+            {/* ✅ 프로젝트 생성 모달 추가 */}
+            {showModal && (
+                <div className="modal">
+                    <div className="modal-content">
+                        <h2>새 프로젝트 생성</h2>
+                        <input
+                            type="text"
+                            placeholder="프로젝트 이름"
+                            value={projectName}
+                            onChange={(e) => setProjectName(e.target.value)}
+                        />
+                        <input
+                            type="text"
+                            placeholder="프로젝트 설명 (선택 사항)"
+                            value={projectDescription}
+                            onChange={(e) => setProjectDescription(e.target.value)}
+                        />
+                        <button onClick={handleCreateProject}>생성</button>
+                        <button onClick={() => setShowModal(false)}>취소</button>
+                    </div>
+                </div>
+            )}
 
             {/* 프로젝트 수정 모달 추가 */}
             {isEditModalOpen && (
@@ -470,7 +550,6 @@ const ProjectDetailPage = () => {
             )}
         </div>
     );
-
 };
 
 export default ProjectDetailPage;

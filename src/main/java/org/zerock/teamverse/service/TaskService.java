@@ -74,6 +74,7 @@ public class TaskService {
         return taskRepository.save(task);
     }
 
+    @Transactional
     public void deleteTask(Long id) {
         Task task = taskRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Task not found"));
@@ -93,5 +94,5 @@ public class TaskService {
     public boolean existsByNameAndProject(String name, Project project) {
         return taskRepository.existsByNameAndProject(name, project);
     }
-    
+
 }

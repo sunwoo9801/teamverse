@@ -81,3 +81,42 @@
 .gantt-chart-container {
   flex: 2;
 }
+
+/* 작업 카드의 메뉴 컨테이너 */
+.task-page-task-menu {
+  position: relative;
+  display: inline-block;
+}
+
+/* 메뉴 아이콘 (점 3개) 스타일 */
+.task-page-menu-icon {
+  cursor: pointer;
+  font-size: 18px;
+  color: #555;
+}
+
+/* 드롭다운 메뉴 스타일 */
+.task-page-dropdown-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: #fff;
+  border: 1px solid #ddd;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  z-index: 1000;
+}
+
+/* 드롭다운 메뉴 아이템 스타일 */
+.task-page-dropdown-item {
+  padding: 5px 10px;
+  cursor: pointer;
+  border-bottom: 1px solid #eee;
+}
+
+.task-page-dropdown-item:last-child {
+  border-bottom: none;
+}
+
+.task-page-dropdown-item:hover {
+  background-color: #f7f7f7;
+}

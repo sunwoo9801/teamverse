@@ -65,10 +65,10 @@ const Sidebar = ({ projectId }) => {
 
   return (
     <div className="sidebar_2">
-      <h3>👥 팀 멤버</h3>
+      <h3>팀 멤버</h3>
       <input
         type="text"
-        placeholder="🔍 팀원 검색..."
+        placeholder="팀원 검색..."
         className="search-bar"
         value={search}
         onChange={(e) => setSearch(e.target.value)}

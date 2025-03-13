@@ -67,6 +67,7 @@ public class SecurityConfig {
                                                                                                                  // 역할
                                                                                                                  // 필요
                         .requestMatchers("/api/chat/private/**").authenticated() // 개인 메시지 API 보호
+                        .requestMatchers("/uploads/**").permitAll() // ✅ 파일 다운로드는 인증 없이 허용
 
                         .anyRequest().authenticated())
                 .exceptionHandling(exception -> exception

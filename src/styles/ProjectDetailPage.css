@@ -53,13 +53,20 @@
 .task-section,
 .gantt-chart-section,
 .activity-feed-section {
-  background: white;
   padding: 15px;
   border-radius: 8px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  margin-bottom: 20px;
+  
+  /* box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); */
 }
 
+.task-line{
+  background: #fff;
+  border-radius: 10px;
+  /* box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); */
+  padding: 20px;
+  border: 1px solid #cdcdcd;
+  position: relative; /* 드롭다운 위치를 위한 상대 위치 */
+}
 /* 작업 목록과 간트차트가 담긴 컨테이너 */
 .gantt-chart-tab-task-container {
   display: flex;
@@ -297,34 +304,27 @@ h2 {
   font-weight: bold;
 }
 
+/* ✅ files-section을 p-4 스타일과 맞추기 */
 .files-section {
-  background: white;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  margin-top: 20px;
-  /* 상단 여백 */
-  margin-bottom: 20px;
-  width: 90%;
-  /* ✔ feed-section, task-page와 동일한 크기 */
-  max-width: 1000px;
-  /* ✔ 최대 너비 지정 (너무 크지 않도록) */
-  margin-left: auto;
-  /* 중앙 정렬 */
-  margin-right: auto;
-  /* 중앙 정렬 */
+padding: 1rem;
 }
-
-/* 제목 스타일 (다른 섹션과 동일하게) */
+.files-tab{
+  padding: 16px; /* ✅ p-4와 동일한 내부 패딩 */
+  background: white; /* ✅ 배경 흰색 */
+  border: 1px solid #d1d5db; /* ✅ border-gray-300 */
+  border-radius: 8px; /* ✅ rounded-lg */
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.05); /* ✅ 부드러운 그림자 */
+  margin: 16px 0; /* ✅ 위아래 여백 추가 */
+  width: 100%; /* ✅ 부모 요소의 전체 너비 사용 */
+}
+/* ✅ 내부 컨텐츠 정렬 */
 .files-section h2 {
-  font-size: 20px;
-  margin-bottom: 15px;
-  text-align: left;
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 12px;
 }
 
-/* 파일 목록 스타일 */
 .files-section .file-list-container {
-  width: 100%;
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -332,14 +332,14 @@ h2 {
 
 .files-section .file-item {
   background: #f9f9f9;
-  padding: 10px;
-  border-radius: 5px;
+  padding: 12px;
+  border-radius: 6px;
   display: flex;
-  justify-content: flex-start;
   align-items: center;
   border: 1px solid #ddd;
   width: 100%;
 }
+
 
 .files-section .file-item a {
   text-decoration: none;
@@ -352,35 +352,88 @@ h2 {
 }
 
 /* 📌 프로젝트 제목과 드롭다운 버튼을 감싸는 컨테이너 */
+/* 📌 프로젝트 헤더 컨테이너 */
 .project-header {
-  background-color: #f3f4f6;
-  padding: 20px;
+  padding: 24px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap; /* 화면 크기에 따라 요소가 정렬됨 */
+  gap: 20px;
 }
 
-.project-header h1 {
-  font-size: 22px;
-  font-weight: bold;
-  margin-bottom: 5px;
+/* 📌 프로젝트 타이틀 & 설명 */
+.project-title-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  flex: 1; /* 공간 최적화 */
 }
-.project-header p {
+
+.project-title-container h1 {
+  font-size: 26px;
+  font-weight: bold;
+  margin: 0;
+  color: #333;
+}
+
+.project-title-container p {
   font-size: 14px;
   color: #666;
-  margin-bottom: 10px;
+  margin-top: 5px;
 }
 
-/* ⋮(점 3개) 버튼 크기 조정 */
+
+
+/* 📌 프로젝트 날짜 정보 */
+/* 📌 프로젝트 날짜 정보 */
+/* 📌 프로젝트 날짜 정보 */
+.project-dates {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* ✅ 왼쪽 정렬 */
+  text-align: left;
+  flex-shrink: 0;
+  gap: 6px; /* 날짜 간격 */
+}
+
+/* 📌 개별 날짜 항목 */
+.project-dates p {
+  display: flex;
+  align-items: center; /* ✅ 아이콘과 텍스트 정렬 */
+  font-size: 15px;
+  font-weight: 500;
+  color: #969696;
+  margin: 0;
+  gap: 5px; /* 아이콘과 날짜 간격 */
+}
+
+/* 📌 |(구분선) 스타일 */
+.date-divider {
+  font-size: 16px;
+  color: #999; /* ✔️ 회색 구분선 */
+  font-weight: bold;
+  display: inline-block;
+  width: 12px; /* ✔️ 너비 일정하게 설정 */
+  text-align: center;
+}
+
+
+/* 📌 ⋮(점 3개) 버튼 */
 .project-dropdown-button {
-  color: #777;
   background: none;
   border: none;
-  font-size: 18px; /* 🔹 아이콘 크기 */
+  font-size: 20px;
+  color: #888;
   cursor: pointer;
-  padding: 0px 5px; /* 🔹 버튼 크기 조정 */
-  display: flex;
-  align-items: center; /* 🔹 버튼 내부 아이콘 세로 정렬 */
-  height: 50px; /* 🔹 제목과 높이 맞춤 */
+  padding: 8px;
+  transition: color 0.2s ease-in-out;
 }
 
+.project-dropdown-button:hover {
+  color: #444;
+}
 
 /* 프로젝트 제목과 설명 사이 간격 줄이기 */
 .project-title-container {
@@ -526,3 +579,64 @@ h2 {
 .task-tab-table tr:hover {
   background-color: #f0f8ff;
 }
+
+
+/* ProjectDetailPage 내부에서만 sidebar 스타일 적용 */
+.project-detail-page .sidebar-container {
+  background-color: #f4f4f4;  /* 예시: 배경색 변경 */
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.project-detail-page .sidebar_2 {
+  border: 1px solid #ddd; /* 사이드바 테두리 추가 */
+  background-color: white; /* 배경 흰색 */
+  padding: 10px;
+  border-radius: 8px;
+}
+
+.project-detail-page .team-member {
+  border-radius: 5px;
+  padding: 10px;
+  transition: background 0.3s;
+}
+
+.project-detail-page .team-member:hover {
+  background-color: #e0e0e0;
+}
+
+/* 📌 반응형 디자인 (작은 화면에서 세로 정렬) */
+@media (max-width: 768px) {
+  .project-header {
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  .project-dates {
+    align-items: flex-start;
+    text-align: left;
+  }
+}
+
+/* 📌 팀원 정보 컨테이너 */
+.member-info {
+  display: flex;
+  flex-direction: column; /* ✅ 강제 개행하여 span이 strong 아래 배치되도록 */
+  gap: 4px; /* ✅ strong과 span 사이의 간격 */
+}
+
+/* 📌 팀원 이름 (strong) */
+.member-info strong {
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+}
+
+/* 📌 팀원 역할 (span) */
+.member-info span {
+  font-size: 12px;
+  color: #777;
+}
+
+

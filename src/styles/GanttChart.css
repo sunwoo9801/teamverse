@@ -7,8 +7,10 @@
   position: relative; /* 부모 요소를 기준으로 버튼 위치 고정 */
   padding: 20px;
   border-radius: 8px;
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  /* box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); */
   background-color: #fff;
+  border: 1px solid #cdcdcd;
+
   /* border-radius: 8px; */
   min-height: 400px; /* 🔹 최소 높이 설정 */
   height: auto; /* 🔹 내용에 따라 높이 자동 조정 */

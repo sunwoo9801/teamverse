@@ -108,6 +108,17 @@ const FilesTab = ({ projectId }) => {
     setPreviewFile(file);
   };
 
+    // ✅ 파일을 클릭하면 즉시 다운로드하는 함수
+    const handleFileDownload = (file) => {
+      const link = document.createElement("a");
+      link.href = file.fileUrl; // 서버에서 제공하는 파일 URL 사용
+      link.download = file.fileName || "downloaded_file";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    };
+
+    
   return (
     <div className="files-tab">
       <h2>파일 목록</h2>
@@ -137,7 +148,11 @@ const FilesTab = ({ projectId }) => {
                   />
                 </td>
                 <td className="file-item">
-                  <span onClick={() => handlePreview(file)} className="file-name">
+                  {/* <span onClick={() => handlePreview(file)} className="file-name">
+                    {file.fileName}
+                  </span> */}
+                                    {/* ✅ 클릭 시 즉시 다운로드 */}
+                                    <span onClick={() => handleFileDownload(file)} className="file-name">
                     {file.fileName}
                   </span>
                 </td>

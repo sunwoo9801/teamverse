@@ -165,11 +165,11 @@ const Navbar = () => {
                   <p className="dropdown-username">{user.username}</p>
                 </div>
 
-                <span className="dropdown-item" onClick={() => setShowProfileModal(true)}>
+                <span className="my_profile" onClick={() => setShowProfileModal(true)}>
                   <FaUserCircle className="icon" /> 내 프로필
                 </span>
                 
-                <Link to="/settings" className="dropdown-item">
+                <Link to="/settings" className="profile_setting">
                   <FaCogs className="icon" /> 설정
                 </Link>
                 

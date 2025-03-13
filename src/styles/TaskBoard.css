@@ -3,6 +3,8 @@
   display: flex; /* ✅ LeftSidebar와 TaskBoard를 나란히 배치 */
   height: 100vh;
   background: #f3f4f6; /* 💡 배경색 추가 */
+  height: calc(100vh - 57px); /* 원하는 계산 높이 유지 */
+
 }
 
 

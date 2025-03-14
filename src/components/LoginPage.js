@@ -63,19 +63,6 @@ const LoginPage = () => {
 			alert(response.message || "로그인 실패");
 		}
 	};
-
-	// 로그인한 사용자 정보 가져오기
-	// const fetchUserInfo = async (token) => {
-	// 	try {
-	// 		const response = await axios.get("http://localhost:8082/api/user", {
-	// 			headers: { Authorization: `Bearer ${token}` },
-	// 		});
-	// 		return response.data;
-	// 	} catch (error) {
-	// 		console.error("사용자 정보를 불러오지 못했습니다:", error);
-	// 		return null;
-	// 	}
-	// };
 	const fetchUserInfo = async () => {
 		try {
 			const token = localStorage.getItem("accessToken")  || sessionStorage.getItem("accessToken");

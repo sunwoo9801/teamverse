@@ -5,6 +5,7 @@ html, body {
   width: 100vw;
   height: 100vh;
   min-height: 100vh; /* 최소 높이를 100vh로 설정하여 늘어날 수 있도록 함 */
+  overflow: auto; /* 🚨 자동 스크롤 가능하도록 변경 */
 
 
 }
@@ -20,8 +21,10 @@ html, body {
   min-height: 100vh; /* 최소 높이를 설정하여 내용에 따라 늘어나도록 함 */
   overflow-y: auto; /* 세로 스크롤 가능 */
   width: 100%;  /* 가로폭을 100%로 지정 */
-  overflow: visible; /* Allows content to grow */
-  height: auto !important; /* Ensures dynamic growth */
+  overflow: visible !important; /* 🚨 내부 요소 확장 허용 */
+  height: auto !important; /* 🚨 자동 확장 허용 */
+
+
 }
 
 
@@ -41,8 +44,8 @@ html, body {
   gap: 20px;
   padding: 80px 80px 0px 80px;
   min-height: 100vh; /* Ensures it expands at least to the full viewport height */
-  height: auto !important; /* Allows it to grow dynamically */
-  overflow: visible; /* Ensures content can expand */
+  height: auto !important; /* 🚨 자동 확장 */
+  overflow: visible !important; /* 🚨 내부 요소가 넘쳐도 스크롤 없이 확장 */
 }
 
 .top-row {

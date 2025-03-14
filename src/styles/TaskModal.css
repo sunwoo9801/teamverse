@@ -11,22 +11,21 @@
   align-items: center;
 }
 
-/* 부모 요소 크기 제한 해제 */
+/* 부모 요소 크기 축소 */
 .task-modal-container {
-  width: 100%;
-  max-width: 98vw;
+  width: 90%;
+  max-width: 480px; /* 기존보다 작게 조정 */
   overflow: visible !important;
 }
 
 .task-modal-content {
   background: white;
-  padding: 50px;
-  border-radius: 12px;
-  width: 1100px;
-  min-width: 1100px;
-  max-width: 98vw;
+  padding: 30px; /* 패딩 감소 */
+  border-radius: 10px;
+  width: 100%;
+  max-width: 460px; /* 기존보다 작게 조정 */
   height: auto;
-  max-height: 95vh;
+  max-height: 85vh; /* 높이 축소 */
   overflow-y: auto;
   text-align: center;
 }
@@ -35,47 +34,49 @@
 .task-modal-content label {
   display: block;
   font-weight: bold;
-  margin-top: 20px;
+  margin-top: 15px; /* 간격 조정 */
   text-align: left;
-  font-size: 18px;
+  font-size: 16px;
 }
 
 .task-modal-content input,
 .task-modal-content select,
 .task-modal-content textarea {
   width: 100%;
-  padding: 14px;
-  margin-top: 10px;
+  padding: 10px; /* 패딩 감소 */
+  margin-top: 8px; /* 간격 축소 */
   border: 1px solid #ccc;
   border-radius: 6px;
-  font-size: 18px;
+  font-size: 16px;
 }
 
 .modal-content textarea {
-  height: 180px;
+  height: 140px; /* 기존보다 높이 축소 */
   resize: none;
 }
 
+/* 버튼 스타일 */
 .modal-actions {
-  margin-top: 30px;
+  margin-top: 20px;
   display: flex;
   justify-content: space-between;
 }
 
 .modal-actions button {
-  padding: 16px 22px;
-  font-size: 18px;
+  padding: 12px 18px; /* 버튼 크기 조정 */
+  font-size: 16px; /* 폰트 크기 감소 */
   cursor: pointer;
 }
 
+/* 아이콘 버튼 스타일 */
 .icon-btn {
   width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 16px;
-  margin-top: 12px;
-  font-size: 18px;
+  padding: 12px; /* 크기 축소 */
+  margin-top: 10px;
+  font-size: 16px;
   background: #f1f1f1;
   border: none;
   cursor: pointer;
@@ -86,169 +87,99 @@
   background: #e0e0e0;
 }
 
-/* 장소 검색창 스타일 */
+/* 장소 검색창 크기 조정 */
 .place-search-modal {
   position: absolute;
-  top: -60px;
-  /* 🔥 기존보다 위로 배치하여 버튼 위에 표시 */
+  top: -50px; /* 기존보다 위로 배치 */
   left: 0;
   width: 100%;
   background: white;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
-  padding: 8px;
+  padding: 6px;
   z-index: 1000;
 }
 
 /* 검색창 스타일 */
 .place-search-input {
   width: 100%;
-  padding: 8px;
+  padding: 6px; /* 크기 축소 */
   border: 1px solid #ccc;
   border-radius: 4px;
   font-size: 14px;
 }
 
-/* 검색 결과 목록 (스크롤 가능) */
+/* 검색 결과 목록 */
 .place-search-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  max-height: 180px;
-  /* 🔥 목록이 너무 길어지지 않도록 제한 */
+  max-height: 140px; /* 기존보다 높이 축소 */
   overflow-y: auto;
-  /* 🔥 스크롤 가능하도록 설정 */
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  background: white;
 }
 
-/* Markdown 미리보기 스타일 */
+/* Markdown 미리보기 */
 .markdown-preview {
-  text-align: left;
-  border: 1px solid #ccc;
-  padding: 15px;
-  margin-top: 10px;
-  background-color: #fff;
-  max-height: 300px;
-  overflow-y: auto;
-  border-radius: 6px;
-}
-
-/* 장소 아이콘 스타일 */
-.place-icon {
-  color: #ff4d4f;
-  font-size: 16px;
-  margin-right: 8px;
-}
-
-/* Markdown 미리보기 스타일 */
-.markdown-preview {
-  text-align: left;
-  border: 1px solid #ccc;
-  padding: 15px;
-  margin-top: 10px;
-  background-color: #fff;
-  max-height: 300px;
-  overflow-y: auto;
-  border-radius: 6px;
-}
-
-
-/* 개별 검색 결과 스타일 (아이콘 포함) */
-.place-search-item {
   padding: 12px;
-  border-bottom: 1px solid #eee;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-}
-
-.place-name {
-  font-size: 16px;
-  font-weight: bold;
-  text-decoration: none;
-  color: #007bff;
-}
-
-.place-address {
-  font-size: 14px;
-  color: #666;
-}
-
-.place-search-item:hover {
-  background: #f5f5f5;
-}
-
-
-/* Markdown 미리보기 스타일 */
-.markdown-preview {
-  text-align: left;
-  border: 1px solid #ccc;
-  padding: 15px;
-  margin-top: 20px;
-  background-color: #fff;
-  max-height: 300px;
+  max-height: 240px; /* 기존보다 축소 */
   overflow-y: auto;
 }
 
-/* 장소 카드를 작업 내용에 맞게 정렬 */
-.selected-places {
-  margin-top: 10px;
-}
-
+/* 장소 카드 크기 조정 */
 .place-card {
-  display: flex;
-  align-items: center;
-  background: #f8f8f8;
-  border-radius: 8px;
-  padding: 10px;
-  margin-top: 8px;
-  position: relative;
+  padding: 8px; /* 크기 축소 */
+  margin-top: 6px;
 }
 
-.embedded-place-card {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  border: 1px solid #ddd;
-  padding: 10px;
-  border-radius: 10px;
-  margin: 10px 0;
-  background-color: #fafafa;
-}
-
-
-/* 지도 썸네일 스타일 */
+/* 지도 썸네일 크기 조정 */
 .place-map-thumbnail {
-  width: 100px;
-  height: 100px;
-  border-radius: 8px;
-  object-fit: cover;
+  width: 80px; /* 기존보다 작게 조정 */
+  height: 80px;
 }
 
-/* 장소 정보 정렬 */
-.place-info {
-  flex-grow: 1;
-}
-
+/* 장소 정보 폰트 크기 조정 */
 .place-info a {
-  font-size: 16px;
-  font-weight: bold;
-  text-decoration: none;
-  color: #007aff;
+  font-size: 14px; /* 기존보다 작게 조정 */
 }
 
 .place-info p {
-  font-size: 14px;
-  color: #666;
+  font-size: 12px; /* 폰트 크기 축소 */
 }
 
-/* 삭제 버튼 위치 조정 */
+/* 삭제 버튼 크기 조정 */
 .delete-place-btn {
-  background: none;
-  border: none;
-  color: red;
-  font-size: 20px;
-  cursor: pointer;
+  font-size: 18px; /* 기존보다 작게 조정 */
 }
+
+/* 모달 버튼 스타일 */
+.modal-actions-right button {
+  position: relative;
+  padding: 14px 22px; /* 버튼 크기 */
+  font-size: 16px; /* 글자 크기 */
+  font-weight: bold;
+  border-radius: 8px; /* 둥근 모서리 */
+  border: 2px solid transparent; /* 투명 테두리 */
+  background: white; /* 기본 배경 */
+  color: #333; /* 기본 글자색 */
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+
+/* 그라디언트 테두리 효과 */
+.modal-actions-right button::before {
+  content: "";
+  position: absolute;
+  inset: 0; /* 버튼 크기와 동일 */
+  border-radius: 8px; /* 둥근 모서리 */
+  padding: 2px; /* 테두리 두께 */
+  background: linear-gradient(135deg, #70a0f4, #b889fa); /* 그라디언트 테두리 */
+  -webkit-mask: linear-gradient(white, white) content-box, linear-gradient(white, white);
+  -webkit-mask-composite: destination-out;
+  mask-composite: exclude;
+  pointer-events: none; /* 클릭 방해 방지 */
+}
+
+/* 호버 시 배경색 변경 */
+.modal-actions-right button:hover {
+  background: linear-gradient(135deg, #70a0f4, #b889fa); /* 그라디언트 배경 */
+  color: white; /* 글자색 변경 */
+}
+
+

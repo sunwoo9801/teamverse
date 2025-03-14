@@ -36,11 +36,11 @@ const ActivityFeed = ({ projectId }) => {
   const [editTask, setEditTask] = useState(null); // 수정할 Task
   const [user, setUser] = useState(null);
 
-useEffect(() => {
-  const storedUser = JSON.parse(localStorage.getItem("user"));
-  setUser(storedUser); // ✅ user 상태 설정
-  console.log("📌 현재 로그인한 사용자 정보:", storedUser);
-}, []);
+  useEffect(() => {
+    const storedUser = JSON.parse(localStorage.getItem("user"));
+    setUser(storedUser); // ✅ user 상태 설정
+    console.log("📌 현재 로그인한 사용자 정보:", storedUser);
+  }, []);
 
 
   // Task 목록 새로고침 함수
@@ -111,30 +111,30 @@ useEffect(() => {
   };
 
   // Task 삭제 함수 수정
-const handleDeleteTask = async (taskId) => {
-  const token = getAccessToken();
-  if (!token) {
-    alert("로그인이 필요합니다.");
-    return;
-  }
+  const handleDeleteTask = async (taskId) => {
+    const token = getAccessToken();
+    if (!token) {
+      alert("로그인이 필요합니다.");
+      return;
+    }
 
-  if (!window.confirm("정말로 이 업무를 삭제하시겠습니까?")) return;
+    if (!window.confirm("정말로 이 업무를 삭제하시겠습니까?")) return;
 
-  try {
-    await axios.delete(`http://localhost:8082/api/user/tasks/${taskId}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-      withCredentials: true,
-    });
-    alert("업무가 성공적으로 삭제되었습니다.");
-    refreshTasks(); // 목록 새로고침으로 통일
-    setMenuOpen(null);
-  } catch (error) {
-    console.error("❌ Task 삭제 실패:", error);
-    alert("업무 삭제에 실패했습니다.");
-  }
-};
+    try {
+      await axios.delete(`http://localhost:8082/api/user/tasks/${taskId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        withCredentials: true,
+      });
+      alert("업무가 성공적으로 삭제되었습니다.");
+      refreshTasks(); // 목록 새로고침으로 통일
+      setMenuOpen(null);
+    } catch (error) {
+      console.error("❌ Task 삭제 실패:", error);
+      alert("업무 삭제에 실패했습니다.");
+    }
+  };
 
   // 더보기 메뉴 토글
   const toggleMenu = (taskId) => {
@@ -225,53 +225,53 @@ const handleDeleteTask = async (taskId) => {
   //     }
   //   };
   // }, [projectId]);
-// useEffect에 WebSocket 삭제 이벤트 추가
-useEffect(() => {
-  fetchActivities();
-  fetchTasks();
+  // useEffect에 WebSocket 삭제 이벤트 추가
+  useEffect(() => {
+    fetchActivities();
+    fetchTasks();
 
-  const stompClient = getStompClient();
-  const onActivityReceived = (message) => {
-    const newActivity = JSON.parse(message.body);
-    setActivities((prevActivities) => {
-      const isDuplicate = prevActivities.some((activity) => activity.id === newActivity.id);
-      return isDuplicate ? prevActivities : [newActivity, ...prevActivities];
-    });
-  };
+    const stompClient = getStompClient();
+    const onActivityReceived = (message) => {
+      const newActivity = JSON.parse(message.body);
+      setActivities((prevActivities) => {
+        const isDuplicate = prevActivities.some((activity) => activity.id === newActivity.id);
+        return isDuplicate ? prevActivities : [newActivity, ...prevActivities];
+      });
+    };
 
-  const onTaskReceived = (message) => {
-    const newTask = JSON.parse(message.body);
-    setTasks((prevTasks) => [
-      { ...newTask, createdByUsername: newTask.createdByUsername || "알 수 없는 사용자" },
-      ...prevTasks,
-    ]);
-  };
+    const onTaskReceived = (message) => {
+      const newTask = JSON.parse(message.body);
+      setTasks((prevTasks) => [
+        { ...newTask, createdByUsername: newTask.createdByUsername || "알 수 없는 사용자" },
+        ...prevTasks,
+      ]);
+    };
 
-  const onTaskDeleted = (message) => {
-    const deletedTaskId = JSON.parse(message.body);
-    setTasks((prevTasks) => prevTasks.filter((task) => task.id !== deletedTaskId));
-  };
+    const onTaskDeleted = (message) => {
+      const deletedTaskId = JSON.parse(message.body);
+      setTasks((prevTasks) => prevTasks.filter((task) => task.id !== deletedTaskId));
+    };
 
-  if (stompClient.connected) {
-    stompClient.subscribe(`/topic/feed/${projectId}`, onActivityReceived);
-    stompClient.subscribe(`/topic/tasks/${projectId}`, onTaskReceived);
-    stompClient.subscribe(`/topic/tasks/delete`, onTaskDeleted); // 삭제 구독 추가
-  } else {
-    stompClient.onConnect = () => {
+    if (stompClient.connected) {
       stompClient.subscribe(`/topic/feed/${projectId}`, onActivityReceived);
       stompClient.subscribe(`/topic/tasks/${projectId}`, onTaskReceived);
-      stompClient.subscribe(`/topic/tasks/delete`, onTaskDeleted);
-    };
-  }
-
-  return () => {
-    if (stompClient.connected) {
-      stompClient.unsubscribe(`/topic/feed/${projectId}`);
-      stompClient.unsubscribe(`/topic/tasks/${projectId}`);
-      stompClient.unsubscribe(`/topic/tasks/delete`);
+      stompClient.subscribe(`/topic/tasks/delete`, onTaskDeleted); // 삭제 구독 추가
+    } else {
+      stompClient.onConnect = () => {
+        stompClient.subscribe(`/topic/feed/${projectId}`, onActivityReceived);
+        stompClient.subscribe(`/topic/tasks/${projectId}`, onTaskReceived);
+        stompClient.subscribe(`/topic/tasks/delete`, onTaskDeleted);
+      };
     }
-  };
-}, [projectId]);
+
+    return () => {
+      if (stompClient.connected) {
+        stompClient.unsubscribe(`/topic/feed/${projectId}`);
+        stompClient.unsubscribe(`/topic/tasks/${projectId}`);
+        stompClient.unsubscribe(`/topic/tasks/delete`);
+      }
+    };
+  }, [projectId]);
 
   // --- feed 데이터 병합 및 정렬 ---
   const combinedFeed = useMemo(() => {
@@ -395,7 +395,7 @@ useEffect(() => {
             ))}
         </div>
         {/* CommentList에 고유 key 추가 */}
-        <CommentList key={`activity-${activity.id}`} activityId={activity.id} />
+        <CommentList key={`activity-${activity.id}`} projectId={projectId} activityId={activity.id} />
       </div>
     );
   };
@@ -403,12 +403,12 @@ useEffect(() => {
 
   // --- 렌더링 함수 (Task 카드) ---
   const renderTaskCard = (task) => {
-      // 디버깅용 콘솔 추가 (확인 완료 후 제거 가능)
-  console.log(
-    `Task ID: ${task.id}, CreatedBy:`, task.createdBy, 
-    `User ID: ${user?.id}`, 
-    `비교 결과:`, task.createdBy?.id === user?.id
-  );
+    // 디버깅용 콘솔 추가 (확인 완료 후 제거 가능)
+    console.log(
+      `Task ID: ${task.id}, CreatedBy:`, task.createdBy,
+      `User ID: ${user?.id}`,
+      `비교 결과:`, task.createdBy?.id === user?.id
+    );
     return (
       <div key={task.id} className="activity-card">
         <div className="activity-header">
@@ -438,34 +438,34 @@ useEffect(() => {
           </div>
 
 
-  {/* 🔹 작성자만 더보기 버튼 표시 (수정 완료) */}
-  {task.createdBy?.id === user?.id && (
-          <div className="task-feed-more-menu">
-            <button className="task-feed-more-button" onClick={() => toggleMenu(task.id)}>
-              ⋮
-            </button>
-            {menuOpen === task.id && (
-              <div className="task-feed-dropdown-menu">
-                <button
-                  className="task-feed-dropdown-item"
-                  onClick={() => {
-                    setEditTask(task);
-                    setIsModalOpen(true);
-                    setMenuOpen(null);
-                  }}
-                >
-                  수정
-                </button>
-                <button
-                  className="task-feed-dropdown-item delete-item"
-                  onClick={() => handleDeleteTask(task.id)}
-                >
-                  삭제
-                </button>
-              </div>
-            )}
-          </div>
-        )}
+          {/* 🔹 작성자만 더보기 버튼 표시 (수정 완료) */}
+          {task.createdBy?.id === user?.id && (
+            <div className="task-feed-more-menu">
+              <button className="task-feed-more-button" onClick={() => toggleMenu(task.id)}>
+                ⋮
+              </button>
+              {menuOpen === task.id && (
+                <div className="task-feed-dropdown-menu">
+                  <button
+                    className="task-feed-dropdown-item"
+                    onClick={() => {
+                      setEditTask(task);
+                      setIsModalOpen(true);
+                      setMenuOpen(null);
+                    }}
+                  >
+                    수정
+                  </button>
+                  <button
+                    className="task-feed-dropdown-item delete-item"
+                    onClick={() => handleDeleteTask(task.id)}
+                  >
+                    삭제
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
 
 
         </div>
@@ -563,7 +563,7 @@ useEffect(() => {
             ))}
         </div>
         {/* CommentList에 고유 key 추가 */}
-        <CommentList key={`task-${task.id}`} taskId={task.id} />
+        <CommentList key={`task-${task.id}`} projectId={projectId} taskId={task.id} />
       </div>
     );
   };

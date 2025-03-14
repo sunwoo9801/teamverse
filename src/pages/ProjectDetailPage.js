@@ -35,7 +35,10 @@ const ProjectDetailPage = () => {
     const [projectName, setProjectName] = useState("");
     const [projectDescription, setProjectDescription] = useState("");
 
-
+    // ✅ 프로젝트 리스트 보기 핸들러
+    const handleShowProjectList = () => {
+        navigate("/TaskBoard", { state: { projectId } });
+    };
 
     useEffect(() => {
         fetchProject();
@@ -198,6 +201,9 @@ const ProjectDetailPage = () => {
         }
     }, [projectId]);
 
+
+
+
     //  Task 삭제 기능
     const handleDeleteTask = async (taskId) => {
         const token = getAccessToken();
@@ -278,7 +284,6 @@ const ProjectDetailPage = () => {
     };
 
 
-
     if (!project) {
         return <p>📌 프로젝트 정보를 불러오는 중...</p>;
     }
@@ -343,42 +348,43 @@ const ProjectDetailPage = () => {
         <div className="project-detail-page">
             <div className="project-layout">
                 <LeftSidebar onCreateProject={() => setShowModal(true)} />
-                 {/* onShowProjectList={handleShowProjectList} */}
+                {/* onShowProjectList={handleShowProjectList} */}
 
                 <div className="project-content">
+                    <div className="project-header">
+                        <div className="project-title-container">
 
-                    <div className="project-title-container">
+                            {/* 드롭다운 버튼 + 메뉴 감싸는 div */}
+                            <div className="project-dropdown-container" ref={dropdownRef}>
+                                {/* ⋮ 버튼 (세로 점 3개) */}
+                                <button className="project-dropdown-button" onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
+                                    <FaEllipsisV />
+                                </button>
+                                {/* 드롭다운 메뉴 */}
+                                {isDropdownOpen && (
+                                    <div className="project-dropdown-menu">
+                                        <button className="project-dropdown-item" onClick={() => setIsEditModalOpen(true)}>
+                                            <FaPencilAlt className="dropdown-icon" /> 프로젝트 수정
+                                        </button>
+                                        <button className="project-dropdown-item" onClick={handleLeaveProject}>
+                                            <FaSignOutAlt className="project-dropdown-icon" /> 프로젝트 나가기
+                                        </button>
+                                        <button className="project-dropdown-item" onClick={handleDeleteProject}>
+                                            <FaTrashAlt className="project-dropdown-icon" /> 프로젝트 삭제
+                                        </button>
+                                    </div>
+                                )}
 
-                        {/* 드롭다운 버튼 + 메뉴 감싸는 div */}
-                        <div className="project-dropdown-container" ref={dropdownRef}>
-                            {/* ⋮ 버튼 (세로 점 3개) */}
-                            <button className="project-dropdown-button" onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
-                                <FaEllipsisV />
-                            </button>
-                            {/* 드롭다운 메뉴 */}
-                            {isDropdownOpen && (
-                                <div className="project-dropdown-menu">
-                                    <button className="project-dropdown-item" onClick={() => setIsEditModalOpen(true)}>
-                                        <FaPencilAlt className="dropdown-icon" /> 프로젝트 수정
-                                    </button>
-                                    <button className="project-dropdown-item" onClick={handleLeaveProject}>
-                                        <FaSignOutAlt className="project-dropdown-icon" /> 프로젝트 나가기
-                                    </button>
-                                    <button className="project-dropdown-item" onClick={handleDeleteProject}>
-                                        <FaTrashAlt className="project-dropdown-icon" /> 프로젝트 삭제
-                                    </button>
-                                </div>
-                            )}
+                            </div>
+                            <h1>{project?.name || "프로젝트 로딩 중..."}</h1>
 
+                            <p className="project-description">{project?.description || ""}</p>
                         </div>
-                        <h1>{project?.name || "프로젝트 로딩 중..."}</h1>
 
-                        <p className="project-description">{project?.description || ""}</p>
-                    </div>
-
-                    <div className="project-dates">
-                        <p className="project-date">📅 시작일: {project?.startDate}</p>
-                        <p className="project-date">⏳ 마감일: {project?.endDate || "미정"}</p>
+                        <div className="project-dates">
+                            <p> <span className="date-divider">|</span> 시작일: {project?.startDate}</p>
+                            <p> <span className="date-divider">|</span> 마감일: {project?.endDate || "미정"}</p>
+                        </div>
                     </div>
 
 
@@ -473,48 +479,42 @@ const ProjectDetailPage = () => {
                     )} */}
                     {activeTab === "tasks" && (
                         <div className="task-section">
-                            <h2>📝 작업 목록</h2>
-                            <table className="task-table">
-                                <thead>
-                                    <tr>
-                                        <th>작업명</th>
-                                        <th>담당자</th>
-                                        <th>상태</th>
-                                        <th>시작일</th>
-                                        <th>마감일</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {tasks.map((task) => (
-                                        <tr key={task.id}>
-                                            <td>{task.name}</td>
-                                            <td>{task.assignedTo?.username || "미정"}</td>
-                                            <td>{task.status}</td>
-                                            <td>{task.startDate}</td>
-                                            <td>{task.dueDate}</td>
+                            <div className="task-line">
+                                <h2>📝 작업 목록</h2>
+                                <table className="task-table">
+                                    <thead>
+                                        <tr>
+                                            <th>작업명</th>
+                                            <th>담당자</th>
+                                            <th>상태</th>
+                                            <th>시작일</th>
+                                            <th>마감일</th>
                                         </tr>
-                                    ))}
-                                </tbody>
-                            </table>
+                                    </thead>
+                                    <tbody>
+                                        {tasks.map((task) => (
+                                            <tr key={task.id}>
+                                                <td>{task.name}</td>
+                                                <td>{task.assignedTo?.username || "미정"}</td>
+                                                <td>{task.status}</td>
+                                                <td>{task.startDate}</td>
+                                                <td>{task.dueDate}</td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     )}
 
 
-                    {/* Gantt Chart 탭 */}
-                    {/* {activeTab === "gantt" && (
+
+                    {activeTab === "gantt" && (
                         <div className="task-page">
-                            <div className="task-page-header">
-                                <h2 className="project-title">{project?.name || "로딩 중..."}</h2>
-                                <button
-                                    className="task-add-btn"
-                                    onClick={() => setIsTaskModalOpen(true)}
-                                >
-                                    + 업무 추가
-                                </button>
-                            </div>
+                            <h2 className="project-title">{project?.name || "로딩 중..."}</h2>
                             <hr className="title-divider" />
-                            <div className="gantt-chart-tab-task-container">
-                                <div className="gantt-chart-tab-task-list">
+                            <div className="task-container">
+                                <div className="task-list">
                                     <table>
                                         <thead>
                                             <tr>
@@ -536,45 +536,12 @@ const ProjectDetailPage = () => {
                                         </tbody>
                                     </table>
                                 </div>
-                                <div className="gantt-chart-tab-container">
+                                <div className="gantt-chart-container">
                                     <GanttChart tasks={tasks} />
                                 </div>
                             </div>
                         </div>
-                    )} */}
-                     {activeTab === "gantt" && (
-                                            <div className="task-page">
-                                                <h2 className="project-title">{project?.name || "로딩 중..."}</h2>
-                                                <hr className="title-divider" />
-                                                <div className="task-container">
-                                                    <div className="task-list">
-                                                        <table>
-                                                            <thead>
-                                                                <tr>
-                                                                    <th>업무명</th>
-                                                                    <th>상태</th>
-                                                                    <th>시작일</th>
-                                                                    <th>마감일</th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                                {tasks.map((task) => (
-                                                                    <tr key={task.id}>
-                                                                        <td>{task.name}</td>
-                                                                        <td>{task.status}</td>
-                                                                        <td>{task.startDate}</td>
-                                                                        <td>{task.dueDate}</td>
-                                                                    </tr>
-                                                                ))}
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                    <div className="gantt-chart-container">
-                                                        <GanttChart tasks={tasks} />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        )}
+                    )}
 
                     {/* {activeTab === "files" && <FilesTab projectId={projectId} />} */}
                     {activeTab === "files" && (

@@ -17,6 +17,7 @@
 .task-container {
   display: flex;
   gap: 20px;
+
 }
 
 /* 업무 목록 스타일 */
@@ -36,6 +37,7 @@
   padding: 10px;
   border-bottom: 1px solid #ddd;
   text-align: left;
+  font-size: 13px;
 }
 
 .status-badge {

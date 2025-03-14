@@ -5,7 +5,7 @@ import { getAccessToken } from "../utils/authUtils";
 import { FaEllipsisV, FaEdit, FaTrashAlt } from "react-icons/fa";
 import "../styles/CommentList.css";
 
-const CommentList = ({ activityId, taskId }) => {
+const CommentList = ({ projectId,activityId, taskId }) => {
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState("");
   const [editingCommentId, setEditingCommentId] = useState(null); // 현재 수정 중인 댓글 ID
@@ -49,15 +49,12 @@ const CommentList = ({ activityId, taskId }) => {
   const fetchComments = async () => {
     console.log("📢 댓글 불러오기 시작");
     const token = getAccessToken();
-    if (!token) {
-      console.error("❌ JWT 토큰이 없습니다. 로그인이 필요합니다.");
-      return;
-    }
+    if (!token) return;
     if (!activityId && !taskId) return;
 
     const url = activityId
-      ? `http://localhost:8082/api/comments/activity/${activityId}`
-      : `http://localhost:8082/api/comments/task/${taskId}`;
+      ? `http://localhost:8082/api/projects/${projectId}/comments/activity/${activityId}`
+      : `http://localhost:8082/api/projects/${projectId}/comments/task/${taskId}`;
 
     try {
       const response = await axios.get(url, {
@@ -65,7 +62,6 @@ const CommentList = ({ activityId, taskId }) => {
         withCredentials: true,
       });
       console.log("댓글 목록:", response.data);
-      // 프로필 이미지가 없으면 기본 이미지로 설정
       const updatedComments = response.data.map((comment) => ({
         ...comment,
         user: {
@@ -105,21 +101,20 @@ const CommentList = ({ activityId, taskId }) => {
 
   // 댓글 추가 핸들러
   const handleAddComment = async () => {
-    if (!newComment.trim()) return; // 빈 댓글 방지
+    if (!newComment.trim()) return;
     if (!user) {
       alert("로그인이 필요합니다.");
       return;
     }
     const token = getAccessToken();
 
-    // activityId가 있으면 활동 댓글, taskId가 있으면 업무 댓글
     const payload = activityId
       ? { userId: user.id, content: newComment }
       : { taskId: taskId, userId: user.id, content: newComment };
 
     const url = activityId
-      ? `http://localhost:8082/api/comments/activity/${activityId}`
-      : `http://localhost:8082/api/comments/task/${taskId}`;
+      ? `http://localhost:8082/api/projects/${projectId}/comments/activity/${activityId}`
+      : `http://localhost:8082/api/projects/${projectId}/comments/task/${taskId}`;
 
     try {
       await axios.post(
@@ -131,8 +126,8 @@ const CommentList = ({ activityId, taskId }) => {
         }
       );
       console.log("댓글 추가 성공!");
-      setNewComment(""); // 입력창 초기화
-      fetchComments(); // 댓글 목록 새로고침
+      setNewComment("");
+      fetchComments();
     } catch (error) {
       console.error("❌ 댓글 추가 실패:", error);
     }
@@ -144,7 +139,7 @@ const CommentList = ({ activityId, taskId }) => {
     const token = getAccessToken();
     try {
       await axios.put(
-        `http://localhost:8082/api/comments/${commentId}`,
+        `http://localhost:8082/api/projects/${projectId}/comments/${commentId}`,
         { userId: user.id, content: editContent },
         {
           headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
@@ -168,7 +163,7 @@ const CommentList = ({ activityId, taskId }) => {
     }
     if (!window.confirm("정말로 삭제하시겠습니까?")) return;
     try {
-      await axios.delete(`http://localhost:8082/api/comments/${commentId}`, {
+      await axios.delete(`http://localhost:8082/api/projects/${projectId}/comments/${commentId}`, {
         headers: { Authorization: `Bearer ${token}` },
         params: { userId: user.id },
         withCredentials: true,
@@ -179,7 +174,6 @@ const CommentList = ({ activityId, taskId }) => {
       alert("댓글 삭제에 실패했습니다.");
     }
   };
-
   return (
     <div className="comment-section">
       <h4>댓글 {comments.length}개</h4>

@@ -33,8 +33,8 @@ public class SecurityConfig {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/uploads/**").permitAll() // ✅ 업로드된 파일 접근 허용
                         .requestMatchers("/api/chat/private/save").authenticated() // 메시지 저장은 인증 필요
-                        .requestMatchers("/uploads/**").permitAll() // 정적 파일 접근 허용
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // OPTIONS 요청 허용
                         .requestMatchers("/api/auth/register").permitAll() // 회원가입 허용
                         .requestMatchers("/api/auth/login").permitAll() // 로그인 허용
@@ -61,7 +61,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/files/upload").authenticated() // 파일 업로드는 인증 필요
                         .requestMatchers("/api/activity/feed/**").authenticated() // 피드 조회는 인증된 사용자만 가능
                         .requestMatchers("/api/activity/feed/{projectId}").authenticated() // 피드 조회는 인증된 사용자만 가능
-                        .requestMatchers("/api/comments/**").authenticated()  // 🔹 댓글 API는 인증된 사용자만 접근 가능
+                        .requestMatchers("/api/comments/**").authenticated() // 🔹 댓글 API는 인증된 사용자만 접근 가능
                         .requestMatchers(HttpMethod.PATCH, "/api/comments/**").authenticated() // 🔹 PATCH 요청 허용
                         .requestMatchers(HttpMethod.POST, "/api/chat/private/send").hasAnyRole("USER", "MEMBER") // 사용자
                                                                                                                  // 역할

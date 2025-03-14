@@ -123,10 +123,11 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
   align-items: center;
+  background: transparent; /* 배경이 어두워지지 않도록 변경 */
+
 }
 
 .modal-content {
@@ -134,17 +135,51 @@
   padding: 20px;
   border-radius: 8px;
   text-align: center;
-  width: 300px;
+  width: 400px;
+  border: 1px solid #ccc; /* 테두리 색상 추가 */
+
 }
 
 .modal-content input {
-  width: 80%;
+  width: 100%;
   padding: 10px;
   margin: 10px 0;
-}
+  border: 2px solid #ccc;
+  border-radius: 8px;
 
+}
 .modal-content button {
   padding: 10px;
   margin: 5px;
   cursor: pointer;
+  background: white; /* 버튼 배경색 */
+  color: #333; /* 글자 색 */
+  font-weight: bold;
+  border-radius: 8px; /* 둥근 모서리 유지 */
+  border: 2px solid transparent; /* 기본 테두리 */
+  position: relative;
+  background-clip: padding-box, border-box;
+}
+
+/* 📌 반투명 배경 제거 */
+.modal-overlay {
+  background: rgba(0, 0, 0, 0);
+}
+
+.modal-content button::before {
+  content: "";
+  position: absolute;
+  inset: 0; /* 상하좌우 0으로 설정하여 버튼 크기와 동일 */
+  border-radius: 8px; /* 버튼과 동일한 둥근 모서리 */
+  padding: 2px; /* 테두리 두께 */
+  background: linear-gradient(135deg, #70a0f4, #b889fa); /* 그라디언트 테두리 */
+  -webkit-mask: linear-gradient(white, white) content-box, linear-gradient(white, white);
+  -webkit-mask-composite: destination-out;
+  mask-composite: exclude;
+  pointer-events: none; /* 클릭 방해 방지 */
+}
+
+.modal-content button:hover {
+  background: linear-gradient(135deg, #70a0f4, #b889fa); /* 배경도 그라디언트 */
+  color: white; /* 호버 시 글자색 변경 */
 }

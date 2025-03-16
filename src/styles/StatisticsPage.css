@@ -1,0 +1,110 @@
+.statistics-page {
+    display: flex;
+    /* background: linear-gradient(135deg, #f6f6f6 30%, #d4eaff 100%); */
+    background: #f3f4f6;
+    /* min-height: 100vh; */
+    font-family: "Poppins", sans-serif;
+    /* padding: 20px; */
+        gap: 15px; /* ✅ sidebar-container와 statistics-content 사이 간격 추가 */
+    height: calc(100vh - 80px); /* 원하는 계산 높이 유지 */
+
+
+  }
+  .left-sidebar {
+    width: 100%;
+    background-color: #f3f4f6;
+    padding: 10px;
+    border-radius: 12px;
+}
+  
+  .sidebar-container {
+    width: 300px;
+    flex-shrink: 0;
+    padding: 10px;
+    background-color: #f3f4f6; /* 💡 TaskBoard의 sidebar 배경색 유지 */
+    box-sizing: border-box;
+    border-width: 0;
+    border-style: solid;
+    border-color: #e5e7eb;
+}
+  .statistics-content {
+    flex-grow: 1;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+
+  }
+  
+  .statistics-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #333;
+  }
+  
+  .stats-card-container {
+    width: 100%;
+    max-width: 700px;
+    /* background: rgba(255, 255, 255, 0.7); */
+    backdrop-filter: blur(10px);
+    padding: 20px;
+    border-radius: 16px;
+    
+    /* box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1); */
+  }
+  
+  .statistics-container {
+    text-align: center;
+  }
+  
+  .statistics-heading {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #444;
+  }
+  
+  .chart-box {
+    width: 80%; /* 기존 80%에서 100%로 조정 */
+    max-width: 600px; /* 기존 500px에서 700px로 조정 */
+
+    margin: auto;
+    padding: 20px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        /* 추가된 코드 */
+        display: flex; /* 내부 요소 정렬을 위한 flex 적용 */
+        justify-content: center; /* 가로 방향 중앙 정렬 */
+        align-items: center; /* 세로 방향 중앙 정렬 */
+  }
+  
+  .status-list {
+    list-style: none;
+    padding: 0;
+    margin-top: 20px;
+    
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;  /* ✅ 요소 간격 추가 */
+  }
+  
+  .status-item {
+    font-size: 18px;
+    font-weight: bold;
+    padding: 12px 20px;  /* ✅ 간격 조정 */
+    /* background: rgba(0, 0, 0, 0.05); */
+    border-radius: 8px;
+    display: inline-block;
+    min-width: 120px;
+    text-align: center;
+  }
+  
+  .status-label {
+    color: #555;
+  }
+
+  

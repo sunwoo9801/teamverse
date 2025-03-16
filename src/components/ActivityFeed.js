@@ -326,12 +326,16 @@ const ActivityFeed = ({ projectId }) => {
                     return (
                       <div key={index} className="file-container">
                         {/\.(jpeg|jpg|png|gif|bmp|webp)$/i.test(file) ? (
+                            <a href={fileUrl} download={fileName} className="file-download-btn">
                           <img
                             src={fileUrl}
                             alt="업로드 이미지"
                             className="uploaded-image"
                             style={{ maxWidth: "100%", height: "auto", objectFit: "contain" }}
+                            
                           />
+                             <div>{fileName}</div>
+                             </a>
                         ) : (
                           <a href={fileUrl} download={fileName} className="file-download-btn">
                             📄 {fileName}

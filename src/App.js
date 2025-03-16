@@ -11,7 +11,6 @@ import TaskPage from './pages/TaskPage';
 import ProjectDetailPage from "./pages/ProjectDetailPage"; // 프로젝트 상세 페이지 import
 import TaskBoard from './components/TaskBoard';
 import ChatPage from "./components/ChatPage";
-import Chatbox from "./components/Chatbox";  // ✅ Chatbox import 추가
 
 
 
@@ -47,7 +46,7 @@ function MainLayout() {
         <Route path="/dashboard/:userId" element={<MainPage />} /> {/* 수정: MainPage 경로 변경 */}
         {/* <Route path="/login" element={<AuthPage/>} /> */}
         {/* <Route path="/login" element={<LoginPage />} /> */}
-        <Route path="/statistics" element={<StatisticsPage tasks={tasks} />} /> {/* tasks 전달 */}
+        <Route path="/statistics" element={<StatisticsPage />} />
         <Route path="/team-status" element={<TeamStatusPage />} /> 
         <Route path="/task" element={<TaskPage />} /> 
         <Route path="/project/:projectId" element={<ProjectDetailPage />} />

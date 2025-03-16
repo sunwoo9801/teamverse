@@ -28,4 +28,8 @@ public interface TeamMemberRepository extends JpaRepository<TeamMember, Long> {
   @Query("DELETE FROM TeamMember tm WHERE tm.project = :project AND tm.user = :user")
   void deleteByProjectAndUser(@Param("project") Project project, @Param("user") User user);
 
+
+  void deleteByProject(Project project);  //  프로젝트 기준으로 팀원 정보 삭제 추가
+
+
 }

@@ -1,6 +1,6 @@
 .task-page {
   width: 100%;
-  padding: 20px;
+
 }
 
 .project-title {
@@ -121,4 +121,79 @@
 
 .task-page-dropdown-item:hover {
   background-color: #f7f7f7;
+}
+
+
+.task-page {
+  display: flex;
+  height: 100vh;
+}
+
+/* ✅ 사이드바 스타일 추가 */
+.sidebar-container {
+  width: 300px;
+  flex-shrink: 0;
+  background-color: #f3f4f6;
+  padding: 10px;
+}
+
+/* ✅ TaskPage 내부 컨텐츠 스타일 */
+.task-content {
+  flex-grow: 1;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.project-title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.title-divider {
+  border: 1px solid #ddd;
+  margin-bottom: 20px;
+}
+
+.task-container {
+  display: flex;
+  gap: 20px;
+}
+
+/* ✅ Task 목록 스타일 */
+.task-list {
+  flex: 1;
+  max-width: 50%;
+  border-right: 1px solid #ddd;
+  padding-right: 20px;
+}
+
+.task-list table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.task-list th, .task-list td {
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+  text-align: left;
+  font-size: 13px;
+}
+
+/* ✅ 간트 차트 컨테이너 */
+.gantt-chart-container {
+  flex: 2;
+}
+
+/* ✅ Task 추가 버튼 스타일 */
+.add-task-btn {
+  /* color: white; */
+  padding: 10px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+}
+
+.add-task-btn:hover {
+  background-color: #d0d0d0;
 }

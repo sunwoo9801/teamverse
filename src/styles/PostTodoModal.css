@@ -108,7 +108,7 @@ textarea {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 15px;
+  padding-top: 10px;
 }
 
 .modal-actions-left {
@@ -185,21 +185,12 @@ textarea {
   margin-top: 10px;
 }
 
-/* .uploaded-image {
-  max-width: 100%;
-  height: auto;
-  border-radius: 8px;
-  display: block;
-} */
-
 .uploaded-image {
   max-width: 100%;
   height: auto;
   border-radius: 8px;
   display: block;
-  margin: 10px 0;
 }
-
 
 .file-preview {
   display: flex;

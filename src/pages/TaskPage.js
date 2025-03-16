@@ -7,6 +7,8 @@ import TaskDetailModal from "../components/TaskDetailModal";
 import GanttChart from "../components/GanttChart";
 import { getStompClient } from "../api/websocket";
 import "../styles/TaskPage.css";
+import LeftSidebar from "../components/LeftSidebar"; // ✅ 사이드바 추가
+import Statistics from "../components/Statistics"; // ✅ 추가
 
 const TaskPage = () => {
   const location = useLocation();
@@ -14,15 +16,12 @@ const TaskPage = () => {
   const queryParams = new URLSearchParams(location.search);
   const projectId = queryParams.get("projectId");
 
-  const [project, setProject] = useState(null); // 프로젝트 정보 상태 
+  const [project, setProject] = useState(null); // 프로젝트 정보 상태
   const [tasks, setTasks] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editTask, setEditTask] = useState(null); // 수정할 Task 저장
   const [selectedTask, setSelectedTask] = useState(null); // Task 상세 보기용 상태
   const user = JSON.parse(localStorage.getItem("user")); // ✅ 변경
-
-  console.log("📌 user 확인:", user);
-
 
 
   // 프로젝트 정보 불러오기
@@ -139,20 +138,29 @@ const TaskPage = () => {
     }
   }, [projectId]);
 
+
+
   return (
     <div className="task-page">
+      {/* ✅ 사이드바 추가 */}
+      <div className="sidebar-container">
+        <LeftSidebar projectId={projectId} />
+      </div>
+      {/* ✅ 기존 TaskPage 내용 감싸기 */}
+      <div className="task-content">
       {/* 프로젝트 제목 */}
       <h2 className="project-title">{project ? project.name : "로딩 중..."}</h2>
+
       <button className="add-task-btn" onClick={() => { setEditTask(null); setIsModalOpen(true); }}>
             + 업무 추가
           </button>
       <hr className="title-divider" />
-      
+
 
       <div className="task-container">
         {/* 왼쪽: Task 목록 */}
         <div className="task-list">
-          
+
 
           <table className="task-table">
             <thead>
@@ -206,6 +214,7 @@ const TaskPage = () => {
       {selectedTask && (
         <TaskDetailModal task={selectedTask} onClose={() => setSelectedTask(null)} />
       )}
+    </div>
     </div>
   );
 };

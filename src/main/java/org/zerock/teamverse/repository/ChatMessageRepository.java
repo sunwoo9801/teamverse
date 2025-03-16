@@ -14,5 +14,8 @@ public interface ChatMessageRepository extends JpaRepository<ChatMessage, Long> 
     // 특정 사용자 간의 개인 채팅 불러오기
     @Query("SELECT m FROM ChatMessage m WHERE (m.sender = :user1 AND m.recipient = :user2) OR (m.sender = :user2 AND m.recipient = :user1) ORDER BY m.createdAt ASC")
     List<ChatMessage> findPrivateMessages(User user1, User user2);
+
+    void deleteByProject(Project project); // ✅ 프로젝트 삭제 전에 관련 메시지 삭제
+
 }
 

@@ -28,8 +28,6 @@ const MainPage = () => {
     const [invites, setInvites] = useState([]); // 초대 목록 상태 추가
     const [showProjectList, setShowProjectList] = useState(false);
 
-
-
     // 로그인한 사용자의 프로젝트 목록 불러오기
     const fetchProjects = async () => {
         const token = getAccessToken();
@@ -59,6 +57,12 @@ const MainPage = () => {
 
                 setProjects(uniqueProjects);
                 setSelectedProject(uniqueProjects[0]);
+
+                            // ✅ 처음 로드될 때 첫 번째 프로젝트의 ID를 `localStorage`에 저장
+            if (!localStorage.getItem("projectId")) {
+                localStorage.setItem("projectId", uniqueProjects[0].id);
+            }
+
                 fetchTasks(uniqueProjects[0].id);
             }
         } catch (error) {
@@ -134,6 +138,8 @@ const MainPage = () => {
             localStorage.setItem("selectedProjectId", response.data.id);
             fetchTasks(response.data.id);
             setShowModal(false);
+            localStorage.setItem("projectId", response.data.id); // ✅ 프로젝트 ID 저장
+
         } catch (error) {
             console.error("❌ 프로젝트 생성 실패:", error);
             alert("프로젝트 생성에 실패했습니다.");
@@ -170,6 +176,8 @@ const MainPage = () => {
         setSelectedProject(project);
         fetchTasks(project.id);
         console.log("🔍 선택된 프로젝트:", project);
+        localStorage.setItem("projectId", project.id); // ✅ 프로젝트 ID 저장
+
     };
 
     // 프로젝트 상세 보기 페이지(TaskPage)로 이동
@@ -235,6 +243,8 @@ const MainPage = () => {
             }
         };
     }, []);
+
+
 
     return (
         <div className="main-page">

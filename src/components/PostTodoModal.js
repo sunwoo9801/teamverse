@@ -94,18 +94,6 @@ const closePlaceSearch = (e) => {
   setShowPlaceSearch(false);
   };
 
-//      setTaskData(prev => ({
-//        ...prev,
-//        description: prev.description + `\n\n📍 ${place.name} (${placeAddress})`
-//      }));
-//
-//      // contentEditable div에도 반영
-//      if (contentRef.current) {
-//        contentRef.current.innerHTML += `<p>📍 <a href="${googleMapsUrl}" target="_blank" rel="noopener noreferrer">${place.name}</a> (${placeAddress})</p>`;
-//      }
-//      setShowPlaceSearch(false);
-//    };
-
   const [taskData, setTaskData] = useState({
     name: "",
     assignedTo: "",
@@ -209,38 +197,89 @@ const closePlaceSearch = (e) => {
       { url: absoluteUrl, isImage, fileName },
     ]);
 
+    // if (contentRef.current) {
+    //   const newNode = document.createElement("div");
+    //   newNode.className = "file-container";
+
+    //   if (isImage) {
+    //     newNode.innerHTML = `
+    //     <img src="${absoluteUrl}" alt="업로드 이미지" class="uploaded-image" />
+    //     ${isModal ? `<button class="delete-file-btn">🗑️</button>` : ""}
+    //   `;
+    //   } else {
+    //     newNode.innerHTML = `
+    //     <div class="file-preview">
+    //       <a href="${absoluteUrl}" target="_blank" class="file-name">${fileName}</a>
+    //       ${isModal ? `<button class="delete-file-btn">🗑️</button>` : ""}
+    //     </div>
+    //   `;
+    //   }
+    //   if (isModal) {
+    //     newNode.querySelector(".delete-file-btn").addEventListener("click", () => {
+    //       removeFile(absoluteUrl, newNode);
+    //     });
+    //   }
+
+    //   contentRef.current.appendChild(newNode);
+
+
+    //   // 파일 추가 후 description 업데이트
+    //   setTaskData((prev) => ({
+    //     ...prev,
+    //     description: contentRef.current.innerHTML,
+    //   }));
+    // }
     if (contentRef.current) {
-      const newNode = document.createElement("div");
-      newNode.className = "file-container";
-
+      // container 생성
+      const container = document.createElement("div");
+      container.className = "file-container";
+    
       if (isImage) {
-        newNode.innerHTML = `
-        <img src="${absoluteUrl}" alt="업로드 이미지" class="uploaded-image" />
-        ${isModal ? `<button class="delete-file-btn">🗑️</button>` : ""}
-      `;
+        // 이미지 요소 직접 생성
+        const imgEl = document.createElement("img");
+        imgEl.src = absoluteUrl;
+        imgEl.alt = "업로드 이미지";
+        imgEl.className = "uploaded-image";
+        container.appendChild(imgEl);
+    
+        // 모달인 경우 삭제 버튼 추가
+        if (isModal) {
+          const deleteBtn = document.createElement("button");
+          deleteBtn.className = "delete-file-btn";
+          deleteBtn.innerText = "🗑️";
+          deleteBtn.addEventListener("click", () => removeFile(absoluteUrl, container));
+          container.appendChild(deleteBtn);
+        }
       } else {
-        newNode.innerHTML = `
-        <div class="file-preview">
-          <a href="${absoluteUrl}" target="_blank" class="file-name">${fileName}</a>
-          ${isModal ? `<button class="delete-file-btn">🗑️</button>` : ""}
-        </div>
-      `;
+        // 이미지가 아닌 경우, 링크 요소 생성
+        const previewDiv = document.createElement("div");
+        previewDiv.className = "file-preview";
+        const linkEl = document.createElement("a");
+        linkEl.href = absoluteUrl;
+        linkEl.target = "_blank";
+        linkEl.className = "file-name";
+        linkEl.innerText = fileName;
+        previewDiv.appendChild(linkEl);
+        container.appendChild(previewDiv);
+    
+        if (isModal) {
+          const deleteBtn = document.createElement("button");
+          deleteBtn.className = "delete-file-btn";
+          deleteBtn.innerText = "🗑️";
+          deleteBtn.addEventListener("click", () => removeFile(absoluteUrl, container));
+          container.appendChild(deleteBtn);
+        }
       }
-      if (isModal) {
-        newNode.querySelector(".delete-file-btn").addEventListener("click", () => {
-          removeFile(absoluteUrl, newNode);
-        });
-      }
-
-      contentRef.current.appendChild(newNode);
-
-
-      // 파일 추가 후 description 업데이트
+    
+      contentRef.current.appendChild(container);
+    
+      // 업데이트된 contentEditable 내용 상태에 반영
       setTaskData((prev) => ({
         ...prev,
         description: contentRef.current.innerHTML,
       }));
     }
+    
   };
 
   useEffect(() => {

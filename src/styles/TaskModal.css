@@ -5,7 +5,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.5);
+  /* background: rgba(0, 0, 0, 0.5); */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -13,21 +13,23 @@
 
 /* 부모 요소 크기 축소 */
 .task-modal-container {
-  width: 90%;
   max-width: 480px; /* 기존보다 작게 조정 */
   overflow: visible !important;
+  
 }
 
 .task-modal-content {
   background: white;
-  padding: 30px; /* 패딩 감소 */
+  padding: 20px; /* 패딩 감소 */
   border-radius: 10px;
   width: 100%;
-  max-width: 460px; /* 기존보다 작게 조정 */
+  max-width: 470px; /* 기존보다 작게 조정 */
   height: auto;
   max-height: 85vh; /* 높이 축소 */
   overflow-y: auto;
   text-align: center;
+  border: 1px solid #ccc;
+
 }
 
 /* 입력 필드 및 버튼 크기 조정 */
@@ -74,8 +76,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 12px; /* 크기 축소 */
-  margin-top: 10px;
+  padding: 10px; /* 크기 축소 */
   font-size: 16px;
   background: #f1f1f1;
   border: none;
@@ -150,9 +151,10 @@
 
 /* 모달 버튼 스타일 */
 .modal-actions-right button {
+  margin-left: 5px;
   position: relative;
-  padding: 14px 22px; /* 버튼 크기 */
-  font-size: 16px; /* 글자 크기 */
+  padding: 12px 20px; /* 버튼 크기 */
+  font-size: 13px; /* 글자 크기 */
   font-weight: bold;
   border-radius: 8px; /* 둥근 모서리 */
   border: 2px solid transparent; /* 투명 테두리 */
@@ -183,3 +185,44 @@
 }
 
 
+/* 색상 선택 컨테이너 */
+.color-picker-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  position: relative;
+  margin-top: 8px;
+}
+
+/* 숨김 처리된 컬러 선택 input */
+.hidden-color-picker {
+  position: absolute;
+  top: -40px; /* 색상 선택 창을 위로 이동 */
+  left: 0;
+  width: 100%;
+  opacity: 0; /* 완전히 숨김 */
+  pointer-events: none; /* 클릭 불가능 */
+}
+
+/* 선택된 색상 미리보기 (클릭 가능) */
+.color-box {
+  width: 40px;
+  height: 40px;
+  border-radius: 6px;
+  border: 2px solid #ccc;
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out, border 0.2s ease-in-out;
+}
+
+/* 호버 시 색상 강조 */
+.color-box:hover {
+  transform: scale(1.1);
+  border: 2px solid #555;
+}
+
+/* 선택된 색상의 HEX 코드 표시 */
+.color-code {
+  font-size: 14px;
+  font-weight: bold;
+  color: #555;
+}

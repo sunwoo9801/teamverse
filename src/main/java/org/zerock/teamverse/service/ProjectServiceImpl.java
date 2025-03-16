@@ -6,7 +6,12 @@ import org.springframework.transaction.annotation.Transactional;
 import org.zerock.teamverse.entity.Project;
 import org.zerock.teamverse.entity.TeamMember;
 import org.zerock.teamverse.entity.User;
+import org.zerock.teamverse.repository.ActivityLogRepository;
+import org.zerock.teamverse.repository.ChatMessageRepository;
+import org.zerock.teamverse.repository.FileInfoRepository;
+import org.zerock.teamverse.repository.InviteRepository;
 import org.zerock.teamverse.repository.ProjectRepository;
+import org.zerock.teamverse.repository.TaskRepository;
 import org.zerock.teamverse.repository.TeamMemberRepository;
 import org.zerock.teamverse.repository.UserRepository;
 
@@ -21,14 +26,32 @@ public class ProjectServiceImpl implements ProjectService { // ✅ 기존 기능
     private final UserRepository userRepository;
     private final TeamMemberRepository teamMemberRepository;
     private final SimpMessagingTemplate messagingTemplate; // ✅ WebSocket 메시지 전송 객체
+    private final InviteRepository inviteRepository; // ✅ 추가
+    private final ChatMessageRepository chatMessageRepository; // ✅ 추가
+    private final TaskRepository taskRepository;  // ✅ 추가
+    private final ActivityLogRepository activityLogRepository; // ✅ 추가
+    private final FileInfoRepository fileInfoRepository; // ✅ 추가
+
 
     public ProjectServiceImpl(ProjectRepository projectRepository,
             UserRepository userRepository,
-            TeamMemberRepository teamMemberRepository, SimpMessagingTemplate messagingTemplate) {
+            TeamMemberRepository teamMemberRepository, SimpMessagingTemplate messagingTemplate,
+            InviteRepository inviteRepository,
+            ChatMessageRepository chatMessageRepository,
+            TaskRepository taskRepository,
+            ActivityLogRepository activityLogRepository,
+            FileInfoRepository fileInfoRepository
+            ) {
         this.projectRepository = projectRepository;
         this.userRepository = userRepository;
         this.teamMemberRepository = teamMemberRepository;
         this.messagingTemplate = messagingTemplate;
+        this.inviteRepository = inviteRepository; // ✅ 추가
+        this.chatMessageRepository = chatMessageRepository; // ✅ 추가
+        this.taskRepository = taskRepository;  // ✅ 필드 초기화
+        this.activityLogRepository = activityLogRepository; // ✅ 필드 초기화
+        this.fileInfoRepository = fileInfoRepository; // ✅ 필드 초기화
+
 
     }
 
@@ -94,10 +117,22 @@ public class ProjectServiceImpl implements ProjectService { // ✅ 기존 기능
     @Transactional
     public void deleteProject(Long id) {
         Project project = projectRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Project not found"));
-        projectRepository.delete(project);
-    }
+                .orElseThrow(() -> new RuntimeException("프로젝트를 찾을 수 없습니다."));
+    
+    // 1️⃣ 관련된 모든 데이터 삭제
+    activityLogRepository.deleteByProject(project);
+    taskRepository.deleteByProjectId(id);
+    chatMessageRepository.deleteByProject(project);
+    inviteRepository.deleteByProject(project);
+    teamMemberRepository.deleteByProject(project);
+    fileInfoRepository.deleteByProject(project);  
 
+
+    // 5️⃣ 프로젝트 삭제
+    projectRepository.delete(project);
+
+    }
+    
     // ✅ 초대 기능 수정
     @Override
     @Transactional

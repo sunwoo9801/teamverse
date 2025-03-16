@@ -350,7 +350,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  min-width: 120px; /* 최소 너비 설정 */
+  min-width: 90px; /* 최소 너비 설정 */
   height: 50px; /* 동일한 높이 설정 */
   text-align: center;
   padding: 12px 15px;
@@ -366,7 +366,7 @@
 /* 프로필 메뉴 버튼 (프로필 자체 크기 유지) */
 .profile-link {
   flex: 1;
-  min-width: 120px; /* 프로필 메뉴 크기 동일하게 */
+  min-width: 90px; /* 프로필 메뉴 크기 동일하게 */
   height: 50px;
   display: flex;
   align-items: center;
@@ -399,7 +399,6 @@
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
   padding: 5px 0;
   z-index: 10;
-  display: none; /* 기본적으로 숨김 */
 }
 
 /* 프로필 드롭다운 내부 요소 변경 방지 */
@@ -416,6 +415,10 @@
   border: none;
   width: auto;
   height: auto;
+}
+
+.profile-dropdown.active {
+  display: block; /* active 클래스가 붙으면 보임 */
 }
 
 /* 프로필 버튼을 클릭했을 때 드롭다운 보이기 */

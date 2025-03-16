@@ -4,6 +4,9 @@ import jakarta.persistence.*;
 import lombok.Data;
 import java.time.LocalDateTime;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Data
@@ -18,6 +21,7 @@ public class ChatMessage {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "project_id", nullable = false) // 프로젝트 기반 채팅
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"}) // Lazy 로딩 문제 해결
+    @OnDelete(action = OnDeleteAction.CASCADE) // ✅ 프로젝트 삭제 시, 자동 삭제
     private Project project;
 
     @ManyToOne(fetch = FetchType.LAZY)

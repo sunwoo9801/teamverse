@@ -4,8 +4,8 @@ html, body {
   box-sizing: border-box;
   width: 100vw;
   height: 100vh;
-  min-height: 100vh; /* 최소 높이를 100vh로 설정하여 늘어날 수 있도록 함 */
-  overflow: auto; /* 🚨 자동 스크롤 가능하도록 변경 */
+  height: 100vh; /* 최소 높이를 100vh로 설정하여 늘어날 수 있도록 함 */
+  overflow: auto !important;
 
 
 }
@@ -18,7 +18,7 @@ html, body {
   height: calc(100vh - 57px); /* 원하는 계산 높이 유지 */
   align-items: stretch;
   width: 100%;  /* 가로폭을 100%로 지정 */
-  min-height: 100vh; /* 최소 높이를 설정하여 내용에 따라 늘어나도록 함 */
+  height: 100%; /* 최소 높이를 설정하여 내용에 따라 늘어나도록 함 */
   overflow-y: auto; /* 세로 스크롤 가능 */
   width: 100%;  /* 가로폭을 100%로 지정 */
   overflow: visible !important; /* 🚨 내부 요소 확장 허용 */
@@ -31,7 +31,7 @@ html, body {
 .sidebar-container {
   width: 300px;
   flex-shrink: 0; /* Prevents it from shrinking further */
-  border-radius: 12px;
+  /* border-radius: 12px; */
   padding: 10px;
 
 }

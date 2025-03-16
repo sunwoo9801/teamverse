@@ -108,7 +108,7 @@ textarea {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 15px;
+  padding-top: 10px;
 }
 
 .modal-actions-left {

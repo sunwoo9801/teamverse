@@ -207,34 +207,78 @@ const TaskModal = ({ onClose, projectId, refreshTasks, editTask }) => {
   };
 
   // 제출 처리
+  // const handleSubmit = async () => {
+  //   const token = getAccessToken();
+  //   if (!token) {
+  //     alert("로그인이 필요합니다.");
+  //     return;
+  //   }
+
+  //   // 업무 제목이 없으면 등록하지 않음
+  //   if (!taskData.name.trim()) {
+  //     alert("업무 제목을 입력하세요.");
+  //     return;
+  //   }
+
+  //   // startDate와 dueDate에 기본값(오늘 날짜)을 할당 (YYYY-MM-DD 형식)
+  //   // const todayStr = new Date().toISOString().split("T")[0];
+
+  //   const updatedTaskData = {
+  //     ...taskData,
+  //     description: contentRef.current ? contentRef.current.innerHTML.trim() : "",
+  //     projectId,
+  //     files: uploadedFiles.map((file) => file.url),
+  //     // 기본값 적용: 사용자가 입력하지 않은 경우 오늘 날짜로 설정
+  //     // startDate: taskData.startDate || todayStr,
+  //     // dueDate: taskData.dueDate || todayStr,
+  //     startDate: taskData.startDate ? taskData.startDate : null,
+  //     dueDate: taskData.dueDate ? taskData.dueDate : null,
+  //   };
+
+  //   try {
+  //     if (isEditMode) {
+  //       await axios.put(
+  //         `http://localhost:8082/api/user/tasks/${editTask.id}`,
+  //         updatedTaskData,
+  //         { headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" }, withCredentials: true }
+  //       );
+  //       alert("업무가 성공적으로 수정되었습니다!");
+  //     } else {
+  //       await axios.post(
+  //         "http://localhost:8082/api/user/tasks",
+  //         updatedTaskData,
+  //         { headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" }, withCredentials: true }
+  //       );
+  //       alert("업무가 성공적으로 등록되었습니다!");
+  //     }
+  //     refreshTasks();
+  //     onClose();
+  //   } catch (error) {
+  //     console.error("❌ Task 저장 실패:", error);
+  //     alert("업무 저장에 실패했습니다.");
+  //   }
+  // };
   const handleSubmit = async () => {
     const token = getAccessToken();
     if (!token) {
       alert("로그인이 필요합니다.");
       return;
     }
-
-    // 업무 제목이 없으면 등록하지 않음
+  
     if (!taskData.name.trim()) {
       alert("업무 제목을 입력하세요.");
       return;
     }
-
-    // startDate와 dueDate에 기본값(오늘 날짜)을 할당 (YYYY-MM-DD 형식)
-    // const todayStr = new Date().toISOString().split("T")[0];
-
+  
     const updatedTaskData = {
       ...taskData,
       description: contentRef.current ? contentRef.current.innerHTML.trim() : "",
       projectId,
       files: uploadedFiles.map((file) => file.url),
-      // 기본값 적용: 사용자가 입력하지 않은 경우 오늘 날짜로 설정
-      // startDate: taskData.startDate || todayStr,
-      // dueDate: taskData.dueDate || todayStr,
-      startDate: taskData.startDate ? taskData.startDate : null,
-      dueDate: taskData.dueDate ? taskData.dueDate : null,
+      startDate: taskData.startDate || null,
+      dueDate: taskData.dueDate || null,
     };
-
+  
     try {
       if (isEditMode) {
         await axios.put(
@@ -251,14 +295,15 @@ const TaskModal = ({ onClose, projectId, refreshTasks, editTask }) => {
         );
         alert("업무가 성공적으로 등록되었습니다!");
       }
-      refreshTasks();
+      
+      refreshTasks(); // 🔥 업무 상태 변경 후 통계 반영
       onClose();
     } catch (error) {
       console.error("❌ Task 저장 실패:", error);
       alert("업무 저장에 실패했습니다.");
     }
   };
-
+  
   return (
     <div className="task-modal-overlay">
       <div className="task-modal-container">
@@ -326,6 +371,25 @@ const TaskModal = ({ onClose, projectId, refreshTasks, editTask }) => {
               ))}
             </div>
           )}
+          {/* ✅ 색상 선택 기능 */}
+          <label>색상 선택</label>
+<div className="color-picker-container">
+  <div 
+    className="color-box"
+    style={{ backgroundColor: taskData.color }}
+    onClick={() => document.getElementById("hiddenColorPicker").click()} 
+    title={`현재 색상: ${taskData.color}`}
+  ></div>
+  <input
+    id="hiddenColorPicker"
+    type="color"
+    name="color"
+    value={taskData.color}
+    onChange={handleColorChange}
+    className="hidden-color-picker"
+  />
+  <span className="color-code">{taskData.color.toUpperCase()}</span>
+</div>
 
           <div className="modal-footer">
             <div className="modal-actions-left">

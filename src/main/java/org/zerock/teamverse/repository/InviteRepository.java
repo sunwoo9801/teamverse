@@ -3,6 +3,7 @@ package org.zerock.teamverse.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.zerock.teamverse.entity.Invite;
 import org.zerock.teamverse.entity.Invite.InviteStatus;
+import org.zerock.teamverse.entity.Project;
 import org.zerock.teamverse.entity.User;
 
 import java.util.List;
@@ -13,5 +14,6 @@ public interface InviteRepository extends JpaRepository<Invite, Long> {
     // 수락되지 않은 초대만 가져오기
     List<Invite> findByReceiverAndStatus(User receiver, Invite.InviteStatus status);
 
+    void deleteByProject(Project project);  // ✅ 프로젝트 기준으로 삭제 메서드 추가
 
 }

@@ -266,23 +266,28 @@ const ProjectDetailPage = () => {
             alert("로그인이 필요합니다.");
             return;
         }
+    
         if (!window.confirm("정말로 이 프로젝트를 삭제하시겠습니까? 삭제하면 복구할 수 없습니다.")) return;
+    
         try {
             await axios.delete(`http://localhost:8082/api/user/projects/${projectId}`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
-                    "Content-Type": "application/json", // DELETE의 경우 필요하지 않을 수 있으나 일관성을 위해 추가
+                    "Content-Type": "application/json",
                 },
                 withCredentials: true,
             });
+    
             alert("프로젝트가 삭제되었습니다.");
-            navigate("/dashboard"); // 삭제 후 대시보드로 이동
+    
+            // ✅ 프로젝트 삭제 후 새로 프로젝트 목록을 불러옴
+            navigate("/TaskBoard"); // 🚀 TaskBoard로 이동 (state를 넘기지 않음)
         } catch (error) {
             console.error("❌ 프로젝트 삭제 실패:", error);
             alert("프로젝트 삭제에 실패했습니다.");
         }
     };
-
+    
 
     if (!project) {
         return <p>📌 프로젝트 정보를 불러오는 중...</p>;
@@ -347,15 +352,24 @@ const ProjectDetailPage = () => {
     return (
         <div className="project-detail-page">
             <div className="project-layout">
+            <div className="sidebar-container">
                 <LeftSidebar onCreateProject={() => setShowModal(true)} />
-                {/* onShowProjectList={handleShowProjectList} */}
+            </div>
 
                 <div className="project-content">
                     <div className="project-header">
                         <div className="project-title-container">
+                            <h1>{project?.name || "프로젝트 로딩 중..."}</h1>
 
-                            {/* 드롭다운 버튼 + 메뉴 감싸는 div */}
-                            <div className="project-dropdown-container" ref={dropdownRef}>
+                            <p className="project-description">{project?.description || ""}</p>
+                        </div>
+
+                        <div className="project-dates">
+                            <p> <span className="date-divider">|</span> 시작일: {project?.startDate}</p>
+                            <p> <span className="date-divider">|</span> 마감일: {project?.endDate || "미정"}</p>
+                        </div>
+                                                    {/* 드롭다운 버튼 + 메뉴 감싸는 div */}
+                                                    <div className="project-dropdown-container" ref={dropdownRef}>
                                 {/* ⋮ 버튼 (세로 점 3개) */}
                                 <button className="project-dropdown-button" onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
                                     <FaEllipsisV />
@@ -376,15 +390,6 @@ const ProjectDetailPage = () => {
                                 )}
 
                             </div>
-                            <h1>{project?.name || "프로젝트 로딩 중..."}</h1>
-
-                            <p className="project-description">{project?.description || ""}</p>
-                        </div>
-
-                        <div className="project-dates">
-                            <p> <span className="date-divider">|</span> 시작일: {project?.startDate}</p>
-                            <p> <span className="date-divider">|</span> 마감일: {project?.endDate || "미정"}</p>
-                        </div>
                     </div>
 
 

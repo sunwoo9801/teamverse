@@ -19,6 +19,9 @@ public interface ActivityLogRepository extends JpaRepository<ActivityLog, Long> 
 
      boolean existsByActivityTypeAndProjectAndUser(String activityType, Project project, User user);
 
+     void deleteByProject(Project project);
+
+     
 }
 /* 데이터베이스와의 상호작용 담당, 특정 조건의 데이터를 조회할 수 있음음 */
 

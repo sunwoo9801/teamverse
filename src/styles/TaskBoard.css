@@ -13,7 +13,18 @@
   flex: 1; /* ✅ 남은 공간을 모두 차지 */
   padding: 20px;
   text-align: center;
+  /* background-color: #c0d5efb0; */
+
 }
+
+.sidebar-container {
+  width: 300px;
+  flex-shrink: 0;
+  /* border-radius: 12px; */
+  padding: 10px;
+}
+
+
 
 /* 🔹 카드 레이아웃 (반응형) */
 .task-board-grid {

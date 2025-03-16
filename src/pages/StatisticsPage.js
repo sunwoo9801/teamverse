@@ -1,63 +1,57 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { getAccessToken } from "../utils/authUtils";
+import Statistics from "../components/Statistics";
+import LeftSidebar from "../components/LeftSidebar";
+import "../styles/StatisticsPage.css";
 
-import Statistics from '../components/Statistics';
-import '../styles/Statistics.css';
-import ActivityFeed from '../components/ActivityFeed';
-import FilterAndSearch from '../components/FilterAndSearch';
+const StatisticsPage = () => {
+  const [tasks, setTasks] = useState([]);
+  const [projectId, setProjectId] = useState(localStorage.getItem("projectId") || null);
+  const token = getAccessToken();
 
+  useEffect(() => {
+    if (!projectId) {
+      console.error("❌ 프로젝트 ID 없음, 다시 로드 필요");
+      return;
+    }
 
-const sampleActivities = [
-  { time: '10:30 AM', message: 'Task "Design Phase" marked as completed.', important: false },
-  { time: '9:45 AM', message: 'New task "Testing Phase" added by John Doe.', important: false },
-  { time: '9:00 AM', message: 'Deadline approaching for "Development Phase".', important: true, link: '#' },
-];
+    const fetchTasks = async () => {
+      if (!token) {
+        alert("로그인이 필요합니다.");
+        return;
+      }
 
-const sampleTeamMembers = [
-  {
-    id: 1,
-    name: 'John Doe',
-    role: 'Frontend Developer',
-    avatar: 'https://via.placeholder.com/60',
-    totalTasks: 10,
-    completedTasks: 7,
-    progress: 70,
-    color: '#4B70E2',
-  },
-  {
-    id: 2,
-    name: 'Jane Smith',
-    role: 'Backend Developer',
-    avatar: 'https://via.placeholder.com/60',
-    totalTasks: 8,
-    completedTasks: 6,
-    progress: 75,
-    color: '#FFA500',
-  },
-  {
-    id: 3,
-    name: 'Emily Johnson',
-    role: 'UI/UX Designer',
-    avatar: 'https://via.placeholder.com/60',
-    totalTasks: 12,
-    completedTasks: 9,
-    progress: 75,
-    color: '#32CD32',
-  },
-];
+      try {
+        const response = await axios.get(`http://localhost:8082/api/user/tasks?projectId=${projectId}`, {
+          headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
+          withCredentials: true,
+        });
 
+        setTasks(response.data);
+      } catch (error) {
+        console.error("❌ 업무 목록 불러오기 실패:", error);
+        if (error.response && error.response.status === 401) {
+          alert("인증이 만료되었습니다. 다시 로그인해주세요.");
+          window.location.href = "/login"; // 🚨 로그인 페이지로 이동
+        }
+      }
+    };
 
-const StatisticsPage = ({ tasks = [] }) => {  // 기본값 추가
-  const [filteredTasks, setFilteredTasks] = useState(tasks);
-  const handleFilter = (filtered) => {
-    setFilteredTasks(filtered);
-  };
+    fetchTasks();
+  }, [token, projectId]); // ✅ `projectId`가 변경될 때마다 실행
 
-  
   return (
     <div className="statistics-page">
-        <FilterAndSearch tasks={tasks} onFilter={handleFilter} />
-        <Statistics tasks={filteredTasks} />
-      <ActivityFeed activities={sampleActivities} />
+      <div className="sidebar-container">
+        <LeftSidebar projectId={projectId} /> {/* ✅ 프로젝트 ID 전달 */}
+      </div>
+      <div className="statistics-content">
+        <h2 className="statistics-title">📊 프로젝트 통계</h2>
+        <div className="stats-card-container">
+          <Statistics tasks={tasks} />
+        </div>
+      </div>
     </div>
   );
 };

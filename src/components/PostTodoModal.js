@@ -175,73 +175,33 @@ const closePlaceSearch = (e) => {
 
   // 파일 업로드 시 task.description에도 추가되도록 수정
   const handleFileUploaded = (fileUrl) => {
-    console.log("📌 업로드된 파일 URL:", fileUrl);
-
-    const isImage = /\.(jpeg|jpg|png|gif|bmp|webp)$/i.test(fileUrl);
-    const fileName = fileUrl.split("/").pop();
     const absoluteUrl = fileUrl.startsWith("http") ? fileUrl : `http://localhost:8082${fileUrl}`;
-
-    // removeFile 함수 추가 (파일 삭제 시 UI에서도 반영)
-    const removeFile = (fileUrl, fileElement) => {
-      console.log("📌 삭제할 파일:", fileUrl);
-
-      setUploadedFiles((prevFiles) => prevFiles.filter((file) => file.url !== fileUrl));
-
-      if (fileElement) {
-        fileElement.remove();
-      }
-
-      // contentEditable에서도 삭제 반영
-      if (contentRef.current) {
-        contentRef.current.innerHTML = contentRef.current.innerHTML.replace(fileElement.outerHTML, "");
-      }
-
-      // 업무(Task) 등록 시 description에서 파일 제거
-      setTaskData((prev) => ({
-        ...prev,
-        description: contentRef.current.innerHTML,
-      }));
-    };
-
-
-    setUploadedFiles((prevFiles) => [
-      ...prevFiles,
-      { url: absoluteUrl, isImage, fileName },
-    ]);
-
+    setUploadedFiles((prevFiles) => [...prevFiles, { url: absoluteUrl }]);
+  
     if (contentRef.current) {
-      const newNode = document.createElement("div");
-      newNode.className = "file-container";
-
+      const fileName = absoluteUrl.split("/").pop();
+      const isImage = /\.(jpeg|jpg|png|gif|bmp|webp)$/i.test(absoluteUrl);
+  
       if (isImage) {
-        newNode.innerHTML = `
-        <img src="${absoluteUrl}" alt="업로드 이미지" class="uploaded-image" />
-        ${isModal ? `<button class="delete-file-btn">🗑️</button>` : ""}
-      `;
+        const imgElement = document.createElement("img");
+        imgElement.src = absoluteUrl;
+        imgElement.alt = fileName;
+        imgElement.style.maxWidth = "100%";
+        imgElement.style.height = "auto";
+        imgElement.style.objectFit = "contain";
+        contentRef.current.appendChild(imgElement);
       } else {
-        newNode.innerHTML = `
-        <div class="file-preview">
-          <a href="${absoluteUrl}" target="_blank" class="file-name">${fileName}</a>
-          ${isModal ? `<button class="delete-file-btn">🗑️</button>` : ""}
-        </div>
-      `;
+        const fileElement = document.createElement("a");
+        fileElement.href = absoluteUrl;
+        fileElement.innerText = `📄 ${fileName}`;
+        fileElement.download = fileName;
+        contentRef.current.appendChild(fileElement);
       }
-      if (isModal) {
-        newNode.querySelector(".delete-file-btn").addEventListener("click", () => {
-          removeFile(absoluteUrl, newNode);
-        });
-      }
-
-      contentRef.current.appendChild(newNode);
-
-
-      // 파일 추가 후 description 업데이트
-      setTaskData((prev) => ({
-        ...prev,
-        description: contentRef.current.innerHTML,
-      }));
     }
   };
+  
+
+  
 
   useEffect(() => {
     console.log("📌 현재 postContent 상태:", postContent);
@@ -305,6 +265,7 @@ const closePlaceSearch = (e) => {
           {
             headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
             withCredentials: true,
+            files: uploadedFiles.map(file => file.url),
           }
         );
         alert("업무가 성공적으로 등록되었습니다!");

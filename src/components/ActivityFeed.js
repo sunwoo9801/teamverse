@@ -1,7 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react";
 import parse from "html-react-parser"; // HTML 변환 라이브러리
-import ReactMarkdown from "react-markdown"; // Markdown 지원
-import remarkGfm from "remark-gfm"; // 테이블, 링크, 줄바꿈 지원
 import axios from "axios";
 import CommentList from "./CommentList"; // 댓글 컴포넌트
 import TaskModal from "./TaskModal"; // TaskModal 임포트
@@ -179,53 +177,6 @@ const ActivityFeed = ({ projectId }) => {
     }
   };
 
-  // --- WebSocket을 통한 실시간 업데이트 ---
-  // useEffect(() => {
-  //   fetchActivities();
-  //   fetchTasks();
-
-  //   const stompClient = getStompClient();
-  //   const onActivityReceived = (message) => {
-  //     const newActivity = JSON.parse(message.body);
-  //     setActivities((prevActivities) => {
-  //       const isDuplicate = prevActivities.some(activity => activity.id === newActivity.id);
-  //       return isDuplicate ? prevActivities : [newActivity, ...prevActivities];
-  //     });
-  //   };
-
-  //   const onTaskReceived = (message) => {
-  //     const newTask = JSON.parse(message.body);
-  //     console.log("새 작업(Task) 수신:", newTask);
-  //     setTasks((prevTasks) => [
-  //       {
-  //         ...newTask,
-  //         createdByUsername: newTask.createdByUsername || "알 수 없는 사용자", // 작성자 이름 보장
-  //       },
-  //       ...prevTasks,
-  //     ]);
-  //   };
-
-  //   if (stompClient.connected) {
-  //     console.log(`🟢 WebSocket 구독: /topic/feed/${projectId}`);
-  //     stompClient.subscribe(`/topic/feed/${projectId}`, onActivityReceived);
-  //     stompClient.subscribe(`/topic/tasks/${projectId}`, onTaskReceived);
-  //   } else {
-  //     console.warn("⚠️ WebSocket이 아직 연결되지 않음, 재연결 시도...");
-  //     stompClient.onConnect = () => {
-  //       console.log(`WebSocket 연결됨, 구독: /topic/feed/${projectId}`);
-  //       stompClient.subscribe(`/topic/feed/${projectId}`, onActivityReceived);
-  //       stompClient.subscribe(`/topic/tasks/${projectId}`, onTaskReceived);
-  //     };
-  //   }
-  //   return () => {
-  //     if (stompClient.connected) {
-  //       stompClient.unsubscribe(`/topic/feed/${projectId}`);
-  //       stompClient.unsubscribe(`/topic/tasks/${projectId}`);
-  //       console.log("🛑 WebSocket 구독 해제됨");
-  //     }
-  //   };
-  // }, [projectId]);
-  // useEffect에 WebSocket 삭제 이벤트 추가
   useEffect(() => {
     fetchActivities();
     fetchTasks();
@@ -316,42 +267,44 @@ const ActivityFeed = ({ projectId }) => {
           <h3>{activity.title || "제목 없음"}</h3>
           <p>{parse(activity.content || "내용 없음")}</p>
           <div className="file-list">
-            {activity.files &&
-              activity.files.length > 0 &&
-              !activity.files.some((file) => activity.content.includes(file)) && (
-                <div className="file-list">
-                  {activity.files.map((file, index) => {
-                    const fileUrl = file.startsWith("http") ? file : `http://localhost:8082${file}`;
-                    const fileName = file.split("/").pop();
-                    return (
-                      <div key={index} className="file-container">
-                        {/\.(jpeg|jpg|png|gif|bmp|webp)$/i.test(file) ? (
-                            <a href={fileUrl} download={fileName} className="file-download-btn">
-                          <img
-                            src={fileUrl}
-                            alt="업로드 이미지"
-                            className="uploaded-image"
-                            style={{ maxWidth: "100%", height: "auto", objectFit: "contain" }}
-                            
-                          />
-                             <div>{fileName}</div>
-                             </a>
-                        ) : (
-                          <a href={fileUrl} download={fileName} className="file-download-btn">
-                            📄 {fileName}
-                          </a>
-                        )}
-                      </div>
-                    );
-                  })}
-                </div>
+  {activity.files &&
+    activity.files.length > 0 &&
+    !activity.files.some((file) => activity.content.includes(file)) && (
+      <div className="file-list">
+        {activity.files.map((file, index) => {
+          const fileUrl = file.startsWith("http") ? file : `http://localhost:8082${file}`;
+          const fileName = file.split("/").pop();
+          const isImage = /\.(jpeg|jpg|png|gif|bmp|webp)$/i.test(file);
+
+          return (
+            <div key={index} className="file-container">
+              {isImage ? (
+                <a href={fileUrl} download={fileName} className="file-download-btn">
+                  <img
+                    src={fileUrl}
+                    alt={fileName}
+                    className="uploaded-image"
+                    style={{ maxWidth: "100%", height: "auto", objectFit: "contain" }}
+                  />
+                  <div>{fileName}</div>
+                </a>
+              ) : (
+                <a href={fileUrl} download={fileName} className="file-download-btn">
+                  📄 {fileName}
+                </a>
               )}
-          </div>
+            </div>
+          );
+        })}
+      </div>
+    )}
+</div>
+
         </div>
         {(activity.content.split("\n").length > MAX_LINES ||
           activity.content.length > MAX_CHARACTERS ||
           activity.content.includes("<img") ||
-          activity.files?.some((file) => /\.(jpeg|jpg|png|gif|bmp|webp)$/i.test(file))) && (
+          activity.files?.some((file) => /\.(jpeg|jpg|png|gif|bmp|webp|pdf|word)$/i.test(file))) && (
             <button
               className="toggle-expand-button"
               onClick={() =>

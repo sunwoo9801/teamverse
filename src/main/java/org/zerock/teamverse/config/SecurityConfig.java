@@ -68,6 +68,7 @@ public class SecurityConfig {
                                                                                                                  // 역할
                                                                                                                  // 필요
                         .requestMatchers("/api/chat/private/**").authenticated() // 개인 메시지 API 보호
+                        .requestMatchers("/storage/uploads/**").permitAll() // ✅ 정적 리소스 접근 허용
 
                         .anyRequest().authenticated())
                 .exceptionHandling(exception -> exception

@@ -20,6 +20,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.springframework.core.io.Resource;
+
 @RestController
 @RequestMapping("/api/files")
 public class FileController {
@@ -36,21 +38,27 @@ public class FileController {
     }
 
 
-    @PostMapping("/upload")
-    public ResponseEntity<Map<String, String>> uploadFile(
-            @RequestParam("file") MultipartFile file,
-            @RequestParam(value = "projectId", required = false) Long projectId,
-            @RequestParam(value = "activityLogId", required = false) Long activityLogId,
-            @RequestParam(value = "taskId", required = false) Long taskId) {
-        try {
-            String fileUrl = fileService.storeFile(file, projectId, activityLogId, taskId);
-            Map<String, String> response = new HashMap<>();
-            response.put("fileUrl", "http://localhost:8082" + fileUrl); // 절대 경로 반환
-            return ResponseEntity.ok(response);
-        } catch (Exception e) {
-            return ResponseEntity.internalServerError().body(null);
-        }
+// ✅ 파일 업로드 API
+@PostMapping("/upload")
+public ResponseEntity<Map<String, String>> uploadFile(
+        @RequestParam("file") MultipartFile file,
+        @RequestParam(value = "projectId", required = false) Long projectId,
+        @RequestParam(value = "activityLogId", required = false) Long activityLogId,
+        @RequestParam(value = "taskId", required = false) Long taskId) {
+    try {
+        String fileUrl = fileService.storeFile(file, projectId, activityLogId, taskId);
+        
+        // ✅ 파일명과 타입도 포함하여 반환
+        Map<String, String> response = new HashMap<>();
+        response.put("fileUrl", "http://localhost:8082" + fileUrl);
+        response.put("fileName", file.getOriginalFilename());
+        response.put("fileType", file.getContentType());
+
+        return ResponseEntity.ok(response);
+    } catch (Exception e) {
+        return ResponseEntity.internalServerError().body(null);
     }
+}
 
 
     @GetMapping
@@ -87,7 +95,9 @@ public class FileController {
                 .map(file -> Map.of(
                         "fileId", String.valueOf(file.getId()), // fileId 포함
                         "fileName", file.getFileName(), // fileName 포함
-                        "fileUrl", "http://localhost:8082" + file.getFileUrl() // 절대 경로 반환
+                        "fileUrl", "http://localhost:8082" + file.getFileUrl(), // 절대 경로 반환
+                        "fileType", file.getFileType()  // ✅ MIME 타입 추가
+
                         ))
                 .collect(Collectors.toList());
 
@@ -104,7 +114,17 @@ public class FileController {
             return ResponseEntity.status(500).body("❌ 파일 삭제 실패");
         }
     }
+    // ✅ 파일 다운로드 API
+    @GetMapping("/download/{fileName:.+}")
+    public ResponseEntity<Resource> downloadFile(@PathVariable String fileName) {
+        Resource resource = fileService.loadFileAsResource(fileName);
 
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileName + "\"")
+                .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                .body(resource);
+    }
+    
      @GetMapping("/download")
     public ResponseEntity<byte[]> downloadSelectedFiles(@RequestParam List<Long> fileIds) {
         try {

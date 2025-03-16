@@ -3,6 +3,8 @@
 
 package org.zerock.teamverse.config;
 
+import java.nio.file.Paths;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.lang.NonNull;
@@ -52,12 +54,16 @@ public class WebConfig implements WebMvcConfigurer  {
 	}
  @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/storage/uploads/**")
+                .addResourceLocations("file:storage/uploads/");
+				
+
         // 정적 리소스 매핑 추가 (업로드된 이미지 제공)
-        registry.addResourceHandler("/uploads/**")
+        // registry.addResourceHandler("/uploads/**")
 				// .addResourceLocations("file:uploads/"); // 📌 실제 파일 저장 경로
 				// .addResourceLocations("file:///C:/uploads/"); // 📌 Windows 경로
-				.addResourceLocations("file:uploads/")  // "uploads/" 폴더를 정적 파일로 제공
-				.setCachePeriod(3600); // 1시간 캐싱
+				// .addResourceLocations("file:uploads/")  // "uploads/" 폴더를 정적 파일로 제공
+				// .setCachePeriod(3600); // 1시간 캐싱
 
         // Linux 또는 Mac 사용 시 (경로 수정)
         // registry.addResourceHandler("/uploads/**")

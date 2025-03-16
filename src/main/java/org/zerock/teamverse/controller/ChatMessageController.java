@@ -47,12 +47,26 @@ public class ChatMessageController {
     }
 
     //  특정 프로젝트의 채팅 기록 조회 (HTTP API)
+    // @GetMapping("/{projectId}")
+    // public ResponseEntity<List<ChatMessage>> getProjectChat(@PathVariable Long projectId) {
+    //     Project project = projectService.getProjectById(projectId)
+    //       .orElseThrow(() -> new RuntimeException("프로젝트를 찾을 수 없습니다."));
+    //     return ResponseEntity.ok(chatMessageService.getChatMessages(project));
+    // }
+
     @GetMapping("/{projectId}")
-    public ResponseEntity<List<ChatMessage>> getProjectChat(@PathVariable Long projectId) {
-        Project project = projectService.getProjectById(projectId)
-          .orElseThrow(() -> new RuntimeException("프로젝트를 찾을 수 없습니다."));
-        return ResponseEntity.ok(chatMessageService.getChatMessages(project));
-    }
+public ResponseEntity<List<ChatMessageDTO>> getProjectChat(@PathVariable Long projectId) {
+    Project project = projectService.getProjectById(projectId)
+        .orElseThrow(() -> new RuntimeException("프로젝트를 찾을 수 없습니다."));
+    
+    List<ChatMessageDTO> chatMessages = chatMessageService.getChatMessages(project)
+        .stream()
+        .map(ChatMessageDTO::new) // ✅ DTO 변환 적용
+        .collect(Collectors.toList());
+    
+    return ResponseEntity.ok(chatMessages);
+}
+
 
     //  WebSocket을 통해 채팅 메시지 전송 및 DB 저장
     @MessageMapping("/chat")

@@ -2,50 +2,36 @@ package org.zerock.teamverse.dto;
 
 import java.time.LocalDateTime;
 
+import org.zerock.teamverse.entity.ChatMessage;
+
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class ChatMessageDTO {
     private Long id;
     private String content;
     private String senderEmail;
+    private String senderUsername; // ✅ 추가
     private Long projectId;
+    private LocalDateTime createdAt; // ✅ 기존 `timestamp` 대신 사용
+
 
     public ChatMessageDTO() {}
 
-    public ChatMessageDTO(Long id, String content, String senderEmail, Long projectId) {
-        this.id = id;
-        this.content = content;
-        this.senderEmail = senderEmail;
-        this.projectId = projectId;
-    }
+    public ChatMessageDTO(ChatMessage message) {
+        this.id = message.getId();
+        this.content = message.getContent();
+        this.projectId = message.getProject().getId();
+        this.createdAt = message.getCreatedAt(); // ✅ DB에서 저장된 `created_at` 값 유지
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public String getSenderEmail() {
-        return senderEmail;
-    }
-
-    public void setSenderEmail(String senderEmail) {
-        this.senderEmail = senderEmail;
-    }
-
-    public Long getProjectId() {
-        return projectId;
-    }
-
-    public void setProjectId(Long projectId) {
-        this.projectId = projectId;
+        if (message.getSender() != null) {
+            this.senderEmail = message.getSender().getEmail();
+            this.senderUsername = message.getSender().getUsername(); // ✅ `username` 추가
+        } else {
+            this.senderEmail = "unknown";
+            this.senderUsername = "알 수 없음";
+        }
     }
 }

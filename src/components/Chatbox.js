@@ -37,11 +37,12 @@ const Chatbox = ({ projectId }) => {
     const userEmail = localStorage.getItem("email") || sessionStorage.getItem("email");
 
     const messageData = {
-        project: { id: projectId },
-        sender: { email: userEmail },
-        content: newMessage.trim(),
-        timestamp: new Date().toISOString(),
+      project: { id: projectId },
+      sender: { email: userEmail },
+      content: newMessage.trim(),
+      createdAt: new Date().toISOString(), // ✅ 필드명 `timestamp` → `createdAt`
     };
+    
 
     console.log("📨 메시지 전송:", messageData);
 
@@ -102,15 +103,22 @@ useEffect(() => {
     <div className="team-chatbox-container">
       <h3>💬 팀 채팅</h3>
       <div className="messages">
-        {messages.map((msg, index) => (
-          <div key={index} className={`message ${msg.sender.email === localStorage.getItem("email") ? "my-message" : "other-message"}`}>
-            <span className="sender">{msg.sender.username}</span>
-            <p>{msg.content}</p>
-            <span className="timestamp">
-            {new Date(msg.timestamp).toLocaleTimeString("ko-KR", { hour: "2-digit", minute: "2-digit" })}
-          </span>
-                </div>
-        ))}
+      {messages.map((msg, index) => {
+  const senderEmail = msg.sender?.email || msg.senderEmail || "unknown"; // ✅ `senderEmail` 백업
+  const senderUsername = msg.sender?.username || msg.senderUsername || "알 수 없음";
+
+  return (
+    <div key={index} className={`message ${senderEmail === localStorage.getItem("email") ? "my-message" : "other-message"}`}>
+      <span className="sender">{senderUsername}</span>
+      <p>{msg.content}</p>
+      <span className="timestamp">
+  {new Date(msg.createdAt).toLocaleTimeString("ko-KR", { hour: "2-digit", minute: "2-digit" })}
+</span>
+
+    </div>
+  );
+})}
+
         <div ref={messageEndRef} />
       </div>
       <div className="message-input">

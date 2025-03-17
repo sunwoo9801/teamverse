@@ -322,27 +322,29 @@ const MainPage = () => {
             <InviteList refreshProjects={fetchProjects} />
 
             {/* 🔹 프로젝트 생성 모달 */}
-            {showModal && (
-                <div className="modal">
-                    <div className="modal-content">
-                        <h2>새 프로젝트 생성</h2>
-                        <input
-                            type="text"
-                            placeholder="프로젝트 이름"
-                            value={projectName}
-                            onChange={(e) => setProjectName(e.target.value)}
-                        />
-                        <input
-                            type="text"
-                            placeholder="프로젝트 설명 (선택 사항)"
-                            value={projectDescription}
-                            onChange={(e) => setProjectDescription(e.target.value)}
-                        />
-                        <button onClick={handleCreateProject}>생성</button>
-                        <button onClick={() => setShowModal(false)}>취소</button>
-                    </div>
-                </div>
-            )}
+{/* 🔹 특정 모달에만 고유 스타일 적용 */}
+{showModal && (
+    <div className="modal">
+        <div className="modal-content custom-modal">
+            <h2>새 프로젝트 생성</h2>
+            <input
+                type="text"
+                placeholder="프로젝트 이름"
+                value={projectName}
+                onChange={(e) => setProjectName(e.target.value)}
+            />
+            <input
+                type="text"
+                placeholder="프로젝트 설명 (선택 사항)"
+                value={projectDescription}
+                onChange={(e) => setProjectDescription(e.target.value)}
+            />
+            <button onClick={handleCreateProject}>생성</button>
+            <button onClick={() => setShowModal(false)}>취소</button>
+        </div>
+    </div>
+)}
+
         </div>
     );
 };

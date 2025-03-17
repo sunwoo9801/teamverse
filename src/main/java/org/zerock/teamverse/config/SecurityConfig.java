@@ -97,7 +97,7 @@ public class SecurityConfig {
         // configuration.setAllowedOriginPatterns(List.of("*")); // 모든 출처 허용
         configuration.setAllowedOrigins(List.of(
             "http://localhost:3000",
-            "https://polite-brioche-b6ceab.netlify.app" // Netlify 프론트엔드 허용
+            "https://zingy-biscotti-17e762.netlify.app" // Netlify 프론트엔드 허용
         ));
                 configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));

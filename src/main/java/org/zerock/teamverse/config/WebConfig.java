@@ -19,36 +19,25 @@ public class WebConfig implements WebMvcConfigurer  {
 	@Bean
 	public WebMvcConfigurer corsConfigurer() {
 		return new WebMvcConfigurer() {
+			
 			@Override
 			public void addCorsMappings(@NonNull CorsRegistry registry) {
-				// 모든 경로에 대해 CORS 허용
-				// registry.addMapping("/**")
-				// 		/*
-				// 		 * 허용할 클라이언트 주소 (React 개발 서버)
-				// 		 * 배포할 때는 localhost:3000이 아니라, 배포된 프론트엔드 주소를 여기에 넣어야 해!
-				// 		 * 예를 들어, 배포된 프론트가 https://myapp.com이라면
-				// 		 * allowedOrigins("https://myapp.com")으로 바꿔야 돼!
-				// 		 * 만약 여러 클라이언트 주소를 허용해야 한다면,
-				// 		 * .allowedOrigins("http://localhost:3000", "https://myapp.com")처럼 여러 개를 넣어주면 돼!
-				// 		 */
-
-				// 		 .allowedOriginPatterns("*") // 모든 출처 허용
-				// 		 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS") // OPTIONS 허용
-				// 		 .allowedHeaders("*")
-				// 		 .exposedHeaders("Authorization") // 응답 헤더에 Authorization 포함
-				// 		 .allowCredentials(true); // 쿠키 포함 허용
-
 				registry.addMapping("/api/**") // API 요청 경로만 CORS 허용
-				.allowedOrigins("http://localhost:3000") // 프론트엔드 주소 지정
+				.allowedOrigins(
+					"http://localhost:3000",
+					"https://melodic-bavarois-fc8dd7.netlify.app" // Netlify 프론트엔드 허용
+				)				
 				.allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH") // 허용할 HTTP 메서드
 				.allowedHeaders("*") // 모든 요청 헤더 허용
 				.exposedHeaders("Content-Disposition") // 파일 다운로드를 위한 응답 헤더 허용
 				.allowCredentials(true); // 쿠키 인증 허용
-
 				// ✅ `uploads` 디렉토리의 이미지도 CORS 허용
 				registry.addMapping("/uploads/**")
-					.allowedOrigins("http://localhost:3000") // ✅ React에서 접근 가능하도록 설정
-					.allowedMethods("GET"); // ✅ GET 요청만 허용 (보안 목적)
+				.allowedOrigins(
+					"http://localhost:3000",
+					"https://melodic-bavarois-fc8dd7.netlify.app" // Netlify 프론트엔드 허용
+				)					.allowedMethods("GET"); // ✅ GET 요청만 허용 (보안 목적)
+
 			}
 		};
 	}

@@ -15,10 +15,10 @@ html, body {
   gap: 10px;
   background-color: #f3f4f6;
   overflow: hidden;
-  height: calc(100vh - 57px); /* 원하는 계산 높이 유지 */
+  height: calc(100vh - 70px); /* 원하는 계산 높이 유지 */
   align-items: stretch;
   width: 100%;  /* 가로폭을 100%로 지정 */
-  height: 60%; /* 최소 높이를 설정하여 내용에 따라 늘어나도록 함 */
+  /* height: 60%; 최소 높이를 설정하여 내용에 따라 늘어나도록 함 */
   overflow-y: auto; /* 세로 스크롤 가능 */
   width: 100%;  /* 가로폭을 100%로 지정 */
   overflow: visible !important; /* 🚨 내부 요소 확장 허용 */
@@ -42,7 +42,7 @@ html, body {
   background-color: #c0d5efb0;
   gap: 20px;
   padding: 80px 80px 0px 80px;
-  /* min-height: 100vh; Ensures it expands at least to the full viewport height */
+  min-height: 80vh;
   height: auto !important; /* 🚨 자동 확장 */
   overflow: visible !important; /* 🚨 내부 요소가 넘쳐도 스크롤 없이 확장 */
 }

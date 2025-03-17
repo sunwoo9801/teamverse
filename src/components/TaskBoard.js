@@ -16,15 +16,21 @@ const TaskBoard = () => {
 
     useEffect(() => {
         console.log("📌 TaskBoard에서 프로젝트 목록 불러오기 시작...");
-
+    
         if (location.state?.projects) {
             console.log("✅ location.state에서 프로젝트 불러옴:", location.state.projects);
-            setProjects(location.state.projects);
+    
+            // 중복 제거 후 상태에 저장
+            const uniqueProjects = Array.from(
+                new Map(location.state.projects.map((p) => [p.id, p])).values()
+            );
+    
+            setProjects(uniqueProjects);
         } else {
             console.warn("🚨 프로젝트 데이터 없음!");
         }
-
     }, [location]);
+    
 
 
     // 🔹 새로운 프로젝트 생성 함수 추가

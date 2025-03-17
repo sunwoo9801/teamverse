@@ -143,8 +143,9 @@ const TeamStatusPage = () => {
   return (
 <div className="team-status flex flex-row" style={{ height: "calc(100vh - 80px)" }}>
 {/* 왼쪽 사이드바 (고정 너비) */}
-    <div className="sidebar-container w-64 bg-gray-100 h-screen flex-shrink-0" style={{ height: "calc(100vh - 80px)" }} >
-    <LeftSidebar onCreateProject={() => setShowModal(true)}
+<div className="sidebar-container w-[300px] bg-gray-100 h-screen flex-shrink-0" 
+     style={{ height: "calc(100vh - 80px)" }} >
+          <LeftSidebar onCreateProject={() => setShowModal(true)}
             onShowProjectList={handleShowProjectList}
             projectId={selectedProject ? selectedProject.id : null}
             />

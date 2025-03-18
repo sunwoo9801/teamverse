@@ -26,7 +26,7 @@ const Navbar = () => {
         return;
       }
 
-      const response = await axios.get("http://localhost:8082/api/auth/me", {
+      const response = await axios.get("https://teamverse.onrender.com/api/auth/me", {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
@@ -47,7 +47,7 @@ const Navbar = () => {
       const token = getAccessToken(); // 수정: token 가져오는 방식 통일
       if (!token) return;
 
-      const response = await axios.get("http://localhost:8082/api/team/invitations", {
+      const response = await axios.get("https://teamverse.onrender.com/api/team/invitations", {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -63,7 +63,7 @@ const Navbar = () => {
     try {
       const token = getAccessToken(); // 수정: token 가져오는 방식 통일
       await axios.post(
-        `http://localhost:8082/api/invites/${inviteId}/accept`,
+        `https://teamverse.onrender.com/api/invites/${inviteId}/accept`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -84,7 +84,7 @@ const Navbar = () => {
         return;
       }
 
-      await axios.post("http://localhost:8082/api/auth/logout", {}, {
+      await axios.post("https://teamverse.onrender.com/api/auth/logout", {}, {
         headers: { Authorization: `Bearer ${token}` },
         withCredentials: true
       });

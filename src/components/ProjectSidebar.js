@@ -19,7 +19,7 @@ const ProjectSidebar = ({ projectId }) => {
             const token = getAccessToken();
             try {
                 const response = await axios.get(
-                    `http://localhost:8082/api/user/projects/${projectId}/team-members`,
+                    `https://teamverse.onrender.com/api/user/projects/${projectId}/team-members`,
                     {
                         headers: { Authorization: `Bearer ${token}` },
                     }

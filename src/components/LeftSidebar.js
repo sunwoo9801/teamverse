@@ -20,7 +20,7 @@ const LeftSidebar = ({ onCreateProject, onShowProjectList, projectId  }) => {
             if (!token) return;
 
             try {
-                const response = await axios.get("http://localhost:8082/api/auth/me", {
+                const response = await axios.get("https://teamverse.onrender.com/api/auth/me", {
                     headers: { Authorization: `Bearer ${token}` },
                     withCredentials: true,
                 });

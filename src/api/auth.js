@@ -1,7 +1,7 @@
 import axios from "axios";
 import { getAccessToken } from "../utils/authUtils"; // accessToken 가져오기
 
-const API_BASE_URL = "http://localhost:8082/api/auth"; // 백엔드 경로 확인
+const API_BASE_URL = "https://teamverse.onrender.com/api/auth"; // 백엔드 경로 확인
 
 // 모든 요청에 accessToken 자동 추가
 const authAxios = axios.create({
@@ -22,7 +22,7 @@ authAxios.interceptors.request.use(
 
 export const signup = async (name, email, password) => {
 	try {
-		const response = await axios.post("http://localhost:8082/api/auth/register", {
+		const response = await axios.post("https://teamverse.onrender.com/api/auth/register", {
 			username: name,
 			email,
 			password
@@ -59,7 +59,7 @@ try {
 
 export const getGoogleMapsApiKey = async () => {
   try {
-    const response = await axios.get("http://localhost:8082/api/config/google-maps-key");
+    const response = await axios.get("https://teamverse.onrender.com/api/config/google-maps-key");
     return response.data;
   } catch (error) {
     console.error("❌ Google Maps API 키 가져오기 실패:", error);

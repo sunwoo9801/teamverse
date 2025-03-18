@@ -25,17 +25,19 @@ public class WebConfig implements WebMvcConfigurer  {
 				registry.addMapping("/api/**") // API 요청 경로만 CORS 허용
 				.allowedOrigins(
 					"http://localhost:3000",
-					"https://zingy-biscotti-17e762.netlify.app" // Netlify 프론트엔드 허용
+					"https://splendorous-sorbet-72e1b9.netlify.app" // Netlify 프론트엔드 허용
 				)				
 				.allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH") // 허용할 HTTP 메서드
 				.allowedHeaders("*") // 모든 요청 헤더 허용
 				.exposedHeaders("Content-Disposition") // 파일 다운로드를 위한 응답 헤더 허용
 				.allowCredentials(true); // 쿠키 인증 허용
+
+				
 				// ✅ `uploads` 디렉토리의 이미지도 CORS 허용
 				registry.addMapping("/uploads/**")
 				.allowedOrigins(
 					"http://localhost:3000",
-					"https://zingy-biscotti-17e762.netlify.app" // Netlify 프론트엔드 허용
+					"https://splendorous-sorbet-72e1b9.netlify.app" // Netlify 프론트엔드 허용
 				)					.allowedMethods("GET"); // ✅ GET 요청만 허용 (보안 목적)
 
 			}

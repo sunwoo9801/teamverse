@@ -94,16 +94,22 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        // configuration.setAllowedOriginPatterns(List.of("*")); // 모든 출처 허용
-        configuration.setAllowedOrigins(List.of(
-            "http://localhost:3000",
-            "https://zingy-biscotti-17e762.netlify.app" // Netlify 프론트엔드 허용
-        ));
+    // ✅ React 프론트엔드 URL 추가
+    configuration.setAllowedOrigins(List.of(
+        "http://localhost:3000", 
+        "https://splendorous-sorbet-72e1b9.netlify.app"
+    ));
                 configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setExposedHeaders(List.of("Authorization", "Content-Disposition")); // 클라이언트가 Authorization 헤더
         configuration.setAllowCredentials(true); // JWT 포함 요청 허용
+    // ✅ 인증 정보를 포함한 요청을 허용하도록 설정
+    configuration.setAllowCredentials(true);
+    
+    // ✅ 브라우저가 Authorization 헤더를 접근할 수 있도록 설정
+    configuration.setExposedHeaders(List.of("Authorization", "Content-Disposition"));
 
+    
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
 

@@ -28,7 +28,7 @@ const InviteList = ({ refreshProjects }) => {
   const fetchInvites = async () => {
     const token = getAccessToken();
     try {
-      const response = await axios.get("http://localhost:8082/api/team/invites", {
+      const response = await axios.get("https://teamverse.onrender.com/api/team/invites", {
         headers: { Authorization: `Bearer ${token}` },
       });
       console.log("📌 받은 초대 목록:", response.data);
@@ -89,7 +89,7 @@ const InviteList = ({ refreshProjects }) => {
   const handleAcceptInvite = async (inviteId) => {
     const token = getAccessToken();
     try {
-      await axios.post(`http://localhost:8082/api/team/invite/${inviteId}/accept`, {}, {
+      await axios.post(`https://teamverse.onrender.com/api/team/invite/${inviteId}/accept`, {}, {
         headers: { Authorization: `Bearer ${token}` },
       });
       console.log(`초대(${inviteId}) 수락`);

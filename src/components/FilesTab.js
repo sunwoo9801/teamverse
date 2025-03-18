@@ -19,7 +19,7 @@ const FilesTab = ({ projectId }) => {
   const fetchFiles = async () => {
   const token = getAccessToken();
   try {
-    const response = await axios.get(`http://localhost:8082/api/files/project/${projectId}`, {
+    const response = await axios.get(`https://teamverse.onrender.com/api/files/project/${projectId}`, {
       headers: { Authorization: `Bearer ${token}` },
       withCredentials: true,
     });
@@ -31,7 +31,7 @@ const FilesTab = ({ projectId }) => {
       fileName: file.fileName,
       fileUrl: file.fileUrl.startsWith("http") 
         ? file.fileUrl 
-        : `http://localhost:8082${file.fileUrl}`,  // 정적 경로 포함
+        : `https://teamverse.onrender.com${file.fileUrl}`,  // 정적 경로 포함
     })));
   } catch (error) {
     console.error("❌ 파일 목록 불러오기 실패:", error);
@@ -70,7 +70,7 @@ const FilesTab = ({ projectId }) => {
     } else {
       // ZIP 다운로드 요청
       const fileIds = selectedFiles.map(file => file.fileId).join(",");
-      const downloadUrl = `http://localhost:8082/api/files/download?fileIds=${fileIds}`;
+      const downloadUrl = `https://teamverse.onrender.com/api/files/download?fileIds=${fileIds}`;
   
       console.log("ZIP 다운로드 요청 URL:", downloadUrl);
   
@@ -88,7 +88,7 @@ const FilesTab = ({ projectId }) => {
   const handlePreview = (file) => {
     const absoluteUrl = file.fileUrl.startsWith("http")
       ? file.fileUrl
-      : `http://localhost:8082${file.fileUrl}`;
+      : `https://teamverse.onrender.com${file.fileUrl}`;
   
     setPreviewFile({ ...file, fileUrl: absoluteUrl });
   };
@@ -98,7 +98,7 @@ const FilesTab = ({ projectId }) => {
     const handleFileDownload = (file) => {
       const absoluteUrl = file.fileUrl.startsWith("http") 
         ? file.fileUrl 
-        : `http://localhost:8082${file.fileUrl}`;
+        : `https://teamverse.onrender.com${file.fileUrl}`;
     
       const link = document.createElement("a");
       link.href = absoluteUrl;

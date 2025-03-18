@@ -53,8 +53,8 @@ const CommentList = ({ projectId,activityId, taskId }) => {
     if (!activityId && !taskId) return;
 
     const url = activityId
-      ? `http://localhost:8082/api/projects/${projectId}/comments/activity/${activityId}`
-      : `http://localhost:8082/api/projects/${projectId}/comments/task/${taskId}`;
+      ? `https://teamverse.onrender.com/api/projects/${projectId}/comments/activity/${activityId}`
+      : `https://teamverse.onrender.com/api/projects/${projectId}/comments/task/${taskId}`;
 
     try {
       const response = await axios.get(url, {
@@ -83,7 +83,7 @@ const CommentList = ({ projectId,activityId, taskId }) => {
     const token = getAccessToken();
     if (!token) return;
     try {
-      const response = await axios.get("http://localhost:8082/api/auth/me", {
+      const response = await axios.get("https://teamverse.onrender.com/api/auth/me", {
         headers: { Authorization: `Bearer ${token}` },
         withCredentials: true,
       });
@@ -113,8 +113,8 @@ const CommentList = ({ projectId,activityId, taskId }) => {
       : { taskId: taskId, userId: user.id, content: newComment };
 
     const url = activityId
-      ? `http://localhost:8082/api/projects/${projectId}/comments/activity/${activityId}`
-      : `http://localhost:8082/api/projects/${projectId}/comments/task/${taskId}`;
+      ? `https://teamverse.onrender.com/api/projects/${projectId}/comments/activity/${activityId}`
+      : `https://teamverse.onrender.com/api/projects/${projectId}/comments/task/${taskId}`;
 
     try {
       await axios.post(
@@ -139,7 +139,7 @@ const CommentList = ({ projectId,activityId, taskId }) => {
     const token = getAccessToken();
     try {
       await axios.put(
-        `http://localhost:8082/api/projects/${projectId}/comments/${commentId}`,
+        `https://teamverse.onrender.com/api/projects/${projectId}/comments/${commentId}`,
         { userId: user.id, content: editContent },
         {
           headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
@@ -163,7 +163,7 @@ const CommentList = ({ projectId,activityId, taskId }) => {
     }
     if (!window.confirm("정말로 삭제하시겠습니까?")) return;
     try {
-      await axios.delete(`http://localhost:8082/api/projects/${projectId}/comments/${commentId}`, {
+      await axios.delete(`https://teamverse.onrender.com/api/projects/${projectId}/comments/${commentId}`, {
         headers: { Authorization: `Bearer ${token}` },
         params: { userId: user.id },
         withCredentials: true,

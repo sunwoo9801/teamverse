@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: teamverse-backend
+    runtime: java
+    env: java
+    buildCommand: "./gradlew build"
+    startCommand: "java -jar build/libs/*.jar"
+    envVars:
+      - key: "JAVA_HOME"
+        value: "/opt/render/project/.jdk"
+      - key: "JDK_VERSION"
+        value: "17"

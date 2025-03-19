@@ -3,6 +3,7 @@ import axios from "axios";
 import "../styles/ProfileModal.css";
 import defaultProfileImage from "../assets/images/basicprofile.jpg"; // 기본 프로필 이미지 import
 import EditProfileModal from "./EditProfileModal";
+import { getAccessToken } from "../utils/authUtils";
 
 const ProfileModal = ({ isOpen, onClose }) => {
   const [user, setUser] = useState(null);
@@ -10,8 +11,15 @@ const ProfileModal = ({ isOpen, onClose }) => {
 
   useEffect(() => {
     if (isOpen) {
+      const token = getAccessToken();
+
       axios
-        .get("https://teamverse.onrender.com/api/auth/me", { withCredentials: true })
+        .get("https://teamverse.onrender.com/api/auth/me", {        
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+        },
+        withCredentials: true,})
         .then((response) => {
           setUser(response.data);
         })
@@ -47,7 +55,7 @@ const ProfileModal = ({ isOpen, onClose }) => {
       </div>
 
       {/* 정보 수정 모달 */}
-      <EditProfileModal
+      <EditProfileModal 
         isOpen={showEditModal}
         onClose={() => setShowEditModal(false)}
         user={user}

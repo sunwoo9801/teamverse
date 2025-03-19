@@ -8,7 +8,7 @@ WORKDIR /app
 COPY build/libs/teamverse-0.0.1-SNAPSHOT.jar app.jar
 
 # 실행 포트 설정
-EXPOSE 8080
+EXPOSE 8082
 
 # Spring Boot 실행
 CMD ["java", "-jar", "app.jar"]

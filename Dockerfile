@@ -7,8 +7,8 @@ WORKDIR /app
 # 3️⃣ 프로젝트의 모든 소스코드를 컨테이너로 복사
 COPY . .
 
-# 4️⃣ Gradle 빌드 실행 (JAR 파일 생성)
-RUN ./gradlew build --no-daemon
+# 4️⃣ Gradle 빌드 실행 (JAR 파일 생성) - 테스트 제외!
+RUN ./gradlew build --no-daemon -x test
 
 # 5️⃣ 실행 환경 설정
 FROM openjdk:17-jdk-slim

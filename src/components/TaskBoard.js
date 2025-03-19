@@ -50,7 +50,7 @@ const TaskBoard = () => {
             };
 
             const response = await axios.post(
-                "https://teamverse.onrender.com/api/user/projects",
+                "http://localhost:8082/api/user/projects",
                 newProjectData,
                 {
                     headers: {

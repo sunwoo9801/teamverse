@@ -42,7 +42,7 @@ const ChatPage = () => {
 
     try {
       const response = await fetch(
-        `https://teamverse.onrender.com/api/chat/private/${recipientId}?senderId=${userId}`,
+        `http://localhost:8082/api/chat/private/${recipientId}?senderId=${userId}`,
         {
           method: "GET",
           headers: { Authorization: `Bearer ${token}` }
@@ -93,7 +93,7 @@ const ChatPage = () => {
     const token = getAccessToken();
 console.log("🛠️ 현재 액세스 토큰:", token);
 
-fetch("https://teamverse.onrender.com/api/chat/private/save", {
+fetch("http://localhost:8082/api/chat/private/save", {
   method: "POST",
   headers: {
     "Content-Type": "application/json",
@@ -152,7 +152,7 @@ fetch("https://teamverse.onrender.com/api/chat/private/save", {
 
     setMessages((prevMessages) => [...prevMessages, messageData]);
 
-    fetch("https://teamverse.onrender.com/api/chat/private/save", {
+    fetch("http://localhost:8082/api/chat/private/save", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -215,7 +215,7 @@ fetch("https://teamverse.onrender.com/api/chat/private/save", {
       }
 
       try {
-        const SERVER_BASE_URL = "https://teamverse.onrender.com";
+        const SERVER_BASE_URL = "http://localhost:8082";
         const verified = await fetch(`${SERVER_BASE_URL}/payment/complete`, {
           method: "POST",
           headers: {
@@ -235,7 +235,7 @@ fetch("https://teamverse.onrender.com/api/chat/private/save", {
         }
 
         // 구매 정보 서버에 저장
-        const saveResponse = await fetch(`https://teamverse.onrender.com/api/user/${userId}/emojis`, {
+        const saveResponse = await fetch(`http://localhost:8082/api/user/${userId}/emojis`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -365,7 +365,7 @@ fetch("https://teamverse.onrender.com/api/chat/private/save", {
     const fetchOwnedEmojis = async () => {
       const token = getAccessToken();
       try {
-        const response = await fetch(`https://teamverse.onrender.com/api/user/${userId}/emojis`, {
+        const response = await fetch(`http://localhost:8082/api/user/${userId}/emojis`, {
           method: "GET",
           headers: { Authorization: `Bearer ${token}` },
         });
@@ -411,7 +411,7 @@ fetch("https://teamverse.onrender.com/api/chat/private/save", {
             <img src={msg.content} alt="이모티콘" className="sent-emoji" />
           ) : msg.content.startsWith("/uploads/") ? (
             <img
-              src={`https://teamverse.onrender.com${msg.content}`}
+              src={`http://localhost:8082${msg.content}`}
               alt="이모티콘"
               className="sent-emoji"
             />

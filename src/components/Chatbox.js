@@ -15,7 +15,7 @@ const Chatbox = ({ projectId }) => {
     const token = getAccessToken();
 
     try {
-      const response = await axios.get(`https://teamverse.onrender.com/api/chat/${projectId}`, {
+      const response = await axios.get(`http://localhost:8082/api/chat/${projectId}`, {
         headers: { Authorization: `Bearer ${token}` },
         "Cache-Control": "no-cache, no-store, must-revalidate", // 사파리 캐싱 방지
         Pragma: "no-cache",

@@ -32,7 +32,7 @@ const TaskModal = ({ onClose, projectId, refreshTasks, editTask }) => {
   const [uploadedFiles, setUploadedFiles] = useState(
     editTask && editTask.files
       ? editTask.files.map((file) => ({
-        url: file.startsWith("http") ? file : `https://teamverse.onrender.com${file}`,
+        url: file.startsWith("http") ? file : `http://localhost:8082${file}`,
         isImage: /\.(jpeg|jpg|png|gif|bmp|webp)$/i.test(file),
         fileName: file.split("/").pop(),
       }))
@@ -62,7 +62,7 @@ const TaskModal = ({ onClose, projectId, refreshTasks, editTask }) => {
       }
       if (editTask.files) {
         setUploadedFiles(editTask.files.map(file => ({
-          url: file.startsWith("http") ? file : `https://teamverse.onrender.com${file}`,
+          url: file.startsWith("http") ? file : `http://localhost:8082${file}`,
           isImage: /\.(jpeg|jpg|png|gif|bmp|webp)$/i.test(file),
           fileName: file.split("/").pop()
         })));
@@ -72,7 +72,7 @@ const TaskModal = ({ onClose, projectId, refreshTasks, editTask }) => {
     const fetchGoogleMapsApiKey = async () => {
       const token = getAccessToken(); // 🔥 JWT 토큰 가져오기
       try {
-        const response = await axios.get("https://teamverse.onrender.com/api/places/google-maps-key", {
+        const response = await axios.get("http://localhost:8082/api/places/google-maps-key", {
           headers: {
             Authorization: `Bearer ${token}`, // 인증 헤더 추가
           },
@@ -96,7 +96,7 @@ const TaskModal = ({ onClose, projectId, refreshTasks, editTask }) => {
       return;
     }
     try {
-      const response = await axios.get(`https://teamverse.onrender.com/api/user/projects/${projectId}/team-members`, {
+      const response = await axios.get(`http://localhost:8082/api/user/projects/${projectId}/team-members`, {
         headers: { Authorization: `Bearer ${token}` },
         withCredentials: true,
       });
@@ -180,7 +180,7 @@ const TaskModal = ({ onClose, projectId, refreshTasks, editTask }) => {
   const handleFileUploaded = (fileUrl) => {
     const isImage = /\.(jpeg|jpg|png|gif|bmp|webp)$/i.test(fileUrl);
     const fileName = fileUrl.split("/").pop();
-    const absoluteUrl = fileUrl.startsWith("http") ? fileUrl : `https://teamverse.onrender.com${fileUrl}`;
+    const absoluteUrl = fileUrl.startsWith("http") ? fileUrl : `http://localhost:8082${fileUrl}`;
 
     setUploadedFiles((prevFiles) => [...prevFiles, { url: absoluteUrl, isImage, fileName }]);
 
@@ -238,14 +238,14 @@ const TaskModal = ({ onClose, projectId, refreshTasks, editTask }) => {
   //   try {
   //     if (isEditMode) {
   //       await axios.put(
-  //         `https://teamverse.onrender.com/api/user/tasks/${editTask.id}`,
+  //         `http://localhost:8082/api/user/tasks/${editTask.id}`,
   //         updatedTaskData,
   //         { headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" }, withCredentials: true }
   //       );
   //       alert("업무가 성공적으로 수정되었습니다!");
   //     } else {
   //       await axios.post(
-  //         "https://teamverse.onrender.com/api/user/tasks",
+  //         "http://localhost:8082/api/user/tasks",
   //         updatedTaskData,
   //         { headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" }, withCredentials: true }
   //       );
@@ -282,14 +282,14 @@ const TaskModal = ({ onClose, projectId, refreshTasks, editTask }) => {
     try {
       if (isEditMode) {
         await axios.put(
-          `https://teamverse.onrender.com/api/user/tasks/${editTask.id}`,
+          `http://localhost:8082/api/user/tasks/${editTask.id}`,
           updatedTaskData,
           { headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" }, withCredentials: true }
         );
         alert("업무가 성공적으로 수정되었습니다!");
       } else {
         await axios.post(
-          "https://teamverse.onrender.com/api/user/tasks",
+          "http://localhost:8082/api/user/tasks",
           updatedTaskData,
           { headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" }, withCredentials: true }
         );

@@ -71,7 +71,7 @@ const LoginPage = () => {
 				return null;
 			}
 	
-			const response = await axios.get("https://teamverse.onrender.com/api/auth/me", {
+			const response = await axios.get("http://localhost:8082/api/auth/me", {
 				headers: { Authorization: `Bearer ${token}` },
 			});
 	

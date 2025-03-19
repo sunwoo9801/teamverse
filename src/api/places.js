@@ -5,7 +5,7 @@ export const searchPlaces = async (query) => {
   try {
     const token = getAccessToken();
     
-    const response = await axios.get(`https://teamverse.onrender.com/api/places/search`, {
+    const response = await axios.get(`http://localhost:8082/api/places/search`, {
       params: { query },
       headers: {
         Authorization: `Bearer ${token}`, // 인증 필요시 추가

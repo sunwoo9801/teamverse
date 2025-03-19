@@ -43,7 +43,7 @@ const FileUpload = ({ onFileUploaded, projectId, fetchFiles }) => { // fetchFile
       }
 
       console.log("파일 업로드 요청: Authorization 헤더 확인", token);
-      const response = await axios.post("https://teamverse.onrender.com/api/files/upload", formData, {
+      const response = await axios.post("http://localhost:8082/api/files/upload", formData, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "multipart/form-data",

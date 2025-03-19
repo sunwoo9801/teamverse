@@ -51,7 +51,7 @@ const EditProfileModal = ({ isOpen, onClose, user, onUpdate }) => {
         delete requestData.email; // 이메일 필드 삭제
       }
 
-      const response = await axios.put("https://teamverse.onrender.com/api/auth/api/user", requestData, {
+      const response = await axios.put("http://localhost:8082/api/auth/api/user", requestData, {
         headers: { Authorization: `Bearer ${token}` },
         withCredentials: true
       });

@@ -38,7 +38,7 @@ const TeamStatusPage = () => {
     }
 
     try {
-      const response = await axios.get("https://teamverse.onrender.com/api/user/projects", {
+      const response = await axios.get("http://localhost:8082/api/user/projects", {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
@@ -65,7 +65,7 @@ const TeamStatusPage = () => {
 
     try {
       const response = await axios.post(
-        "https://teamverse.onrender.com/api/user/projects",
+        "http://localhost:8082/api/user/projects",
         {
           name: projectName.trim() || "새 프로젝트",
           description: projectDescription.trim() || "",
@@ -98,7 +98,7 @@ const TeamStatusPage = () => {
 
     try {
       await axios.post(
-        `https://teamverse.onrender.com/api/team/invite`,
+        `http://localhost:8082/api/team/invite`,
         { email: inviteEmail, projectId: selectedProject.id },
         {
           headers: {

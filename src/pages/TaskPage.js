@@ -36,7 +36,7 @@ const TaskPage = () => {
     }
 
     try {
-      const response = await axios.get(`https://teamverse.onrender.com/api/user/projects/${projectId}`, {
+      const response = await axios.get(`http://localhost:8082/api/user/projects/${projectId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
@@ -62,7 +62,7 @@ const TaskPage = () => {
     }
 
     try {
-      const response = await axios.get(`https://teamverse.onrender.com/api/user/tasks?projectId=${projectId}`, {
+      const response = await axios.get(`http://localhost:8082/api/user/tasks?projectId=${projectId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
@@ -109,7 +109,7 @@ const TaskPage = () => {
     if (!window.confirm("정말로 이 업무를 삭제하시겠습니까?")) return;
 
     try {
-      await axios.delete(`https://teamverse.onrender.com/api/user/tasks/${taskId}`, {
+      await axios.delete(`http://localhost:8082/api/user/tasks/${taskId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

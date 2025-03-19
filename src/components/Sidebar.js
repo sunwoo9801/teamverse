@@ -40,7 +40,7 @@ const Sidebar = ({ projectId }) => {
     const token = getAccessToken();
     try {
       const response = await axios.get(
-        `https://teamverse.onrender.com/api/user/projects/${projectId}/team-members`,
+        `http://localhost:8082/api/user/projects/${projectId}/team-members`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
       // 멤버 데이터에서 profileImage가 없을 경우 기본 이미지 설정

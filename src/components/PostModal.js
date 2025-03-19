@@ -1,3 +1,82 @@
+//import React, { useState } from "react";
+//import axios from "axios";
+//import { getAccessToken } from "../utils/authUtils";
+//import "../styles/PostTodoModal.css";
+//import ModalNav from "./ModalNav"; // 네비게이션 추가
+//
+//const PostTodoModal = ({ onClose, refreshFeed }) => {
+//  const [activeTab, setActiveTab] = useState("post");
+//  const [postContent, setPostContent] = useState(""); // 글 작성 데이터 추가
+//
+//
+//  const handlePostSubmit = async () => {
+//    if (!postContent.trim()) {
+//      alert("⚠️ 내용을 입력하세요.");
+//      return;
+//    }
+//
+//    const token = getAccessToken();
+//    if (!token) {
+//      alert("로그인이 필요합니다.");
+//      return;
+//    }
+//
+//    try {
+//      const response = await axios.post(
+//        `http://localhost:8082/api/activity/post`,
+//        {
+//          title: title, // 🔵 제목을 JSON으로 포함
+//          content: postContent,
+//          projectId: projectId
+//        },
+//        {
+//          headers: {
+//            Authorization: `Bearer ${token}`,
+//            "Content-Type": "application/json",
+//          },
+//          withCredentials: true,
+//        }
+//      );
+//      alert("글이 등록되었습니다.");
+//      refreshFeed((prev) => [response.data, ...prev]);
+//      onClose();
+//    } catch (error) {
+//      console.error("❌ 글 등록 실패:", error);
+//    }
+//  };
+//
+//  return (
+//    <div className="modal-overlay">
+//      <div className="modal-container">
+//        <div className="modal-content">
+//          <ModalNav activeTab={activeTab} setActiveTab={setActiveTab} />
+//
+//          {/* 글 작성 UI */}
+//          {activeTab === "post" && (
+//            <>
+//              <h2>글 작성</h2>
+//              <textarea
+//                placeholder="게시글 내용을 입력하세요."
+//                value={postContent}
+//                onChange={(e) => setPostContent(e.target.value)}
+//              />
+//              <div className="modal-actions">
+//                <button onClick={onClose}>취소</button>
+//                <button onClick={handlePostSubmit}>등록</button>
+//              </div>
+//            </>
+//          )}
+//        </div>
+//      </div>
+//    </div>
+//  );
+//};
+//
+//export default PostTodoModal;
+
+
+
+
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { getAccessToken } from "../utils/authUtils";
@@ -51,7 +130,7 @@ const PostTodoModal = ({ onClose, initialTab = "post", refreshFeed, projectId })
       }
 
       try {
-        const response = await axios.get(`https://teamverse.onrender.com/api/user/projects/${projectId}/team-members`, {
+        const response = await axios.get(`http://localhost:8082/api/user/projects/${projectId}/team-members`, {
           headers: { Authorization: `Bearer ${token}` },
           withCredentials: true,
         });
@@ -92,7 +171,7 @@ const PostTodoModal = ({ onClose, initialTab = "post", refreshFeed, projectId })
 
     const isImage = /\.(jpeg|jpg|png|gif|bmp|webp)$/i.test(fileUrl);
     const fileName = fileUrl.split("/").pop();
-    const absoluteUrl = fileUrl.startsWith("http") ? fileUrl : `https://teamverse.onrender.com${fileUrl}`;
+    const absoluteUrl = fileUrl.startsWith("http") ? fileUrl : `http://localhost:8082${fileUrl}`;
 
     // removeFile 함수 추가 (파일 삭제 시 UI에서도 반영)
     const removeFile = (fileUrl, fileElement) => {
@@ -180,7 +259,7 @@ const PostTodoModal = ({ onClose, initialTab = "post", refreshFeed, projectId })
   //       }
 
   //       const response = await axios.post(
-  //         "https://teamverse.onrender.com/api/activity/post",
+  //         "http://localhost:8082/api/activity/post",
   //         {
   //           title: title,
   //           content: content, // postContent 대신 content 사용
@@ -207,7 +286,7 @@ const PostTodoModal = ({ onClose, initialTab = "post", refreshFeed, projectId })
 
   //     } else {
   //       await axios.post(
-  //         "https://teamverse.onrender.com/api/user/tasks",
+  //         "http://localhost:8082/api/user/tasks",
   //         {
   //           ...taskData,
   //           projectId: projectId
@@ -252,7 +331,7 @@ const PostTodoModal = ({ onClose, initialTab = "post", refreshFeed, projectId })
         }
 
         await axios.post(
-          "https://teamverse.onrender.com/api/activity/post",
+          "http://localhost:8082/api/activity/post",
           {
             title: title,
             content: content,
@@ -272,7 +351,7 @@ const PostTodoModal = ({ onClose, initialTab = "post", refreshFeed, projectId })
       } else if (activeTab === "task") {
         // 업무(Task) 등록 시 contentRef의 내용을 description으로 저장
         const response = await axios.post(
-          "https://teamverse.onrender.com/api/user/tasks",
+          "http://localhost:8082/api/user/tasks",
           {
             ...taskData,
             description: content, // `description`을 contentEditable에서 가져오기

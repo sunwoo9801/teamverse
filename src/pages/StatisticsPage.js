@@ -23,7 +23,7 @@ const StatisticsPage = () => {
       }
 
       try {
-        const response = await axios.get(`https://teamverse.onrender.com/api/user/tasks?projectId=${projectId}`, {
+        const response = await axios.get(`http://localhost:8082/api/user/tasks?projectId=${projectId}`, {
           headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
           withCredentials: true,
         });

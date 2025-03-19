@@ -38,7 +38,7 @@ const MainPage = () => {
         }
 
         try {
-            const response = await axios.get("https://teamverse.onrender.com/api/user/projects", {
+            const response = await axios.get("http://localhost:8082/api/user/projects", {
                 headers: {
                     Authorization: `Bearer ${token}`,
                     "Content-Type": "application/json",
@@ -82,7 +82,7 @@ const MainPage = () => {
         }
 
         try {
-            const response = await axios.post("https://teamverse.onrender.com/api/auth/refresh", {
+            const response = await axios.post("http://localhost:8082/api/auth/refresh", {
                 refreshToken,
             });
 
@@ -115,7 +115,7 @@ const MainPage = () => {
             };
 
             const response = await axios.post(
-                "https://teamverse.onrender.com/api/user/projects", newProjectData, {
+                "http://localhost:8082/api/user/projects", newProjectData, {
                 // { name: projectName, startDate: new Date().toISOString().split("T")[0] },
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -156,7 +156,7 @@ const MainPage = () => {
         }
 
         try {
-            const response = await axios.get(`https://teamverse.onrender.com/api/user/projects/${projectId}/tasks`, {
+            const response = await axios.get(`http://localhost:8082/api/user/projects/${projectId}/tasks`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                     "Content-Type": "application/json",
@@ -196,7 +196,7 @@ const MainPage = () => {
     const fetchInvites = async () => {
         const token = getAccessToken();
         try {
-            const response = await axios.get("https://teamverse.onrender.com/api/team/invites", {
+            const response = await axios.get("http://localhost:8082/api/team/invites", {
                 headers: { Authorization: `Bearer ${token}` },
             });
             console.log("📌 받은 초대 목록:", response.data);

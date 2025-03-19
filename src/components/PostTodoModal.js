@@ -38,7 +38,7 @@ const closePlaceSearch = (e) => {
     const fetchGoogleMapsApiKey = async () => {
       const token = getAccessToken();
       try {
-        const response = await axios.get("https://teamverse.onrender.com/api/places/google-maps-key", {
+        const response = await axios.get("http://localhost:8082/api/places/google-maps-key", {
           headers: { Authorization: `Bearer ${token}` },
           withCredentials: true,
         });
@@ -138,7 +138,7 @@ const closePlaceSearch = (e) => {
       }
 
       try {
-        const response = await axios.get(`https://teamverse.onrender.com/api/user/projects/${projectId}/team-members`, {
+        const response = await axios.get(`http://localhost:8082/api/user/projects/${projectId}/team-members`, {
           headers: { Authorization: `Bearer ${token}` },
           withCredentials: true,
         });
@@ -175,7 +175,7 @@ const closePlaceSearch = (e) => {
 
   // 파일 업로드 시 task.description에도 추가되도록 수정
   const handleFileUploaded = (fileUrl) => {
-    const absoluteUrl = fileUrl.startsWith("http") ? fileUrl : `https://teamverse.onrender.com${fileUrl}`;
+    const absoluteUrl = fileUrl.startsWith("http") ? fileUrl : `http://localhost:8082${fileUrl}`;
     setUploadedFiles((prevFiles) => [...prevFiles, { url: absoluteUrl }]);
   
     if (contentRef.current) {
@@ -226,7 +226,7 @@ const closePlaceSearch = (e) => {
         }
 
         await axios.post(
-          "https://teamverse.onrender.com/api/activity/post",
+          "http://localhost:8082/api/activity/post",
           {
             title: title,
             content: content,
@@ -260,7 +260,7 @@ const closePlaceSearch = (e) => {
           files: uploadedFiles.map(file => file.url)
         };
         await axios.post(
-          "https://teamverse.onrender.com/api/user/tasks",
+          "http://localhost:8082/api/user/tasks",
           updatedTaskData,
           {
             headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },

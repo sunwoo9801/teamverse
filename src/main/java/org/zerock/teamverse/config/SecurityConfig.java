@@ -97,7 +97,7 @@ public class SecurityConfig {
     // ✅ React 프론트엔드 URL 추가
     configuration.setAllowedOrigins(List.of(
         "http://localhost:3000", 
-        "https://amazing-starship-4e4e37.netlify.app"
+        "https://kaleidoscopic-pavlova-97c2e1.netlify.app"
     ));
                 configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));

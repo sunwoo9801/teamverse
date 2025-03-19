@@ -66,3 +66,7 @@ tasks.named('test') {
 tasks.withType(JavaCompile) {
 	options.compilerArgs << "-parameters"
 }
+
+dependencies {
+    implementation 'org.postgresql:postgresql:42.7.1'  // 최신 버전 사용
+}

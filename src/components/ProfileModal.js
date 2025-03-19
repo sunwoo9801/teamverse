@@ -11,7 +11,7 @@ const ProfileModal = ({ isOpen, onClose }) => {
   useEffect(() => {
     if (isOpen) {
       axios
-        .get("http://localhost:8082/api/auth/me", { withCredentials: true })
+        .get("https://teamverse.onrender.com/api/auth/me", { withCredentials: true })
         .then((response) => {
           setUser(response.data);
         })

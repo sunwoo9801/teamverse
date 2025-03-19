@@ -16,7 +16,7 @@ const PrivateChatModal = ({ userId, recipientId, recipientName, onClose }) => {
 
     try {
       const response = await fetch(
-        `http://localhost:8082/api/chat/private/${recipientId}?senderId=${userId}`,
+        `https://teamverse.onrender.com/api/chat/private/${recipientId}?senderId=${userId}`,
         {
           method: "GET",
           headers: { Authorization: `Bearer ${token}` }

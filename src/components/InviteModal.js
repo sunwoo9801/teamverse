@@ -7,7 +7,7 @@ const InviteModal = ({ projectId, onClose }) => {
   const handleInvite = async () => {
     const token = localStorage.getItem("token");
     try {
-      await axios.post("http://localhost:8082/api/team/invite", 
+      await axios.post("https://teamverse.onrender.com/api/team/invite", 
         { receiverEmail: email, projectId },
         { headers: { Authorization: `Bearer ${token}` } }
       );

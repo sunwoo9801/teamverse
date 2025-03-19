@@ -18,7 +18,7 @@ const TaskForm = ({ onTaskAdded }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:8080/api/tasks', task);
+      const response = await axios.post('https://teamverse.onrender.com/api/tasks', task);
       onTaskAdded(response.data); // 새로운 작업 리스트에 추가
       setTask({ name: '', startDate: '', endDate: '', assignee: '', progress: 0 });
     } catch (error) {

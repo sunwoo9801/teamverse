@@ -56,14 +56,14 @@ const ActivityFeed = ({ projectId }) => {
     }
     try {
       const response = await axios.get(
-        `http://localhost:8082/api/user/projects/${projectId}/tasks`,
+        `https://teamverse.onrender.com/api/user/projects/${projectId}/tasks`,
         { headers: { Authorization: `Bearer ${token}` }, withCredentials: true }
       );
       const updatedTasks = await Promise.all(
         response.data.map(async (task) => {
           try {
             const reactionCountResponse = await axios.get(
-              `http://localhost:8082/api/likes/task/${task.id}/count`,
+              `https://teamverse.onrender.com/api/likes/task/${task.id}/count`,
               { headers: { Authorization: `Bearer ${token}` }, withCredentials: true }
             );
             return {
@@ -98,7 +98,7 @@ const ActivityFeed = ({ projectId }) => {
     }
     try {
       const response = await axios.get(
-        `http://localhost:8082/api/activity/feed/${projectId}`,
+        `https://teamverse.onrender.com/api/activity/feed/${projectId}`,
         { headers: { Authorization: `Bearer ${token}` }, withCredentials: true }
       );
       console.log("받아온 피드 데이터:", response.data);
@@ -119,7 +119,7 @@ const ActivityFeed = ({ projectId }) => {
     if (!window.confirm("정말로 이 업무를 삭제하시겠습니까?")) return;
 
     try {
-      await axios.delete(`http://localhost:8082/api/user/tasks/${taskId}`, {
+      await axios.delete(`https://teamverse.onrender.com/api/user/tasks/${taskId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -149,14 +149,14 @@ const ActivityFeed = ({ projectId }) => {
     const payload = isTask ? { taskId: id, type } : { activityId: id, type };
     try {
       const response = await axios.post(
-        "http://localhost:8082/api/likes/toggle",
+        "https://teamverse.onrender.com/api/likes/toggle",
         payload,
         { headers: { Authorization: `Bearer ${token}` }, withCredentials: true }
       );
       // 업데이트된 리액션 개수 가져오기
       const reactionCountUrl = isTask
-        ? `http://localhost:8082/api/likes/task/${id}/count`
-        : `http://localhost:8082/api/likes/${id}/count`;
+        ? `https://teamverse.onrender.com/api/likes/task/${id}/count`
+        : `https://teamverse.onrender.com/api/likes/${id}/count`;
       const countResponse = await axios.get(reactionCountUrl, {
         headers: { Authorization: `Bearer ${token}` },
         withCredentials: true,
@@ -272,7 +272,7 @@ const ActivityFeed = ({ projectId }) => {
     !activity.files.some((file) => activity.content.includes(file)) && (
       <div className="file-list">
         {activity.files.map((file, index) => {
-          const fileUrl = file.startsWith("http") ? file : `http://localhost:8082${file}`;
+          const fileUrl = file.startsWith("http") ? file : `https://teamverse.onrender.com${file}`;
           const fileName = file.split("/").pop();
           const isImage = /\.(jpeg|jpg|png|gif|bmp|webp)$/i.test(file);
 
@@ -454,13 +454,13 @@ const ActivityFeed = ({ projectId }) => {
                     <div key={index} className="file-container">
                       {/\.(jpeg|jpg|png|gif|bmp|webp)$/i.test(file) ? (
                         <img
-                          src={`http://localhost:8082${file}`}
+                          src={`https://teamverse.onrender.com${file}`}
                           alt="업로드 이미지"
                           className="uploaded-image"
                           style={{ maxWidth: "100%", height: "auto", objectFit: "contain" }}
                         />
                       ) : (
-                        <a href={`http://localhost:8082${file}`} target="_blank" rel="noopener noreferrer" className="file-name">
+                        <a href={`https://teamverse.onrender.com${file}`} target="_blank" rel="noopener noreferrer" className="file-name">
                           📄 {file.split("/").pop()}
                         </a>
                       )}

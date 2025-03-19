@@ -25,7 +25,7 @@ public class WebConfig implements WebMvcConfigurer  {
 				registry.addMapping("/api/**") // API 요청 경로만 CORS 허용
 				.allowedOrigins(
 					"http://localhost:3000",
-					"https://teamverse2.netlify.app" // Netlify 프론트엔드 허용
+					"https://teamverse.netlify.app" // Netlify 프론트엔드 허용
 				)				
 				.allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH") // 허용할 HTTP 메서드
 				.allowedHeaders("*") // 모든 요청 헤더 허용
@@ -37,7 +37,7 @@ public class WebConfig implements WebMvcConfigurer  {
 				registry.addMapping("/uploads/**")
 				.allowedOrigins(
 					"http://localhost:3000",
-					"https://teamverse2.netlify.app" // Netlify 프론트엔드 허용
+					"https://teamverse.netlify.app" // Netlify 프론트엔드 허용
 				)					.allowedMethods("GET"); // ✅ GET 요청만 허용 (보안 목적)
 
 			}

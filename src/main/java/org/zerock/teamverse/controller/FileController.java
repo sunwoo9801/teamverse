@@ -50,7 +50,7 @@ public ResponseEntity<Map<String, String>> uploadFile(
         
         // ✅ 파일명과 타입도 포함하여 반환
         Map<String, String> response = new HashMap<>();
-        response.put("fileUrl", "http://localhost:8082" + fileUrl);
+        response.put("fileUrl", "https://teamverse.onrender.com" + fileUrl);
         response.put("fileName", file.getOriginalFilename());
         response.put("fileType", file.getContentType());
 
@@ -95,7 +95,7 @@ public ResponseEntity<Map<String, String>> uploadFile(
                 .map(file -> Map.of(
                         "fileId", String.valueOf(file.getId()), // fileId 포함
                         "fileName", file.getFileName(), // fileName 포함
-                        "fileUrl", "http://localhost:8082" + file.getFileUrl(), // 절대 경로 반환
+                        "fileUrl", "https://teamverse.onrender.com" + file.getFileUrl(), // 절대 경로 반환
                         "fileType", file.getFileType()  // ✅ MIME 타입 추가
 
                         ))

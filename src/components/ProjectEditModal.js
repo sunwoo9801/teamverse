@@ -29,10 +29,10 @@ const ProjectEditModal = ({ project, onClose, onSave }) => {
 
                 <label className="modal-label">프로젝트명</label>
                 <input className="modal-input" value={name} onChange={(e) => setName(e.target.value)} />
-
-                <label className="modal-label">설명</label>
-                <textarea className="modal-textarea" value={description} onChange={(e) => setDescription(e.target.value)} />
-
+                <div>
+                    <label className="modal-label">설명</label>
+                    <textarea className="modal-textarea" value={description} onChange={(e) => setDescription(e.target.value)} />
+                </div>
                 <div className="modal-date-group">
                     <div>
                         <label className="modal-label">시작일</label>

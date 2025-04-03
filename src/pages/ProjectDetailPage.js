@@ -70,7 +70,7 @@ const ProjectDetailPage = () => {
         }
 
         try {
-            const response = await axios.get(`https://teamverse.onrender.com/api/user/projects/${projectId}`, {
+            const response = await axios.get(`http://localhost:8082/api/user/projects/${projectId}`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                     "Content-Type": "application/json",
@@ -106,7 +106,7 @@ const ProjectDetailPage = () => {
             };
 
             const response = await axios.post(
-                "https://teamverse.onrender.com/api/user/projects",
+                "http://localhost:8082/api/user/projects",
                 newProjectData,
                 {
                     headers: {
@@ -144,7 +144,7 @@ const ProjectDetailPage = () => {
         }
 
         try {
-            const response = await axios.get(`https://teamverse.onrender.com/api/activity/feed/${projectId}`, {
+            const response = await axios.get(`http://localhost:8082/api/activity/feed/${projectId}`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                     "Content-Type": "application/json",
@@ -170,7 +170,7 @@ const ProjectDetailPage = () => {
         }
 
         try {
-            const response = await axios.get(`https://teamverse.onrender.com/api/user/projects/${projectId}/tasks`, {
+            const response = await axios.get(`http://localhost:8082/api/user/projects/${projectId}/tasks`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                     "Content-Type": "application/json",
@@ -215,7 +215,7 @@ const ProjectDetailPage = () => {
         if (!window.confirm("정말로 이 작업을 삭제하시겠습니까?")) return;
 
         try {
-            await axios.delete(`https://teamverse.onrender.com/api/user/tasks/${taskId}`, {
+            await axios.delete(`http://localhost:8082/api/user/tasks/${taskId}`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                     "Content-Type": "application/json",
@@ -240,7 +240,7 @@ const ProjectDetailPage = () => {
 
         try {
             const response = await axios.put(
-                `https://teamverse.onrender.com/api/user/projects/${projectId}`,
+                `http://localhost:8082/api/user/projects/${projectId}`,
                 updatedProject,
                 {
                     headers: {
@@ -270,7 +270,7 @@ const ProjectDetailPage = () => {
         if (!window.confirm("정말로 이 프로젝트를 삭제하시겠습니까? 삭제하면 복구할 수 없습니다.")) return;
     
         try {
-            await axios.delete(`https://teamverse.onrender.com/api/user/projects/${projectId}`, {
+            await axios.delete(`http://localhost:8082/api/user/projects/${projectId}`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                     "Content-Type": "application/json",
@@ -303,7 +303,7 @@ const ProjectDetailPage = () => {
             }
 
             try {
-                const response = await axios.get(`https://teamverse.onrender.com/api/user/projects/${projectId}/tasks`, {
+                const response = await axios.get(`http://localhost:8082/api/user/projects/${projectId}/tasks`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                         "Content-Type": "application/json",
@@ -333,7 +333,7 @@ const ProjectDetailPage = () => {
         if (!window.confirm("정말로 이 프로젝트에서 나가시겠습니까?")) return;
 
         try {
-            await axios.delete(`https://teamverse.onrender.com/api/user/projects/${projectId}/leave`, {
+            await axios.delete(`http://localhost:8082/api/user/projects/${projectId}/leave`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                     "Content-Type": "application/json",
@@ -516,7 +516,6 @@ const ProjectDetailPage = () => {
 
                     {activeTab === "gantt" && (
                         <div className="task-page">
-                            <h2 className="project-title">{project?.name || "로딩 중..."}</h2>
                             <hr className="title-divider" />
                             <div className="task-container">
                                 <div className="task-list">
